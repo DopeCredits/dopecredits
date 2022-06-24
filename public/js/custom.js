@@ -28,7 +28,7 @@
 function rangeSlider() {
 	var bal = $('#slider_single').val();
 	bal = (parseFloat(bal.replace(' K', "")) * 1000).toFixed(0);
-	$('#stakAmount').text(bal)
+	$('#stakAmount').text(bal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','));
 	$('#bonusAmount').text((bal / 100) * 2);
 }
 
@@ -139,7 +139,7 @@ var FlatSliderObj;
 			this._super("_setOption", key, value);
 		},
 
-		on_slide: function (event, ui) {			
+		on_slide: function (event, ui) {
 			if (this.options.range === true) {
 				this.element.val(ui.values[0] + ';' + ui.values[1]);
 				this.$min_value.html(ui.values[0] + ' ' + this.options.einheit);

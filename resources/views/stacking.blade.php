@@ -33,7 +33,9 @@
                                 src="{{ asset('images/white-logo.png') }}" class="img-fluid" alt=""></a>
                         <div class="e-wallet">
                             <span class="e-wallInner"><img src="{{ asset('images/frighter.png') }}" alt="">
-                                <p id="topWallet">Connect Wallet</p>
+                                <p id="topWallet">
+                                    {{ isset($_COOKIE['public']) ? substr($_COOKIE['public'], 0, 4) . '...' . substr($_COOKIE['public'], -5) : 'Connect Wallet' }}
+                                </p>
                             </span>
                         </div>
                     </div>
@@ -61,7 +63,8 @@
                                                 <p>Current Balance</p>
                                             </div>
                                             <div class="rightBalance">
-                                                <p><span id="accountBalance">0</span>&nbsp;&nbsp;<span
+                                                <p><span
+                                                        id="accountBalance">{{ isset($_COOKIE['public']) ? balanceComma(ansrBalance($_COOKIE['public'])) : 0 }}</span>&nbsp;&nbsp;<span
                                                         class="blue">$ANSR</span></p>
                                             </div>
                                         </div>
@@ -88,7 +91,8 @@
                                     </fieldset>
                                     <div class="col-12">
                                         <div class="bar-slider">
-                                            <input type="hidden" value="10" id="slider_single" class="flat-slider" />
+                                            <input type="hidden" value="10" id="slider_single"
+                                                class="flat-slider" />
                                         </div>
                                     </div>
                                     <fieldset>
@@ -97,13 +101,31 @@
                                                 <p>After 30 Days</p>
                                             </div>
                                             <div class="rightBalance ">
-                                                <p class=""><span class="blue"><span id="stakAmount">0</span>+<span id="bonusAmount">0</span></p>
+                                                <p class=""><span class="blue"><span
+                                                            id="stakAmount">0</span>+<span id="bonusAmount">0</span></p>
                                             </div>
                                         </div>
                                     </fieldset>
                                     <div class="col-12">
-                                        <button type="submit" class=" mt-3 stak-btn form-sub"><span
-                                                class="stak-btns form-btn">Start Staking</span></button>
+                                        @if (isset($_COOKIE['public']))
+                                            <button onclick="staking()"
+                                                {{ ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT') ? '' : 'disabled' }}
+                                                id="btnStaking" type="button" class=" mt-3 stak-btn form-sub"><span
+                                                    class="stak-btns form-btn">Start Staking</span></button>
+                                        @else
+                                            <button onclick="staking()" id="btnStaking" type="button" class=" mt-3 stak-btn form-sub"><span
+                                                    class="stak-btns form-btn">Start Staking</span></button>
+                                        @endif
+                                    </div>
+
+                                    <div class="col-12 text-center">
+                                        @if (isset($_COOKIE['public']))
+                                            <h5 id="eligibleError"
+                                                {{ ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT') ? 'hidden' : '' }}
+                                                class="text-danger">Not eligible</h5>
+                                        @else
+                                            <h5 id="eligibleError" hidden class="text-danger">Not eligible</h5>
+                                        @endif
                                     </div>
 
                                 </form>
@@ -118,10 +140,10 @@
                         <p>&copy; 2022 blocktech.foundation. <br class="resevrd-mob"> All Rights Reserved</p>
                     </div>
                 </div>
+            </div>
         </div>
-    </div>
 
-    @include('components.connectWallet')
+        @include('components.connectWallet')
 
 </body>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -138,7 +160,7 @@
 <script src="{{ asset('js/wallet.js') }}"></script>
 <script type="text/javascript">
     $(window).load(function() {
-        // $('#ConnectWallet').modal('show');
+        $('#ConnectWallet').modal('show');
     });
 </script>
 

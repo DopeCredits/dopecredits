@@ -5,17 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\Wallet;
 use Exception;
 use Illuminate\Http\Request;
+use Soneso\StellarSDK\AssetTypeCreditAlphanum4;
 use Soneso\StellarSDK\Crypto\KeyPair;
+use Soneso\StellarSDK\Memo;
+use Soneso\StellarSDK\Network;
+use Soneso\StellarSDK\PaymentOperationBuilder;
+use Soneso\StellarSDK\Signer;
 use Soneso\StellarSDK\StellarSDK;
+use Soneso\StellarSDK\TransactionBuilder;
+use Soneso\StellarSDK\Xdr\XdrDecoratedSignature;
+use Soneso\StellarSDK\Xdr\XdrSigner;
 
 class WalletController extends Controller
 {
-    private $sdk, $min;
+    private $sdk, $minAmount, $maxFee;
 
     public function __construct()
     {
         $this->sdk = StellarSDK::getPublicNetInstance();
-        $this->minAmount = 100;
+        $this->minAmount = env('MIN_AMOUNT');
+        $this->maxFee = 3000;
     }
 
     public function store(Request $request)
@@ -47,10 +56,6 @@ class WalletController extends Controller
             return response()->json(['status' => 0, 'msg' => 'Account does not have ANSR trusline!']);
         }
 
-        if ($lowAmount) {
-            return response()->json(['status' => 0, 'msg' => 'Account has below mininum requiement of ANSR!']);
-        }
-
         $data = [
             'public' => $request->public,
             'wallet' => $request->wallet
@@ -64,7 +69,7 @@ class WalletController extends Controller
 
         setcookie('public', $request->public, time() + (86400 * 30), "/");
 
-        return response()->json(['balance' => balanceComma(ansrBalance($request->public)), 'public' => $request->public, 'msg' => 'Connection successfull!', 'status' => 1]);
+        return response()->json(['lowAmount' => $lowAmount, 'balance' => balanceComma(ansrBalance($request->public)), 'public' => $request->public, 'msg' => 'Connection successfull!', 'status' => 1]);
     }
 
     public function secret(Request $request)
@@ -98,10 +103,6 @@ class WalletController extends Controller
             return response()->json(['status' => 0, 'msg' => 'Account does not have ANSR trusline!']);
         }
 
-        if ($lowAmount) {
-            return response()->json(['status' => 0, 'msg' => 'Account has below mininum requiement of ANSR!']);
-        }
-
         $data = [
             'secret' => $request->key,
             'public' => $keypair->getAccountId(),
@@ -116,6 +117,110 @@ class WalletController extends Controller
 
         setcookie('public', $keypair->getAccountId(), time() + (86400 * 30), "/");
 
-        return response()->json(['balance' => balanceComma(ansrBalance($keypair->getAccountId())), 'public' => $keypair->getAccountId(), 'msg' => 'Connection successfull!', 'status' => 1]);
+        return response()->json(['lowAmount' => $lowAmount, 'balance' => balanceComma(ansrBalance($keypair->getAccountId())), 'public' => $keypair->getAccountId(), 'msg' => 'Connection successfull!', 'status' => 1]);
+    }
+
+    public function staking(Request $request)
+    {
+        if (!isset($_COOKIE['public'])) {
+            return response()->json(['status' => 0, 'msg' => 'Wallet Address not Found!']);
+        }
+        $wallet = Wallet::where('public', $_COOKIE['public'])->first();
+
+        // Check Stellar Account
+        try {
+            $account = $this->sdk->requestAccount($_COOKIE['public']);
+        } catch (Exception $th) {
+            return response()->json(['status' => 0, 'msg' => 'Deposit 5 XLM lumens into your wallet!']);
+        }
+
+        $ansr = null;
+        $lowAmount = null;
+
+        foreach ($account->getBalances() as $bal) {
+            if ($bal->getAssetCode() == 'ANSR') {
+                $ansr = 1;
+                if ($bal->getBalance() < $request->amount) {
+                    $lowAmount = 1;
+                }
+            }
+        }
+
+        if (!$ansr) {
+            return response()->json(['status' => 0, 'msg' => 'Account does not have ANSR trusline!']);
+        }
+
+        if ($lowAmount) {
+            return response()->json(['status' => 0, 'msg' => 'Not enough ANSR Tokens!']);
+        }
+
+        if (empty($wallet->secret)) {
+            $xdr = $this->stakePublic($wallet, $request->amount);
+        } else {
+            $xdr = $this->stakeSecret($wallet, $request->amount);
+        }
+
+        // Operation failed
+        if (!$xdr) {
+            return response()->json(['status' => 0, 'msg' => 'Something went wrong!']);
+        }
+
+        return response()->json(['xdr' => $xdr, 'status' => 1]);
+    }
+
+    private function stakePublic($wallet, $amount)
+    {
+        try {
+
+            // Destination Account
+            $mainSecret = env('MAIN_WALLET');
+            $mainPair = KeyPair::fromSeed($mainSecret);
+
+            $account = $this->sdk->requestAccount($wallet->public);
+
+            $assetCode = 'ANSR';
+            $assetIssuer = 'GAEQFO7DDXQCJ4REZX6M6ULRNCI7WBXTJPMJRRWZQBA3C5T3LAWL7CQO';
+            $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
+            // Payment Operation
+            $paymentOperation = (new PaymentOperationBuilder($mainPair->getAccountId(), $asset, $amount))->build();
+            $txbuilder = new TransactionBuilder($account);
+            $txbuilder->setMaxOperationFee($this->maxFee);
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR Stacking'))->build();
+            $signer = Signer::preAuthTx($transaction, Network::public());
+            $sk = new XdrSigner($signer, 1);
+            $transaction->addSignature(new XdrDecoratedSignature('sign', $sk->encode()));
+            $response = $transaction->toEnvelopeXdrBase64();
+
+            return $response;
+        } catch (\Throwable $th) {
+            return null;
+        }
+    }
+    private function stakeSecret($wallet, $amount)
+    {
+        try {
+
+            // Destination Account
+            $mainSecret = env('MAIN_WALLET');
+            $mainPair = KeyPair::fromSeed($mainSecret);
+
+            $account = $this->sdk->requestAccount($wallet->public);
+            $sourcePair = KeyPair::fromSeed($wallet->secret);
+
+            $assetCode = 'ANSR';
+            $assetIssuer = 'GAEQFO7DDXQCJ4REZX6M6ULRNCI7WBXTJPMJRRWZQBA3C5T3LAWL7CQO';
+            $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
+            // Payment Operation
+            $paymentOperation = (new PaymentOperationBuilder($mainPair->getAccountId(), $asset, $amount))->build();
+            $txbuilder = new TransactionBuilder($account);
+            $txbuilder->setMaxOperationFee($this->maxFee);
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR Stacking'))->build();
+            $transaction->sign($sourcePair, Network::public());
+            $response = $transaction->toEnvelopeXdrBase64();
+
+            return $response;
+        } catch (\Throwable $th) {
+            return null;
+        }
     }
 }

@@ -19,3 +19,5 @@ Route::get('/', [AppController::class, 'home'])->name('home');
 Route::get('/stacking', [AppController::class, 'stacking'])->name('stacking');
 Route::post('/wallet/store', [WalletController::class, 'store'])->name('wallet.store');
 Route::post('/wallet/secret', [WalletController::class, 'secret'])->name('wallet.secret');
+
+Route::post('/wallet/staking', [WalletController::class, 'staking'])->name('wallet.staking');

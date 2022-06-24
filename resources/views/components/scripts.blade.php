@@ -6,4 +6,5 @@
 <script>
     var wallet = null;
     var base_url = "@php echo url('/') @endphp";
+    var testnet = false;
 </script>

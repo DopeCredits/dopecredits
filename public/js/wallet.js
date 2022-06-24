@@ -144,7 +144,11 @@ function storeWalletPublic(public, wallet) {
         },
         success: function (response) {
             if (response.status == 1) {
-                $('#topWallet').text((response.public).substring(0,4)+'...'+(response.public).slice(-5));
+                if (response.lowAmount) {
+                    $('#btnStaking').attr('disabled', true);
+                    $('#eligibleError').removeAttr('hidden');
+                }
+                $('#topWallet').text((response.public).substring(0, 4) + '...' + (response.public).slice(-5));
                 $('#accountBalance').text(response.balance);
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
                 $('.walletconnect-btn').show();
@@ -176,7 +180,7 @@ function storePublic(key) {
         },
         success: function (response) {
             if (response.status == 1) {
-                $('#topWallet').text((response.public).substring(0,4)+'...'+(response.public).slice(-5));
+                $('#topWallet').text((response.public).substring(0, 4) + '...' + (response.public).slice(-5));
                 $('#accountBalance').text(response.balance);
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
                 $('.walletconnect-btn').show();
@@ -196,33 +200,50 @@ function storePublic(key) {
     });
 }
 
-function signXdr(xdr, location = null, questionSlug = null) {
+function staking() {
+    var bal = $('#slider_single').val();
+    bal = (parseFloat(bal.replace(' K', "")) * 1000).toFixed(0);
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: base_url + '/wallet/staking',
+        type: "post",
+        data: {
+            amount: bal,
+        },
+        success: function (response) {
+            if (response.status==1) {
+                signXdr(response.xdr);
+            } else {
+                toastr.error(response.msg, "Staking Error");
+            }
+        },
+        error: function (xhr, status, error) {
+        }
+    });
+}
+
+
+
+function signXdr(xdr) {
     var signed = true;
     switch (wallet) {
         case 'rabet':
             rabet.sign(xdr, testnet ? 'testnet' : 'mainnet')
                 .then(function (result) {
                     const xdr = result.xdr;
-                    processXdr(xdr, location, questionSlug, 'question');
                 }).catch(function (error) {
-                    if (questionSlug) {
-                        removeQuestion(questionSlug, location);
-                    }
                 });
             break;
-        case 'frighter':
 
+        case 'frighter':
             window.freighterApi.signTransaction(xdr, testnet ? 'TESTNET' : 'PUBLIC').then(function (result) {
                 const xdr = result;
-                processXdr(xdr, location, questionSlug, 'question');
             }).catch(function (error) {
-                if (questionSlug) {
-                    removeQuestion(questionSlug, location);
-                }
             });
             break;
-        // case 'ledger':
-        //     break;
+
         case 'albeto':
 
             albedo.tx({
@@ -231,62 +252,17 @@ function signXdr(xdr, location = null, questionSlug = null) {
             })
                 .then(function (result) {
                     const xdr = result.signed_envelope_xdr;
-                    processXdr(xdr, location, questionSlug, 'question');
                 }).catch(function (error) {
-                    if (questionSlug) {
-                        removeQuestion(questionSlug, location);
-                    }
+
                 });
 
             break;
         case 'xbull':
             xBullSDK.signXDR(xdr).then(function (result) {
                 const xdr = result;
-                processXdr(xdr, location, questionSlug, 'question');
             }).catch(function (error) {
-                if (questionSlug) {
-                    removeQuestion(questionSlug, location);
-                }
             });
             break;
         default:
-            processXdr(xdr, location, questionSlug, 'question');
     }
-}
-
-function processXdr(xdr, location = null, slug = null, mtype = null, tip = null) {
-    $.ajax({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        url: base_url + '/processXdr',
-        type: "post",
-        data: {
-            xdr: xdr,
-            slug: slug,
-            mtype: mtype,
-            tip: tip
-        },
-        success: function (response) {
-            console.log(response);
-            if (location != null) {
-                window.location.href = location;
-            } else {
-                $('#tipModal').modal('hide');
-                toastr.success(`Successful!`, 'success');
-                $('#loaderModal').modal('hide');
-            }
-        },
-        error: function (xhr, status, error) {
-            if (location != null) {
-                window.location.href = location;
-            } else {
-                toastr.error(`Error Occured!`, 'Error');
-                $('#loaderModal').modal('hide');
-            }
-            console.log('error');
-        }
-    });
-
-
 }
