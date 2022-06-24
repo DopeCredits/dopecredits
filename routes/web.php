@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AppController;
+use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [AppController::class, 'home'])->name('home');
+Route::get('/stacking', [AppController::class, 'stacking'])->name('stacking');
+Route::post('/wallet/store', [WalletController::class, 'store'])->name('wallet.store');
