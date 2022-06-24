@@ -1,5 +1,5 @@
     <!-- bootstarp 5 js -->
-    <div class="modal fade" id="ConnectWallet" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="ConnectWallet" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content modal-wallet">
                 <div class="modal-body">

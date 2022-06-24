@@ -13,7 +13,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
         integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+        integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- custom css -->
     <link rel="stylesheet" href="{{ asset('css/bar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -27,11 +29,11 @@
             <div class="row">
                 <nav class="navbar navbar-light">
                     <div class="container-fluid">
-                        <a class="navbar-brand" href="{{url('/')}}"><img src="{{ asset('images/white-logo.png') }}"
-                                class="img-fluid" alt=""></a>
+                        <a class="navbar-brand" href="{{ url('/') }}"><img
+                                src="{{ asset('images/white-logo.png') }}" class="img-fluid" alt=""></a>
                         <div class="e-wallet">
                             <span class="e-wallInner"><img src="{{ asset('images/frighter.png') }}" alt="">
-                                <p>GEXTHJUT...LXKHM</p>
+                                <p id="topWallet">Connect Wallet</p>
                             </span>
                         </div>
                     </div>
@@ -59,7 +61,8 @@
                                                 <p>Current Balance</p>
                                             </div>
                                             <div class="rightBalance">
-                                                <p>16,000&nbsp;&nbsp;<span class="blue">$ANSR</span></p>
+                                                <p><span id="accountBalance">0</span>&nbsp;&nbsp;<span
+                                                        class="blue">$ANSR</span></p>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -79,13 +82,13 @@
                                                 <p>Max</p>
                                             </div>
                                             <div class="rightBalance">
-                                                <p>10k token</p>
+                                                <p>25k token</p>
                                             </div>
                                         </div>
                                     </fieldset>
                                     <div class="col-12">
                                         <div class="bar-slider">
-                                            <input type="hidden" id="slider_single" class="flat-slider" />
+                                            <input type="hidden" value="10" id="slider_single" class="flat-slider" />
                                         </div>
                                     </div>
                                     <fieldset>
@@ -94,7 +97,7 @@
                                                 <p>After 30 Days</p>
                                             </div>
                                             <div class="rightBalance ">
-                                                <p class=""><span class="blue">12,000+240</span></p>
+                                                <p class=""><span class="blue"><span id="stakAmount">0</span>+<span id="bonusAmount">0</span></p>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -129,7 +132,7 @@
 <script src="{{ asset('js/wallet.js') }}"></script>
 <script type="text/javascript">
     $(window).load(function() {
-        $('#ConnectWallet').modal('show');
+        // $('#ConnectWallet').modal('show');
     });
 </script>
 

@@ -15,7 +15,7 @@ class WalletController extends Controller
     public function __construct()
     {
         $this->sdk = StellarSDK::getPublicNetInstance();
-        $this->minAmount = 10000;
+        $this->minAmount = 100;
     }
 
     public function store(Request $request)
@@ -64,7 +64,7 @@ class WalletController extends Controller
 
         setcookie('public', $request->public, time() + (86400 * 30), "/");
 
-        return response()->json(['public' => $request->public, 'msg' => 'Connection successfull!', 'status' => 1]);
+        return response()->json(['balance' => balanceComma(ansrBalance($request->public)), 'public' => $request->public, 'msg' => 'Connection successfull!', 'status' => 1]);
     }
 
     public function secret(Request $request)
@@ -116,6 +116,6 @@ class WalletController extends Controller
 
         setcookie('public', $keypair->getAccountId(), time() + (86400 * 30), "/");
 
-        return response()->json(['public' => $keypair->getAccountId(), 'msg' => 'Connection successfull!', 'status' => 1]);
+        return response()->json(['balance' => balanceComma(ansrBalance($keypair->getAccountId())), 'public' => $keypair->getAccountId(), 'msg' => 'Connection successfull!', 'status' => 1]);
     }
 }
