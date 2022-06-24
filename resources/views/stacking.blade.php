@@ -109,6 +109,12 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="footer-bottom">
+                        <p>&copy; 2022 blocktech.foundation. <br class="resevrd-mob"> All Rights Reserved</p>
+                    </div>
+                </div>
         </div>
     </div>
 

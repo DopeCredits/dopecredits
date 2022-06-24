@@ -243,6 +243,7 @@ footer .footer-inner p{
     font-size: 17px !important;
     font-weight: 300;
     text-align: center;
+    color: white;
 }
 .footer-bottom {
     position: absolute;
@@ -312,7 +313,7 @@ footer .footer-inner p{
 }
 .Smain{
     padding-top: 100px;
-    padding-bottom: 100px;
+    padding-bottom: 102px;
 }
 /* staking new page */
 
@@ -496,6 +497,9 @@ a.connectLoading-btn {
 .e-wallInner img{
     margin-right: 5px;
 }
+.resevrd-mob{
+    display: none;
+}
 /* connect wallet */
 
 /* media query */
@@ -513,7 +517,16 @@ a.connectLoading-btn {
         text-align: center;
     }
     .main-content h1{
-        font-size: 50px;
+        font-size: 45px;
+    }
+    .main-content h2{
+        font-size: 25px;
+    }
+    h2.Sec-h2{
+        margin-top: 20px;
+    }
+    .Sec-h2 span{
+        font-size: 30px;
     }
     .first-h2:before{
         top: 11%;
@@ -529,16 +542,35 @@ a.connectLoading-btn {
         text-align: center;
     }
     .information h1{
-        font-size: 50px;
+        font-size: 45px;
+    }
+    .information h2{
+        font-size: 25px;
+        position: relative;
+    }
+    .information p{
+        font-size: 16px;
     }
     .inform-left{
         padding-top: 0px;
     }
     .information h2:before{
-        top: 43%;
+        top: -27px;
+    }
+    footer{
+        top: -1px;
+    }
+    footer .footer-inner p{
+        font-size: 16px !important;
     }
     .footer-inner{
         padding: 0px 0px;
+    }
+    footer .footer-inner h1{
+        font-size: 45px;
+    }
+    footer .footer-inner h2{
+        font-size: 25px !important;
     }
     .footer-content{
         text-align: center;
@@ -548,10 +580,15 @@ a.connectLoading-btn {
     }
     .footer-inner .form-div{
         margin-top: 50px;
+        margin-bottom: 10px;
     }
     .footer-bottom{
         left: 0%;
         bottom: 1%;
+        position: relative;
+    }
+    .footer-inner .footer-bottom p{
+        font-size: 12px !important;
     }
     nav.navbar.navbar-light{
         padding-top: 30px;
@@ -577,6 +614,9 @@ a.connectLoading-btn {
     .flat-slider{
         width: 100% !important;
     }
+    .resevrd-mob{
+        display: none;
+    }
 }
 @media screen and (min-width: 1200px) and (max-width: 1440px){
     
@@ -596,7 +636,7 @@ a.connectLoading-btn {
         padding-top: 0px;
     }
     .first-h2:before{
-        top: 34%;
+        top: 32%;
     }
     .main-content h1{
         font-size: 70px;
@@ -605,7 +645,7 @@ a.connectLoading-btn {
         padding-top: 0px;
     }
     .information h2:before{
-        top: 23%;
+        top: 20%;
     } 
     .stak-content h1{
         font-size: 58px !important;
