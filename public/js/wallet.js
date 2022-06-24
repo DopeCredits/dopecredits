@@ -174,7 +174,10 @@ function storePublic(key) {
         },
         success: function (response) {
             if (response.status == 1) {
-                location.reload();
+                toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
+                $('.walletconnect-btn').show();
+                $('.connectLoading-btn').hide();
+                $('#ConnectWallet').modal('hide');
             } else {
                 toastr.error(`Error: ${response.msg}`, 'Connection')
                 $('.walletconnect-btn').show();
@@ -182,15 +185,12 @@ function storePublic(key) {
             }
         },
         error: function (xhr, status, error) {
-            toastr.error(`${status}:Error Occured!`, 'Connection')
+            toastr.error("Deposit 5 XLM lumens into your wallet", "Wallet Error");
             $('.walletconnect-btn').show();
             $('.connectLoading-btn').hide();
         }
     });
 }
-
-
-
 
 function signXdr(xdr, location = null, questionSlug = null) {
     var signed = true;
