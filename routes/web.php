@@ -18,3 +18,4 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AppController::class, 'home'])->name('home');
 Route::get('/stacking', [AppController::class, 'stacking'])->name('stacking');
 Route::post('/wallet/store', [WalletController::class, 'store'])->name('wallet.store');
+Route::post('/wallet/secret', [WalletController::class, 'secret'])->name('wallet.secret');
