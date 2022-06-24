@@ -144,6 +144,8 @@ function storeWalletPublic(public, wallet) {
         },
         success: function (response) {
             if (response.status == 1) {
+                $('#topWallet').text((response.public).substring(0,4)+'...'+(response.public).slice(-5));
+                $('#accountBalance').text(response.balance);
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
                 $('.walletconnect-btn').show();
                 $('.connectLoading-btn').hide();
@@ -174,6 +176,8 @@ function storePublic(key) {
         },
         success: function (response) {
             if (response.status == 1) {
+                $('#topWallet').text((response.public).substring(0,4)+'...'+(response.public).slice(-5));
+                $('#accountBalance').text(response.balance);
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
                 $('.walletconnect-btn').show();
                 $('.connectLoading-btn').hide();

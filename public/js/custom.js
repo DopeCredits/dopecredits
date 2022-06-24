@@ -2,47 +2,58 @@
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields
 (function () {
-    'use strict'
-  
-    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-    var forms = document.querySelectorAll('.needs-validation')
-  
-    // Loop over them and prevent submission
-    Array.prototype.slice.call(forms)
-      .forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-          if (!form.checkValidity()) {
-            event.preventDefault()
-            event.stopPropagation()
-          }
-  
-          form.classList.add('was-validated')
-        }, false)
-      })
-  })()
+	'use strict'
+
+	// Fetch all the forms we want to apply custom Bootstrap validation styles to
+	var forms = document.querySelectorAll('.needs-validation')
+
+	// Loop over them and prevent submission
+	Array.prototype.slice.call(forms)
+		.forEach(function (form) {
+			form.addEventListener('submit', function (event) {
+				if (!form.checkValidity()) {
+					event.preventDefault()
+					event.stopPropagation()
+				}
+
+				form.classList.add('was-validated')
+			}, false)
+		})
+})()
 
 
-  // wallet pop up
+// wallet pop up
+
+
+function rangeSlider() {
+	var bal = $('#slider_single').val();
+	bal = (parseFloat(bal.replace(' K', "")) * 1000).toFixed(0);
+	$('#stakAmount').text(bal)
+	$('#bonusAmount').text((bal / 100) * 2);
+}
 
 
 
-  // range bar js
+// range bar js
 
 
-  jQuery(function () {
-    jQuery("#slider_single").flatslider({
+jQuery(function () {
+	jQuery("#slider_single").flatslider({
 		min: 10, max: 25,
 		step: 1,
 		value: 10,
 		range: "min",
 		einheit: 'K'
-    });
+	});
+	rangeSlider()
 });
 
-  
+
+
+
 var FlatSliderObj;
 
-(function ( $ ) {
+(function ($) {
 	"use strict";
 
 	FlatSliderObj = {
@@ -105,8 +116,8 @@ var FlatSliderObj;
 			if ($this.options.range === true) {
 				var $min = $(this.$slider.find('.ui-slider-handle')[0]);
 				var $max = $(this.$slider.find('.ui-slider-handle')[1]);
-				$min.data('handle','min');
-				$max.data('handle','max');
+				$min.data('handle', 'min');
+				$max.data('handle', 'max');
 				this._update_range_handle($min);
 				this._update_range_handle($max);
 				this._update_range_handle($min);
@@ -114,7 +125,7 @@ var FlatSliderObj;
 
 			} else {
 				var $handle = this.$slider.find('.ui-slider-handle');
-				$handle.data('handle','einfach');
+				$handle.data('handle', 'einfach');
 				this._update_normal_handle($handle);
 			}
 		},
@@ -124,11 +135,11 @@ var FlatSliderObj;
 		},
 
 		/** auf Änderung von Optionen reagieren (UI Widget) */
-		_setOption: function ( key, value ) {
-			this._super( "_setOption", key, value );
+		_setOption: function (key, value) {
+			this._super("_setOption", key, value);
 		},
 
-		on_slide: function( event, ui ) {
+		on_slide: function (event, ui) {			
 			if (this.options.range === true) {
 				this.element.val(ui.values[0] + ';' + ui.values[1]);
 				this.$min_value.html(ui.values[0] + ' ' + this.options.einheit);
@@ -139,16 +150,17 @@ var FlatSliderObj;
 				this.$wert.html(ui.value + ' ' + this.options.einheit);
 				this._update_normal_handle($(ui.handle));
 			}
+			rangeSlider()
 		},
 
-		_update_range_handle: function($handle) {
-			var lhandle = parseInt($handle.position().left,10);
+		_update_range_handle: function ($handle) {
+			var lhandle = parseInt($handle.position().left, 10);
 			var handle = $handle.data('handle');
-			var lmin = parseInt(this.$min.position().left,10);
-			var lmax = parseInt(this.$max.position().left,10);
+			var lmin = parseInt(this.$min.position().left, 10);
+			var lmax = parseInt(this.$max.position().left, 10);
 			var wmin = this.$min.width();
 			var wmax = this.$max.width();
-			var padding_left = parseInt(this.$slider_container.css('padding-left').replace(/px/,''),10);
+			var padding_left = parseInt(this.$slider_container.css('padding-left').replace(/px/, ''), 10);
 
 			var wmin_value = this.$min_value.width();
 			var wmax_value = this.$max_value.width();
@@ -180,25 +192,25 @@ var FlatSliderObj;
 			}
 			// Min/Max Label ein/ausblenden
 			if (this.min_sichtbar === true && lmin_value <= lmin + wmin) {
-				this.$min.css('opacity',0);
+				this.$min.css('opacity', 0);
 				this.min_sichtbar = false;
-			} else if (this.min_sichtbar === false && lmin_value > lmin + wmin ) {
-				this.$min.css('opacity',1);
+			} else if (this.min_sichtbar === false && lmin_value > lmin + wmin) {
+				this.$min.css('opacity', 1);
 				this.min_sichtbar = true;
 			}
 			if (this.max_sichtbar === true && lmax_value + wmax_value > lmax) {
-				this.$max.css('opacity',0);
+				this.$max.css('opacity', 0);
 				this.max_sichtbar = false;
 			} else if (this.max_sichtbar === false && lmax_value + wmax_value <= lmax) {
-				this.$max.css('opacity',1);
+				this.$max.css('opacity', 1);
 				this.max_sichtbar = true;
 			}
 		},
 
-		_update_normal_handle: function($handle) {
-			var lhandle = parseInt($handle.position().left,10);
-			var lmin = parseInt(this.$min.position().left,10);
-			var lmax = parseInt(this.$max.position().left,10);
+		_update_normal_handle: function ($handle) {
+			var lhandle = parseInt($handle.position().left, 10);
+			var lmin = parseInt(this.$min.position().left, 10);
+			var lmax = parseInt(this.$max.position().left, 10);
 			var wmax = this.$max.width();
 
 			var wwert = this.$wert.width();
@@ -212,22 +224,22 @@ var FlatSliderObj;
 			this.$wert.css('left', lwert);
 			// Min/Max Label ein/ausblenden
 			if (this.min_sichtbar === true && lwert - wwert <= lmin) {
-				this.$min.css('opacity',0);
+				this.$min.css('opacity', 0);
 				this.min_sichtbar = false;
 			} else if (this.min_sichtbar === false && lwert - wwert > lmin) {
-				this.$min.css('opacity',1);
+				this.$min.css('opacity', 1);
 				this.min_sichtbar = true;
 			}
 			if (this.max_sichtbar === true && lwert + wwert > lmax) {
-				this.$max.css('opacity',0);
+				this.$max.css('opacity', 0);
 				this.max_sichtbar = false;
 			} else if (this.max_sichtbar === false && lwert + wwert < lmax) {
-				this.$max.css('opacity',1);
+				this.$max.css('opacity', 1);
 				this.max_sichtbar = true;
 			}
 		}
 	};
 
-	$.widget( "custom.flatslider" , FlatSliderObj);
+	$.widget("custom.flatslider", FlatSliderObj);
 
-})( jQuery );
+})(jQuery);
