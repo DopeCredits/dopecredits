@@ -26,7 +26,7 @@
             <div class="row">
                 <nav class="navbar navbar-light">
                     <div class="container-fluid">
-                        <a class="navbar-brand" href="#"><img src="{{ asset('images/white-logo.png') }}"
+                        <a class="navbar-brand" href="{{url('/')}}"><img src="{{ asset('images/white-logo.png') }}"
                                 class="img-fluid" alt=""></a>
                     </div>
                 </nav>

@@ -27,7 +27,7 @@
             <div class="row">
                 <nav class="navbar navbar-light">
                     <div class="container-fluid">
-                        <a class="navbar-brand" href="#"><img src="{{ asset('images/white-logo.png') }}"
+                        <a class="navbar-brand" href="{{url('/')}}"><img src="{{ asset('images/white-logo.png') }}"
                                 class="img-fluid" alt=""></a>
                         <div class="e-wallet">
                             <span class="e-wallInner"><img src="{{ asset('images/frighter.png') }}" alt="">
@@ -85,7 +85,7 @@
                                     </fieldset>
                                     <div class="col-12">
                                         <div class="bar-slider">
-                                            <input type="hidden" id="slider_range" class="flat-slider" />
+                                            <input type="hidden" id="slider_single" class="flat-slider" />
                                         </div>
                                     </div>
                                     <fieldset>

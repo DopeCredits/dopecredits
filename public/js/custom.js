@@ -30,13 +30,12 @@
 
 
   jQuery(function () {
-    jQuery("#slider_range").flatslider({
-        min: 10,
-        max: 25,
-        step: 1,
-        values: [10, 25],
-        range: true,
-        einheit: 'K'
+    jQuery("#slider_single").flatslider({
+		min: 10, max: 25,
+		step: 1,
+		value: 10,
+		range: "min",
+		einheit: 'K'
     });
 });
 
