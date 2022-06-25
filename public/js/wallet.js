@@ -213,7 +213,7 @@ function btnLoaderHide() {
 
 function staking() {
     var bal = $('#slider_single').val();
-    bal = (parseFloat(bal.replace(' K', "")) * 1000).toFixed(0);
+    bal = (parseFloat(bal.replace(' K', "")) * 10).toFixed(0);
     $('#btnStaking').hide();
     $('#loadStaking').show();
     $.ajax({
@@ -312,6 +312,7 @@ function submitStakingXdr(xdr, staking_id) {
             btnLoaderHide();
         },
         error: function (xhr, status, error) {
+            console.log(xhr.responseText);
             btnLoaderHide();
             toastr.error('Something went wrong!', "Staking Error");
         }
