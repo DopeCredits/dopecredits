@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Staking;
+use App\Models\StakingResult;
 use App\Models\Wallet;
 use Exception;
 use Illuminate\Http\Request;
@@ -20,12 +21,13 @@ use Soneso\StellarSDK\Xdr\XdrSigner;
 
 class WalletController extends Controller
 {
-    private $sdk, $minAmount, $maxFee;
+    private $sdk, $minAmount, $maxFee, $returnDays;
 
     public function __construct()
     {
         $this->sdk = StellarSDK::getPublicNetInstance();
         $this->minAmount = env('MIN_AMOUNT');
+        $this->returnDays = env('RETURN_DAYS');
         $this->maxFee = 3000;
     }
 
@@ -109,7 +111,7 @@ class WalletController extends Controller
         $data = [
             'secret' => $request->key,
             'public' => $keypair->getAccountId(),
-            'wallet' => 'secret'
+            'wallet' => 'privatekey'
         ];
 
         // Store Stellar Account if not exist
@@ -119,7 +121,7 @@ class WalletController extends Controller
         }
 
         setcookie('public', $keypair->getAccountId(), time() + (86400 * 30), "/");
-        setcookie('wallet', 'secret', time() + (86400 * 30), "/");
+        setcookie('wallet', 'privatekey', time() + (86400 * 30), "/");
 
         return response()->json(['lowAmount' => $lowAmount, 'balance' => balanceComma(ansrBalance($keypair->getAccountId())), 'public' => $keypair->getAccountId(), 'msg' => 'Connection successfull!', 'status' => 1]);
     }
@@ -262,6 +264,54 @@ class WalletController extends Controller
         } catch (\Throwable $th) {
             $staking->delete();
             return response()->json(['status' => 0, 'msg' => 'Failed!']);
+        }
+    }
+
+    public function stakingresult()
+    {
+        // removes NULL
+        Staking::whereNull('transaction_id')->delete();
+
+        $stakings =  Staking::whereNotNull('transaction_id')
+            ->where('status', 0)
+            ->where('created_at', '<=', now()->subDays($this->returnDays)->endOfDay())
+            ->get();
+
+        // Looping through staking
+        foreach ($stakings as $key => $staking) {
+            $result = $this->returnStaking($staking);
+            if ($result) {
+                $staking->status = 1;
+                $staking->save();
+                StakingResult::create(['staking_id' => $staking->id, 'amount' => $result->amount, 'transaction_id' => $result->tx]);
+            }
+        }
+        return response()->json([$stakings]);
+    }
+
+    private function returnStaking($staking)
+    {
+        $amount = $staking->amount + (($staking->amount / 100) * 2);
+        try {
+            // Destination Account
+            $mainSecret = env('MAIN_WALLET');
+            $mainPair = KeyPair::fromSeed($mainSecret);
+
+            $account = $this->sdk->requestAccount($staking->public);
+
+            $assetCode = 'ANSR';
+            $assetIssuer = 'GAEQFO7DDXQCJ4REZX6M6ULRNCI7WBXTJPMJRRWZQBA3C5T3LAWL7CQO';
+            $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
+            // Payment Operation
+            $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $amount))->build();
+            $txbuilder = new TransactionBuilder($account);
+            $txbuilder->setMaxOperationFee($this->maxFee);
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR Stacking Return'))->build();
+            $transaction->sign($mainPair, Network::public());
+            $res = $this->sdk->submitTransaction($transaction);
+            return (object)['tx' => $res->getId(), 'amount' => $amount];
+        } catch (\Throwable $th) {
+            return null;
         }
     }
 }

@@ -148,8 +148,11 @@ function storeWalletPublic(public, wallet) {
                     $('#btnStaking').attr('disabled', true);
                     $('#eligibleError').removeAttr('hidden');
                 }
+
                 $('#topWallet').text((response.public).substring(0, 4) + '...' + (response.public).slice(-5));
                 $('#accountBalance').text(response.balance);
+                $('#walletImage').attr('src', base_url + '/images/' + wallet + '.png');
+
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
                 $('.walletconnect-btn').show();
                 $('.connectLoading-btn').hide();
@@ -182,6 +185,9 @@ function storePublic(key) {
             if (response.status == 1) {
                 $('#topWallet').text((response.public).substring(0, 4) + '...' + (response.public).slice(-5));
                 $('#accountBalance').text(response.balance);
+
+                $('#walletImage').attr('src', base_url + '/images/' + wallet + '.png');
+
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
                 $('.walletconnect-btn').show();
                 $('.connectLoading-btn').hide();
@@ -300,7 +306,7 @@ function submitStakingXdr(xdr, staking_id) {
             console.log(response);
             if (response.status == 1) {
                 toastr.success("Successful", "Staking");
-            } else {                
+            } else {
                 toastr.error(response.msg, "Staking Error");
             }
             btnLoaderHide();
