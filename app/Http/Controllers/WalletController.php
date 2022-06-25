@@ -278,8 +278,6 @@ class WalletController extends Controller
             // ->where('created_at', '<=', now()->subDays($this->returnDays)->endOfDay())
             ->get();
 
-        return response()->json($stakings);
-
         // Looping through staking
         foreach ($stakings as $key => $staking) {
             $result = $this->returnStaking($staking);
