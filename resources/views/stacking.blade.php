@@ -31,7 +31,7 @@
                     <div class="container-fluid">
                         <a class="navbar-brand" href="{{ url('/') }}"><img
                                 src="{{ asset('images/white-logo.png') }}" class="img-fluid" alt=""></a>
-                        <div class="e-wallet">
+                        <div style="cursor: pointer" onclick="$('#ConnectWallet').modal('show');" class="e-wallet">
                             <span class="e-wallInner"><img src="{{ asset('images/frighter.png') }}" alt="">
                                 <p id="topWallet">
                                     {{ isset($_COOKIE['public']) ? substr($_COOKIE['public'], 0, 4) . '...' . substr($_COOKIE['public'], -5) : 'Connect Wallet' }}
@@ -117,6 +117,14 @@
                                                 class=" mt-3 stak-btn form-sub"><span class="stak-btns form-btn">Start
                                                     Staking</span></button>
                                         @endif
+                                        <button style="display: none" id="loadStaking" type="button"
+                                            class=" mt-3 loader-btn"><span class="form-btn">
+                                                <div class="spinner-border text-light" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                                <p>Processing</p>
+                                            </span></button>
+
                                     </div>
 
                                     <div class="col-12 text-center">

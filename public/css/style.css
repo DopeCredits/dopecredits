@@ -500,6 +500,27 @@ a.connectLoading-btn {
 .resevrd-mob{
     display: none;
 }
+.loader-btn{
+    width: 100%;
+    max-width: 150px !important;
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    border: 1px solid transparent;
+    background-color: transparent;
+    text-align: center;
+    position: relative;
+    color: white;
+    cursor:default !important;
+}
+.loader-btn .form-btn{
+    display: flex;
+    
+}
+.loader-btn .form-btn p{
+    font-size: 18px !important;
+    margin-left: 5px;
+}
 /* connect wallet */
 
 /* media query */

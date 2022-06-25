@@ -8,5 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Staking extends Model
 {
     use HasFactory;
-    protected $fillable=['public','amount','status','transaction_id'];
+    protected $fillable = ['public', 'amount', 'status', 'transaction_id'];
+
+    public function stakingResult()
+    {
+        return $this->hasOne(StakingResult::class);
+    }
 }

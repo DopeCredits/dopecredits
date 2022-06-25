@@ -13,6 +13,7 @@ use Soneso\StellarSDK\Network;
 use Soneso\StellarSDK\PaymentOperationBuilder;
 use Soneso\StellarSDK\Signer;
 use Soneso\StellarSDK\StellarSDK;
+use Soneso\StellarSDK\Transaction;
 use Soneso\StellarSDK\TransactionBuilder;
 use Soneso\StellarSDK\Xdr\XdrDecoratedSignature;
 use Soneso\StellarSDK\Xdr\XdrSigner;
@@ -123,6 +124,7 @@ class WalletController extends Controller
         return response()->json(['lowAmount' => $lowAmount, 'balance' => balanceComma(ansrBalance($keypair->getAccountId())), 'public' => $keypair->getAccountId(), 'msg' => 'Connection successfull!', 'status' => 1]);
     }
 
+    // Stacking XDR GENERATE
     public function staking(Request $request)
     {
         if (!isset($_COOKIE['public'])) {
@@ -233,6 +235,33 @@ class WalletController extends Controller
             return $response;
         } catch (\Throwable $th) {
             return null;
+        }
+    }
+
+    // XDR SUBMIT
+    public function submitXdr(Request $request)
+    {
+        $xdr = $request->xdr;
+        $staking = Staking::where('id', $request->staking_id)->first();
+        if (!$staking) {
+            return response()->json(['status' => 0, 'msg' => 'Something went wrong!']);
+        }
+        try {
+            $sdk = $this->sdk;
+            $tx = Transaction::fromEnvelopeBase64XdrString($xdr);
+            if (!empty($tx->getSignatures()[1])) {
+                $tx->setSignatures([$tx->getSignatures()[1]]);
+            }
+            $result = $sdk->submitTransaction($tx);
+            $txID = $result->getId();
+            if ($txID) {
+                $staking->transaction_id = $txID;
+                $staking->save();
+            }
+            return response()->json(['status' => 1, 'msg' => 'Success!']);
+        } catch (\Throwable $th) {
+            $staking->delete();
+            return response()->json(['status' => 0, 'msg' => 'Failed!']);
         }
     }
 }

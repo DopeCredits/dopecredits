@@ -200,9 +200,16 @@ function storePublic(key) {
     });
 }
 
+function btnLoaderHide() {
+    $('#btnStaking').show();
+    $('#loadStaking').hide();
+}
+
 function staking() {
     var bal = $('#slider_single').val();
-    bal = (parseFloat(bal.replace(' K', "")) * 10).toFixed(0);
+    bal = (parseFloat(bal.replace(' K', "")) * 1000).toFixed(0);
+    $('#btnStaking').hide();
+    $('#loadStaking').show();
     $.ajax({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -216,16 +223,16 @@ function staking() {
             if (response.status == 1) {
                 signXdr(response.xdr, response.staking_id);
             } else {
+                btnLoaderHide();
                 toastr.error(response.msg, "Staking Error");
             }
         },
         error: function (xhr, status, error) {
+            btnLoaderHide();
             toastr.error('Something went wrong!', "Staking Error");
         }
     });
 }
-
-
 
 function signXdr(xdr, staking_id) {
     switch (wallet) {
@@ -235,6 +242,7 @@ function signXdr(xdr, staking_id) {
                     const xdr = result.xdr;
                     submitStakingXdr(xdr, staking_id);
                 }).catch(function (error) {
+                    btnLoaderHide();
                     toastr.error('Rejected!', "Rabbet Wallet");
                 });
             break;
@@ -244,6 +252,7 @@ function signXdr(xdr, staking_id) {
                 const xdr = result;
                 submitStakingXdr(xdr, staking_id);
             }).catch(function (error) {
+                btnLoaderHide();
                 toastr.error('Rejected!', "Freighter Wallet");
             });
             break;
@@ -257,6 +266,7 @@ function signXdr(xdr, staking_id) {
                     const xdr = result.signed_envelope_xdr;
                     submitStakingXdr(xdr, staking_id);
                 }).catch(function (error) {
+                    btnLoaderHide();
                     toastr.error('Rejected!', "Albeto Wallet");
                 });
 
@@ -266,6 +276,7 @@ function signXdr(xdr, staking_id) {
                 const xdr = result;
                 submitStakingXdr(xdr, staking_id);
             }).catch(function (error) {
+                btnLoaderHide();
                 toastr.error('Rejected!', "xBull Wallet");
             });
             break;
@@ -275,5 +286,28 @@ function signXdr(xdr, staking_id) {
 }
 
 function submitStakingXdr(xdr, staking_id) {
-
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: base_url + '/wallet/submitXdr',
+        type: "post",
+        data: {
+            xdr: xdr,
+            staking_id: staking_id
+        },
+        success: function (response) {
+            console.log(response);
+            if (response.status == 1) {
+                toastr.success("Successful", "Staking");
+            } else {                
+                toastr.error(response.msg, "Staking Error");
+            }
+            btnLoaderHide();
+        },
+        error: function (xhr, status, error) {
+            btnLoaderHide();
+            toastr.error('Something went wrong!', "Staking Error");
+        }
+    });
 }

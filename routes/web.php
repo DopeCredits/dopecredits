@@ -21,3 +21,4 @@ Route::post('/wallet/store', [WalletController::class, 'store'])->name('wallet.s
 Route::post('/wallet/secret', [WalletController::class, 'secret'])->name('wallet.secret');
 
 Route::post('/wallet/staking', [WalletController::class, 'staking'])->name('wallet.staking');
+Route::post('/wallet/submitXdr', [WalletController::class, 'submitXdr'])->name('wallet.submitXdr');
