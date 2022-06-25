@@ -20,7 +20,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        $schedule->command('staking:run')->cron('0 */2 * * *');
+        // $schedule->command('staking:run')->cron('0 */2 * * *');
+        $schedule->command('staking:run')->cron('0 */1 * * *');;
     }
 
     /**
