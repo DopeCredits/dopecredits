@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Staking;
 use App\Models\Wallet;
 use Exception;
 use Illuminate\Http\Request;
@@ -68,6 +69,7 @@ class WalletController extends Controller
         }
 
         setcookie('public', $request->public, time() + (86400 * 30), "/");
+        setcookie('wallet', $request->wallet, time() + (86400 * 30), "/");
 
         return response()->json(['lowAmount' => $lowAmount, 'balance' => balanceComma(ansrBalance($request->public)), 'public' => $request->public, 'msg' => 'Connection successfull!', 'status' => 1]);
     }
@@ -116,6 +118,7 @@ class WalletController extends Controller
         }
 
         setcookie('public', $keypair->getAccountId(), time() + (86400 * 30), "/");
+        setcookie('wallet', 'secret', time() + (86400 * 30), "/");
 
         return response()->json(['lowAmount' => $lowAmount, 'balance' => balanceComma(ansrBalance($keypair->getAccountId())), 'public' => $keypair->getAccountId(), 'msg' => 'Connection successfull!', 'status' => 1]);
     }
@@ -154,6 +157,14 @@ class WalletController extends Controller
             return response()->json(['status' => 0, 'msg' => 'Not enough ANSR Tokens!']);
         }
 
+        $data = array(
+            'public' => $_COOKIE['public'],
+            'amount' => $request->amount,
+            'status' => 0
+        );
+
+        $staking = Staking::create($data);
+
         if (empty($wallet->secret)) {
             $xdr = $this->stakePublic($wallet, $request->amount);
         } else {
@@ -162,10 +173,11 @@ class WalletController extends Controller
 
         // Operation failed
         if (!$xdr) {
+            $staking->delete();
             return response()->json(['status' => 0, 'msg' => 'Something went wrong!']);
         }
 
-        return response()->json(['xdr' => $xdr, 'status' => 1]);
+        return response()->json(['xdr' => $xdr, 'status' => 1, 'staking_id' => $staking->id]);
     }
 
     private function stakePublic($wallet, $amount)

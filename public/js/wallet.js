@@ -202,7 +202,7 @@ function storePublic(key) {
 
 function staking() {
     var bal = $('#slider_single').val();
-    bal = (parseFloat(bal.replace(' K', "")) * 1000).toFixed(0);
+    bal = (parseFloat(bal.replace(' K', "")) * 10).toFixed(0);
     $.ajax({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -213,56 +213,67 @@ function staking() {
             amount: bal,
         },
         success: function (response) {
-            if (response.status==1) {
-                signXdr(response.xdr);
+            if (response.status == 1) {
+                signXdr(response.xdr, response.staking_id);
             } else {
                 toastr.error(response.msg, "Staking Error");
             }
         },
         error: function (xhr, status, error) {
+            toastr.error('Something went wrong!', "Staking Error");
         }
     });
 }
 
 
 
-function signXdr(xdr) {
-    var signed = true;
+function signXdr(xdr, staking_id) {
     switch (wallet) {
         case 'rabet':
             rabet.sign(xdr, testnet ? 'testnet' : 'mainnet')
                 .then(function (result) {
                     const xdr = result.xdr;
+                    submitStakingXdr(xdr, staking_id);
                 }).catch(function (error) {
+                    toastr.error('Rejected!', "Rabbet Wallet");
                 });
             break;
 
         case 'frighter':
             window.freighterApi.signTransaction(xdr, testnet ? 'TESTNET' : 'PUBLIC').then(function (result) {
                 const xdr = result;
+                submitStakingXdr(xdr, staking_id);
             }).catch(function (error) {
+                toastr.error('Rejected!', "Freighter Wallet");
             });
             break;
 
         case 'albeto':
-
             albedo.tx({
                 xdr: xdr,
                 network: testnet ? 'testnet' : 'mainnet'
             })
                 .then(function (result) {
                     const xdr = result.signed_envelope_xdr;
+                    submitStakingXdr(xdr, staking_id);
                 }).catch(function (error) {
-
+                    toastr.error('Rejected!', "Albeto Wallet");
                 });
 
             break;
         case 'xbull':
             xBullSDK.signXDR(xdr).then(function (result) {
                 const xdr = result;
+                submitStakingXdr(xdr, staking_id);
             }).catch(function (error) {
+                toastr.error('Rejected!', "xBull Wallet");
             });
             break;
         default:
+            submitStakingXdr(xdr, staking_id);
     }
+}
+
+function submitStakingXdr(xdr, staking_id) {
+
 }

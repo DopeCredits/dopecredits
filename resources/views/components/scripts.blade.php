@@ -4,7 +4,11 @@
 <script src="https://unpkg.com/@albedo-link/intent"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-freighter-api/1.1.2/index.min.js"></script>
 <script>
-    var wallet = null;
+    @if (isset($_COOKIE['wallet']))
+        var wallet = "{{ $_COOKIE['wallet'] }}";
+    @else
+        var wallet = null;
+    @endif
     var base_url = "@php echo url('/') @endphp";
     var testnet = false;
 </script>

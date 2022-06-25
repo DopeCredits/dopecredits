@@ -113,8 +113,9 @@
                                                 id="btnStaking" type="button" class=" mt-3 stak-btn form-sub"><span
                                                     class="stak-btns form-btn">Start Staking</span></button>
                                         @else
-                                            <button onclick="staking()" id="btnStaking" type="button" class=" mt-3 stak-btn form-sub"><span
-                                                    class="stak-btns form-btn">Start Staking</span></button>
+                                            <button onclick="staking()" id="btnStaking" type="button"
+                                                class=" mt-3 stak-btn form-sub"><span class="stak-btns form-btn">Start
+                                                    Staking</span></button>
                                         @endif
                                     </div>
 
@@ -159,9 +160,11 @@
 <script src="{{ asset('js/custom.js') }}"></script>
 <script src="{{ asset('js/wallet.js') }}"></script>
 <script type="text/javascript">
-    $(window).load(function() {
-        $('#ConnectWallet').modal('show');
-    });
+    @if (!isset($_COOKIE['public']))
+        $(window).load(function() {
+            $('#ConnectWallet').modal('show');
+        });
+    @endif
 </script>
 
 </html>
