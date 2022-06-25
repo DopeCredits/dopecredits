@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('staking_results', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('staking_id')->unique();
+            $table->bigInteger('staking_id')->unsigned();
             $table->double('amount');
             $table->text('transaction_id');
             $table->timestamps();
