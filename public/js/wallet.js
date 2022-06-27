@@ -82,7 +82,7 @@ function albedoWallet() {
             storeWalletPublic(res.pubkey, 'albeto');
         })
         .catch(function (error) {
-            toastr.error(`Error Occured`, 'ALabedo Wallet');
+            toastr.error(`Connection Rejected`, 'Albedo Wallet');
             $('.walletconnect-btn').show();
             $('.connectLoading-btn').hide();
         });
