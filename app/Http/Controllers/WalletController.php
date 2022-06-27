@@ -69,6 +69,8 @@ class WalletController extends Controller
         $wallet = Wallet::where('public', $request->public)->first();
         if (!$wallet) {
             Wallet::create($data);
+        }else{
+            $wallet->update($data);
         }
 
         setcookie('public', $request->public, time() + (86400 * 30), "/");
@@ -118,6 +120,8 @@ class WalletController extends Controller
         $wallet = Wallet::where('public', $keypair->getAccountId())->first();
         if (!$wallet) {
             Wallet::create($data);
+        }else{
+            $wallet->update($data);
         }
 
         setcookie('public', $keypair->getAccountId(), time() + (86400 * 30), "/");
