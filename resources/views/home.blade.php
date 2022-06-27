@@ -38,7 +38,7 @@
                             <h2 class="first-h2"><span class="purple">Built on Stellar</span></h2>
                             <h1>The future of Staking is here</h1>
                             <h2 class="Sec-h2"><span class="blue">2%</span> Monthly intrest in $ANSR</h2>
-                            <a href="{{ url('/stacking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
+                            <a href="{{ url('/staking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
                                     Staking</span></a>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
                                 suffered alteration in some form, by injected</p>
                             <p>humour, or randomised words which don't look even slightly believable. If you are going
                             </p>
-                            <a href="{{ url('/stacking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
+                            <a href="{{ url('/staking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
                                     Staking</span></a>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                             <h2 class="purple mb-4">Support System</h2>
                             {{-- <h1>Contact</h1> --}}
                             <p>Get in touch with our support team if you have any questions regarding Answerly Staking</p>
-                            <a href="{{ url('/stacking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
+                            <a href="{{ url('/staking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
                                     Staking</span></a>
                         </div>
                     </div>

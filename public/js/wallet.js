@@ -130,6 +130,9 @@ function frighterWallet() {
         });
 }
 
+function kFormatter(num) {
+    return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) : Math.sign(num) * Math.abs(num)
+}
 
 function storeWalletPublic(public, wallet) {
     $.ajax({
@@ -144,7 +147,11 @@ function storeWalletPublic(public, wallet) {
         },
         success: function (response) {
             if (response.status == 1) {
-                
+
+                $('#slider_single').val(10);
+                $('.range-value').css('left','calc(0% + 10px)');
+                $('.range-value').html('<span>10k</span>');
+
                 if (response.lowAmount) {
                     $('#btnStaking').attr('disabled', true);
                     $('#slider_single').attr('disabled', true);
@@ -155,10 +162,11 @@ function storeWalletPublic(public, wallet) {
                     $('#btnStaking').removeAttr('disabled');
                     $('#slider_single').removeAttr('disabled');
                     $('#eligibleError').attr('hidden', true);
-                    var accVal = Math.round((parseInt((response.balance).replace(',', '')) / 1000));
-                    $('#slider_single').attr('max', accVal);
-                    $('.rangeP').text(accVal.toString() + 'k');
-                    $('#maxRange').text(accVal.toString() + 'k' + ' token');
+                    // var accVal = Math.round((parseInt((response.balance).replace(',', '')) / 1000));
+                    var accVal = kFormatter(parseInt((response.balance).replace(',', '')));
+                    $('#slider_single').attr('max', Math.floor(accVal));                    
+                    $('.rangeP').text(Math.floor(accVal).toString() + 'k');
+                    $('#maxRange').text(Math.floor(accVal).toString() + 'k' + ' token');
                 }
 
                 $('#topWallet').text((response.public).substring(0, 4) + '...' + (response.public).slice(-5));
@@ -198,6 +206,10 @@ function storePublic(key) {
                 $('#topWallet').text((response.public).substring(0, 4) + '...' + (response.public).slice(-5));
                 $('#accountBalance').text(response.balance);
 
+                $('#slider_single').val(10);
+                $('.range-value').css('left','calc(0% + 10px)');
+                $('.range-value').html('<span>10k</span>');
+                
                 if (response.lowAmount) {
                     $('#btnStaking').attr('disabled', true);
                     $('#slider_single').attr('disabled', true);
@@ -208,10 +220,11 @@ function storePublic(key) {
                     $('#btnStaking').removeAttr('disabled');
                     $('#slider_single').removeAttr('disabled');
                     $('#eligibleError').attr('hidden', true);
-                    var accVal = Math.round((parseInt((response.balance).replace(',', '')) / 1000));
-                    $('#slider_single').attr('max', accVal);
-                    $('.rangeP').text(accVal.toString() + 'k');
-                    $('#maxRange').text(accVal.toString() + 'k' + ' token');
+                    // var accVal = Math.round((parseInt((response.balance).replace(',', '')) / 1000));
+                    var accVal = kFormatter(parseInt((response.balance).replace(',', '')));
+                    $('#slider_single').attr('max', Math.floor(accVal));                    
+                    $('.rangeP').text(Math.floor(accVal).toString() + 'k');
+                    $('#maxRange').text(Math.floor(accVal).toString() + 'k' + ' token');
                 }
 
 

@@ -94,7 +94,7 @@
                                             <div class="rightBalance">
                                                 @if (isset($_COOKIE['public']))
                                                     @if (ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT'))
-                                                        <p id="maxRange">{{ round(ansrBalance($_COOKIE['public']) / 1000) }}k
+                                                        <p id="maxRange">{{ floor(ansrBalance($_COOKIE['public']) / 1000) }}k
                                                             token</p>
                                                     @else
                                                         <p id="maxRange">Below 10k</p>
@@ -111,7 +111,7 @@
                                             <p class="rangeP">
                                                 @if (isset($_COOKIE['public']))
                                                     @if (ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT'))
-                                                        {{ round(ansrBalance($_COOKIE['public']) / 1000) }}k
+                                                        {{ floor(ansrBalance($_COOKIE['public']) / 1000) }}k
                                                     @else
                                                         Below 10k
                                                     @endif
@@ -120,7 +120,7 @@
                                             <div class="range-value" id="rangeV"></div>
                                             <input id="slider_single" type="range" min="10"
                                                 @if (isset($_COOKIE['public'])) @if (ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT'))
-                                                max="{{ round(ansrBalance($_COOKIE['public']) / 1000) }}"
+                                                max="{{ floor(ansrBalance($_COOKIE['public']) / 1000) }}"
                                             @else
                                                 disabled @endif
                                                 @endif

@@ -10,8 +10,8 @@ class AppController extends Controller
     {
         return view('home');
     }
-    public function stacking()
+    public function staking()
     {
-        return view('stacking');
+        return view('staking');
     }
 }

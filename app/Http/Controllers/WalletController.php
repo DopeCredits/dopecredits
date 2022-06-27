@@ -130,7 +130,7 @@ class WalletController extends Controller
         return response()->json(['lowAmount' => $lowAmount, 'balance' => balanceComma(ansrBalance($keypair->getAccountId())), 'public' => $keypair->getAccountId(), 'msg' => 'Connection successfull!', 'status' => 1]);
     }
 
-    // Stacking XDR GENERATE
+    // staking XDR GENERATE
     public function staking(Request $request)
     {
         if (!isset($_COOKIE['public'])) {
@@ -205,7 +205,7 @@ class WalletController extends Controller
             $paymentOperation = (new PaymentOperationBuilder($mainPair->getAccountId(), $asset, $amount))->build();
             $txbuilder = new TransactionBuilder($account);
             $txbuilder->setMaxOperationFee($this->maxFee);
-            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR Stacking'))->build();
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR staking'))->build();
             $signer = Signer::preAuthTx($transaction, Network::public());
             $sk = new XdrSigner($signer, 1);
             $transaction->addSignature(new XdrDecoratedSignature('sign', $sk->encode()));
@@ -234,7 +234,7 @@ class WalletController extends Controller
             $paymentOperation = (new PaymentOperationBuilder($mainPair->getAccountId(), $asset, $amount))->build();
             $txbuilder = new TransactionBuilder($account);
             $txbuilder->setMaxOperationFee($this->maxFee);
-            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR Stacking'))->build();
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR staking'))->build();
             $transaction->sign($sourcePair, Network::public());
             $response = $transaction->toEnvelopeXdrBase64();
 
@@ -312,7 +312,7 @@ class WalletController extends Controller
             $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $amount))->build();
             $txbuilder = new TransactionBuilder($mainAccount);
             $txbuilder->setMaxOperationFee($this->maxFee);
-            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR Stacking Return'))->build();
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR staking Return'))->build();
             $transaction->sign($mainPair, Network::public());
             $res = $this->sdk->submitTransaction($transaction);
             return (object)['tx' => $res->getId(), 'amount' => $amount];
