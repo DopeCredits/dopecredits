@@ -64,10 +64,7 @@
                         <div class="inform-left">
                             <h2 class="purple mb-4">About Answerly Staking</h2>
                             {{-- <h1>Information</h1> --}}
-                            <p>There are many variations of passages of Lorem Ipsum available, but the majority have
-                                suffered alteration in some form, by injected</p>
-                            <p>humour, or randomised words which don't look even slightly believable. If you are going
-                            </p>
+                            <p>Answerly staking allow the token holders to earn 2% monthly interest just by locking their tokens for 1 month. The entire staking module is running decentrally on the Stellar blockchain. Moreover, Answerly Staking is open to everyone, no matter if you are an Answerly platform user or not</p>
                             <a href="{{ url('/stacking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
                                     Staking</span></a>
                         </div>
