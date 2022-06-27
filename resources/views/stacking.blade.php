@@ -183,7 +183,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="footer-bottom">
-                        <p>&copy; 2022 answerly.app <br class="resevrd-mob"> All Rights Reserved</p>
+                        <p>&copy; 2022 Answerly Inc.<br class="resevrd-mob"> All Rights Reserved</p>
                     </div>
                 </div>
             </div>
