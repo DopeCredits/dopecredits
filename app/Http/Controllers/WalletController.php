@@ -298,6 +298,7 @@ class WalletController extends Controller
             $mainSecret = env('MAIN_WALLET');
             $mainPair = KeyPair::fromSeed($mainSecret);
 
+            $mainAccount = $this->sdk->requestAccount($mainPair->getAccountId());
             $account = $this->sdk->requestAccount($staking->public);
 
             $assetCode = 'ANSR';
@@ -305,7 +306,7 @@ class WalletController extends Controller
             $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
             // Payment Operation
             $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $amount))->build();
-            $txbuilder = new TransactionBuilder($account);
+            $txbuilder = new TransactionBuilder($mainAccount);
             $txbuilder->setMaxOperationFee($this->maxFee);
             $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR Stacking Return'))->build();
             $transaction->sign($mainPair, Network::public());
