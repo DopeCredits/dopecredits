@@ -144,9 +144,21 @@ function storeWalletPublic(public, wallet) {
         },
         success: function (response) {
             if (response.status == 1) {
+                
                 if (response.lowAmount) {
                     $('#btnStaking').attr('disabled', true);
+                    $('#slider_single').attr('disabled', true);
                     $('#eligibleError').removeAttr('hidden');
+                    $('.rangeP').text('Below 10k');
+                    $('#maxRange').text('Below 10k');
+                } else {
+                    $('#btnStaking').removeAttr('disabled');
+                    $('#slider_single').removeAttr('disabled');
+                    $('#eligibleError').attr('hidden', true);
+                    var accVal = Math.round((parseInt((response.balance).replace(',', '')) / 1000));
+                    $('#slider_single').attr('max', accVal);
+                    $('.rangeP').text(accVal.toString() + 'k');
+                    $('#maxRange').text(accVal.toString() + 'k' + ' token');
                 }
 
                 $('#topWallet').text((response.public).substring(0, 4) + '...' + (response.public).slice(-5));
@@ -185,6 +197,23 @@ function storePublic(key) {
             if (response.status == 1) {
                 $('#topWallet').text((response.public).substring(0, 4) + '...' + (response.public).slice(-5));
                 $('#accountBalance').text(response.balance);
+
+                if (response.lowAmount) {
+                    $('#btnStaking').attr('disabled', true);
+                    $('#slider_single').attr('disabled', true);
+                    $('#eligibleError').removeAttr('hidden');
+                    $('.rangeP').text('Below 10k');
+                    $('#maxRange').text('Below 10k');
+                } else {
+                    $('#btnStaking').removeAttr('disabled');
+                    $('#slider_single').removeAttr('disabled');
+                    $('#eligibleError').attr('hidden', true);
+                    var accVal = Math.round((parseInt((response.balance).replace(',', '')) / 1000));
+                    $('#slider_single').attr('max', accVal);
+                    $('.rangeP').text(accVal.toString() + 'k');
+                    $('#maxRange').text(accVal.toString() + 'k' + ' token');
+                }
+
 
                 $('#walletImage').attr('src', base_url + '/images/' + wallet + '.png');
 

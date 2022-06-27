@@ -34,8 +34,9 @@
                         <div style="cursor: pointer" onclick="$('#ConnectWallet').modal('show');" class="e-wallet">
                             <span class="e-wallInner">
                                 @if (isset($_COOKIE['wallet']))
-                                    <img id='walletImage' src="{{ asset('images/' . $_COOKIE['wallet'] . '.png') }}" alt="">
-                                    @else
+                                    <img id='walletImage' src="{{ asset('images/' . $_COOKIE['wallet'] . '.png') }}"
+                                        alt="">
+                                @else
                                     <img id='walletImage' alt="">
                                 @endif
 
@@ -91,16 +92,40 @@
                                                 <p>Max</p>
                                             </div>
                                             <div class="rightBalance">
-                                                <p>25k token</p>
+                                                @if (isset($_COOKIE['public']))
+                                                    @if (ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT'))
+                                                        <p id="maxRange">{{ round(ansrBalance($_COOKIE['public']) / 1000) }}k
+                                                            token</p>
+                                                    @else
+                                                        <p id="maxRange">Below 10k</p>
+                                                    @endif
+                                                @else
+                                                    <p id="maxRange">Not Connected!</p>
+                                                @endif
                                             </div>
                                         </div>
                                     </fieldset>
                                     <div class="col-12">
                                         <div class="range-wrap">
                                             <div class="rangeback"></div>
-                                            <p class="rangeP">800</p>
+                                            <p class="rangeP">
+                                                @if (isset($_COOKIE['public']))
+                                                    @if (ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT'))
+                                                        {{ round(ansrBalance($_COOKIE['public']) / 1000) }}k
+                                                    @else
+                                                        Below 10k
+                                                    @endif
+                                                @endif
+                                            </p>
                                             <div class="range-value" id="rangeV"></div>
-                                            <input id="slider_single" type="range" min="200" max="800" value="200" step="1">
+                                            <input id="slider_single" type="range" min="10"
+                                                @if (isset($_COOKIE['public'])) @if (ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT'))
+                                                max="{{ round(ansrBalance($_COOKIE['public']) / 1000) }}"
+                                            @else
+                                                disabled @endif
+                                                @endif
+
+                                            value="10" step="1">
                                         </div>
                                         {{-- <div class="bar-slider">
                                             <input type="hidden" value="10" id="slider_single"
@@ -180,25 +205,24 @@
 <script src="{{ asset('js/custom.js') }}"></script>
 <script src="{{ asset('js/wallet.js') }}"></script>
 <script type="text/javascript">
-
-const
-	range = document.getElementById('slider_single'),
-	rangeV = document.getElementById('rangeV'),
-	setValue = ()=>{
-		const
-			newValue = Number( (range.value - range.min) * 100 / (range.max - range.min) ),
-			newPosition = 10 - (newValue * 0.2);
+    const
+        range = document.getElementById('slider_single'),
+        rangeV = document.getElementById('rangeV'),
+        setValue = () => {
+            const
+                newValue = Number((range.value - range.min) * 100 / (range.max - range.min)),
+                newPosition = 10 - (newValue * 0.2);
             if (newValue > 90) {
                 $('.rangeP').hide();
-            }
-            else{
+            } else {
                 $('.rangeP').show();
             }
-		rangeV.innerHTML = `<span>${range.value}</span>`;
-		rangeV.style.left = `calc(${newValue}% + (${newPosition}px))`;
-	};
-document.addEventListener("DOMContentLoaded", setValue);
-range.addEventListener('input', setValue);
+            rangeSlider();
+            rangeV.innerHTML = `<span>${range.value}k</span>`;
+            rangeV.style.left = `calc(${newValue}% + (${newPosition}px))`;
+        };
+    document.addEventListener("DOMContentLoaded", setValue);
+    range.addEventListener('input', setValue);
 
     @if (!isset($_COOKIE['public']))
         $(window).load(function() {
