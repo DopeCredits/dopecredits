@@ -683,10 +683,16 @@ a.connectLoading-btn {
     .main-div{
         padding-top: 0px;
     }
+    .first-h2:before{
+        top: 33%;
+    }
 
 }
 @media screen and (min-width: 1601px) and (max-width: 1680px){
     .main-div{
         padding-top: 0px;
+    }
+    .first-h2:before{
+        top: 33%;
     }
 }
