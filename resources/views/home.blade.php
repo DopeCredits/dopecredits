@@ -62,8 +62,8 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="inform-left">
-                            <h2 class="blue">About Staking.answerly</h2>
-                            <h1>Information</h1>
+                            <h2 class="purple mb-4">About Answerly Staking</h2>
+                            {{-- <h1>Information</h1> --}}
                             <p>There are many variations of passages of Lorem Ipsum available, but the majority have
                                 suffered alteration in some form, by injected</p>
                             <p>humour, or randomised words which don't look even slightly believable. If you are going
@@ -85,9 +85,9 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="footer-content">
-                            <h2 class="purple">Support System</h2>
-                            <h1>Contact</h1>
-                            <p>Thanks for Reaching Us.</p>
+                            <h2 class="purple mb-4">Support System</h2>
+                            {{-- <h1>Contact</h1> --}}
+                            <p>Get in touch with our support team if you have any questions regarding Answerly Staking</p>
                             <a href="{{ url('/stacking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
                                     Staking</span></a>
                         </div>
@@ -97,12 +97,12 @@
                             <form class="row g-3 needs-validation" novalidate>
                                 <div class="col-12">
                                     <input type="text" class="form-control" id="validationCustom01"
-                                        placeholder="Name" required>
+                                        placeholder="Answerly Username" required>
                                 </div>
                                 <div class="col-12">
                                     <div class="input-group has-validation">
                                         <input type="email" class="form-control" id="validationCustomUsername"
-                                            aria-describedby="inputGroupPrepend" placeholder="email" required>
+                                            aria-describedby="inputGroupPrepend" placeholder="Email" required>
                                     </div>
                                 </div>
                                 <div class="col-12">
@@ -110,7 +110,7 @@
                                 </div>
                                 <div class="col-12">
                                     <button type="submit" class="mt-4 stak-btn form-sub"><span
-                                            class="stak-btns form-btn">Start Staking</span></button>
+                                            class="stak-btns form-btn">Send Message</span></button>
                                 </div>
 
                             </form>
@@ -120,7 +120,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="footer-bottom">
-                            <p>&copy; 2022 answerly.app <br class="resevrd-mob"> All Rights Reserved</p>
+                            <p>&copy; 2022 Answerly Inc.<br class="resevrd-mob"> All Rights Reserved</p>
                         </div>
                     </div>
                 </div>
