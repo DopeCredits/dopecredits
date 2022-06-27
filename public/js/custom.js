@@ -37,16 +37,16 @@ function rangeSlider() {
 // range bar js
 
 
-jQuery(function () {
-	jQuery("#slider_single").flatslider({
-		min: 10, max: 25,
-		step: 1,
-		value: 10,
-		range: "min",
-		einheit: 'K'
-	});
-	rangeSlider()
-});
+// jQuery(function () {
+// 	jQuery("#slider_single").flatslider({
+// 		min: 10, max: 25,
+// 		step: 1,
+// 		value: 10,
+// 		range: "min",
+// 		einheit: 'K'
+// 	});
+// 	rangeSlider()
+// });
 
 
 

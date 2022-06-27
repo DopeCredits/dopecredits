@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="main-content">
-                            <h2 class="first-h2"><span class="purple">Build on Stellar</span></h2>
+                            <h2 class="first-h2"><span class="purple">Built on Stellar</span></h2>
                             <h1>The future of Staking is here</h1>
                             <h2 class="Sec-h2"><span class="blue">2%</span> Monthly intrest in $ANSR</h2>
                             <a href="{{ url('/stacking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
@@ -87,8 +87,7 @@
                         <div class="footer-content">
                             <h2 class="purple">Support System</h2>
                             <h1>Contact</h1>
-                            <p>Contrary to popular belief, Lorem Ipsum is not simply random <br> text. It has roots in a
-                                piece of classical Latin literature</p>
+                            <p>Thanks for Reaching Us.</p>
                             <a href="{{ url('/stacking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
                                     Staking</span></a>
                         </div>

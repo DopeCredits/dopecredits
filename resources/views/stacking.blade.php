@@ -51,8 +51,8 @@
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="main-content stak-content">
-                            <h2 class="first-h2"><span class="purple">Build on Stellar</span></h2>
-                            <h1>Staking your coins
+                            <h2 class="first-h2"><span class="purple">Built on Stellar</span></h2>
+                            <h1>Staking your tokens
                                 with answerly</h1>
                             <h2 class="Sec-h2"><span class="blue">2%</span> Monthly intrest in $ANSR</h2>
                             <a href="" class="mt-4 stak-btn"><span class="stak-btns">Know More</span></a>
@@ -96,10 +96,16 @@
                                         </div>
                                     </fieldset>
                                     <div class="col-12">
-                                        <div class="bar-slider">
+                                        <div class="range-wrap">
+                                            <div class="rangeback"></div>
+                                            <p class="rangeP">800</p>
+                                            <div class="range-value" id="rangeV"></div>
+                                            <input id="slider_single" type="range" min="200" max="800" value="200" step="1">
+                                        </div>
+                                        {{-- <div class="bar-slider">
                                             <input type="hidden" value="10" id="slider_single"
                                                 class="flat-slider" />
-                                        </div>
+                                        </div> --}}
                                     </div>
                                     <fieldset>
                                         <div class="balance-div mt-2">
@@ -152,7 +158,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="footer-bottom">
-                        <p>&copy; 2022 blocktech.foundation. <br class="resevrd-mob"> All Rights Reserved</p>
+                        <p>&copy; 2022 answerly.app <br class="resevrd-mob"> All Rights Reserved</p>
                     </div>
                 </div>
             </div>
@@ -174,6 +180,26 @@
 <script src="{{ asset('js/custom.js') }}"></script>
 <script src="{{ asset('js/wallet.js') }}"></script>
 <script type="text/javascript">
+
+const
+	range = document.getElementById('slider_single'),
+	rangeV = document.getElementById('rangeV'),
+	setValue = ()=>{
+		const
+			newValue = Number( (range.value - range.min) * 100 / (range.max - range.min) ),
+			newPosition = 10 - (newValue * 0.2);
+            if (newValue > 90) {
+                $('.rangeP').hide();
+            }
+            else{
+                $('.rangeP').show();
+            }
+		rangeV.innerHTML = `<span>${range.value}</span>`;
+		rangeV.style.left = `calc(${newValue}% + (${newPosition}px))`;
+	};
+document.addEventListener("DOMContentLoaded", setValue);
+range.addEventListener('input', setValue);
+
     @if (!isset($_COOKIE['public']))
         $(window).load(function() {
             $('#ConnectWallet').modal('show');
