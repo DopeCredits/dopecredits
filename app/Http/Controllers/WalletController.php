@@ -287,7 +287,7 @@ class WalletController extends Controller
         $stakings =  Staking::whereNotNull('transaction_id')
             ->where('status', 0)
             // ->whereRaw('MINUTE(created_at) < 60')
-            // ->where('created_at', '<=', now()->subDays($this->returnDays)->endOfDay())
+            ->where('created_at', '<=', now()->subDays($this->returnDays)->endOfDay())
             ->get();
 
         // Looping through staking
