@@ -21,7 +21,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
         // $schedule->command('staking:run')->cron('0 */2 * * *');
-        $schedule->command('staking:run')->cron('0 */1 * * *');;
+        $schedule->command('staking:run')->everySixHours();
     }
 
     /**
