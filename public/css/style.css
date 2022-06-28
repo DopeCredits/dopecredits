@@ -495,7 +495,19 @@ a.connectLoading-btn {
     margin-top: 10px;
 }
 .e-wallInner img{
-    margin-right: 5px;
+    margin-right: 10px;
+}
+ul.dropdown-menu.show{
+    background-color: inherit;
+    border: 1px solid #23d7ff;
+    margin-top: 10px;
+}
+.dropdown-item{
+    color: white !important;
+}
+.dropdown-item:hover{
+    background-color: #7d70ff;
+    color: white !important;
 }
 .resevrd-mob{
     display: none;
@@ -607,6 +619,9 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 	left: 50%;
 	margin-left: -5px;
 	margin-top: -1px;
+}
+.dropdown-toggle::after{
+    display: none !important;
 }
 /* range slider */
 
@@ -724,6 +739,9 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     }
     .resevrd-mob{
         display: none;
+    }
+    ul.dropdown-menu.show{
+        min-width: 130px;
     }
 }
 @media screen and (min-width: 1200px) and (max-width: 1440px){

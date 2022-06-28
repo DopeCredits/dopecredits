@@ -33,19 +33,26 @@
                     <div class="container-fluid">
                         <a class="navbar-brand" href="{{ url('/') }}"><img
                                 src="{{ asset('images/white-logo.png') }}" class="img-fluid" alt=""></a>
-                        <div style="cursor: pointer" onclick="$('#ConnectWallet').modal('show');" class="e-wallet">
-                            <span class="e-wallInner">
-                                @if (isset($_COOKIE['wallet']))
-                                    <img id='walletImage' src="{{ asset('images/' . $_COOKIE['wallet'] . '.png') }}"
-                                        alt="">
-                                @else
-                                    <img id='walletImage' alt="">
-                                @endif
-
-                                <p id="topWallet">
-                                    {{ isset($_COOKIE['public']) ? substr($_COOKIE['public'], 0, 4) . '...' . substr($_COOKIE['public'], -5) : 'Connect Wallet' }}
-                                </p>
-                            </span>
+                        <div class="btn-group">
+                            <div style="cursor: pointer" class="e-wallet dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false">
+                                {{-- onclick="$('#ConnectWallet').modal('show');" --}}
+                                <span class="e-wallInner">
+                                    @if (isset($_COOKIE['wallet']))
+                                        <img id='walletImage' src="{{ asset('images/' . $_COOKIE['wallet'] . '.png') }}"
+                                            alt="">
+                                    @else
+                                        <img id='walletImage' alt="">
+                                    @endif
+    
+                                    <p id="topWallet">
+                                        {{ isset($_COOKIE['public']) ? substr($_COOKIE['public'], 0, 4) . '...' . substr($_COOKIE['public'], -5) : 'Connect Wallet' }}
+                                    </p>
+                                </span>
+                            </div>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableOutside">
+                                <li><a class="dropdown-item" onclick="$('#ConnectWallet').modal('show');" href="javascript::void(0)">Change</a></li>
+                                <li><a class="dropdown-item" href="{{ url('wallet/disconnect') }}">Disconnect</a></li>
+                              </ul>
                         </div>
                     </div>
                 </nav>
