@@ -130,6 +130,37 @@ function frighterWallet() {
         });
 }
 
+function kFormatter(num) {
+    return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) : Math.sign(num) * Math.abs(num)
+}
+
+function number_format_short(n) {
+    console.log(n);
+    var n_format = 0;
+    var suffix = '';
+    if (n < 900) {
+        // 0 - 900
+        n_format = (n);
+        suffix = '';
+    } else if (n < 900000) {
+        // 0.9k-850k
+        n_format = (n / 1000);
+        suffix = 'K';
+    } else if (n < 900000000) {
+        // 0.9m-850m
+        n_format = (n / 1000000);
+        suffix = 'M';
+    } else if (n < 900000000000) {
+        // 0.9b-850b
+        n_format = (n / 1000000000);
+        suffix = 'B';
+    } else {
+        // 0.9t+
+        n_format = (n / 1000000000000);
+        suffix = 'T';
+    }
+    return Math.floor(n_format).toString() + suffix;
+}
 
 function storeWalletPublic(public, wallet) {
     $.ajax({
@@ -144,7 +175,11 @@ function storeWalletPublic(public, wallet) {
         },
         success: function (response) {
             if (response.status == 1) {
-                
+
+                $('#slider_single').val(10);
+                $('.range-value').css('left', 'calc(0% + 10px)');
+                $('.range-value').html('<span>10k</span>');
+
                 if (response.lowAmount) {
                     $('#btnStaking').attr('disabled', true);
                     $('#slider_single').attr('disabled', true);
@@ -155,14 +190,16 @@ function storeWalletPublic(public, wallet) {
                     $('#btnStaking').removeAttr('disabled');
                     $('#slider_single').removeAttr('disabled');
                     $('#eligibleError').attr('hidden', true);
-                    var accVal = Math.round((parseInt((response.balance).replace(',', '')) / 1000));
-                    $('#slider_single').attr('max', accVal);
-                    $('.rangeP').text(accVal.toString() + 'k');
-                    $('#maxRange').text(accVal.toString() + 'k' + ' token');
+                    // var accVal = Math.round((parseInt((response.balance).replace(',', '')) / 1000));
+                    var accVal = kFormatter(parseInt((response.balance).replace(',', '')));
+                    $('#slider_single').attr('max', Math.floor(accVal));
+                    $('.rangeP').text(number_format_short(parseInt((response.balance).replace(',', ''))));
+                    $('#maxRange').text(number_format_short(parseInt((response.balance).replace(',', ''))) + ' token');
                 }
+                $('.remove-btn').show();
 
                 $('#topWallet').text((response.public).substring(0, 4) + '...' + (response.public).slice(-5));
-                $('#accountBalance').text(response.balance);
+                $('#accountBalance').text(number_format_short(parseInt((response.balance).replace(',', ''))));
                 $('#walletImage').attr('src', base_url + '/images/' + wallet + '.png');
 
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
@@ -196,7 +233,11 @@ function storePublic(key) {
         success: function (response) {
             if (response.status == 1) {
                 $('#topWallet').text((response.public).substring(0, 4) + '...' + (response.public).slice(-5));
-                $('#accountBalance').text(response.balance);
+                $('#accountBalance').text(number_format_short(parseInt((response.balance).replace(',', ''))));
+
+                $('#slider_single').val(10);
+                $('.range-value').css('left', 'calc(0% + 10px)');
+                $('.range-value').html('<span>10k</span>');
 
                 if (response.lowAmount) {
                     $('#btnStaking').attr('disabled', true);
@@ -208,11 +249,13 @@ function storePublic(key) {
                     $('#btnStaking').removeAttr('disabled');
                     $('#slider_single').removeAttr('disabled');
                     $('#eligibleError').attr('hidden', true);
-                    var accVal = Math.round((parseInt((response.balance).replace(',', '')) / 1000));
-                    $('#slider_single').attr('max', accVal);
-                    $('.rangeP').text(accVal.toString() + 'k');
-                    $('#maxRange').text(accVal.toString() + 'k' + ' token');
+                    // var accVal = Math.round((parseInt((response.balance).replace(',', '')) / 1000));
+                    var accVal = kFormatter(parseInt((response.balance).replace(',', '')));
+                    $('#slider_single').attr('max', Math.floor(accVal));
+                    $('.rangeP').text(number_format_short(parseInt((response.balance).replace(',', ''))));
+                    $('#maxRange').text(number_format_short(parseInt((response.balance).replace(',', ''))) + ' token');
                 }
+                $('.remove-btn').show();
 
 
                 $('#walletImage').attr('src', base_url + '/images/' + wallet + '.png');

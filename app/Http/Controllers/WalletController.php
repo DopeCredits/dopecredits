@@ -7,6 +7,7 @@ use App\Models\StakingResult;
 use App\Models\Wallet;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Soneso\StellarSDK\AssetTypeCreditAlphanum4;
 use Soneso\StellarSDK\Crypto\KeyPair;
 use Soneso\StellarSDK\Memo;
@@ -69,7 +70,7 @@ class WalletController extends Controller
         $wallet = Wallet::where('public', $request->public)->first();
         if (!$wallet) {
             Wallet::create($data);
-        }else{
+        } else {
             $wallet->update($data);
         }
 
@@ -120,7 +121,7 @@ class WalletController extends Controller
         $wallet = Wallet::where('public', $keypair->getAccountId())->first();
         if (!$wallet) {
             Wallet::create($data);
-        }else{
+        } else {
             $wallet->update($data);
         }
 
@@ -130,7 +131,14 @@ class WalletController extends Controller
         return response()->json(['lowAmount' => $lowAmount, 'balance' => balanceComma(ansrBalance($keypair->getAccountId())), 'public' => $keypair->getAccountId(), 'msg' => 'Connection successfull!', 'status' => 1]);
     }
 
-    // Stacking XDR GENERATE
+    public function disconnect()
+    {
+        Cookie::queue(Cookie::forget('public'));
+        Cookie::queue(Cookie::forget('wallet'));
+        return redirect('/staking');
+    }
+
+    // staking XDR GENERATE
     public function staking(Request $request)
     {
         if (!isset($_COOKIE['public'])) {
@@ -205,7 +213,7 @@ class WalletController extends Controller
             $paymentOperation = (new PaymentOperationBuilder($mainPair->getAccountId(), $asset, $amount))->build();
             $txbuilder = new TransactionBuilder($account);
             $txbuilder->setMaxOperationFee($this->maxFee);
-            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR Stacking'))->build();
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR staking'))->build();
             $signer = Signer::preAuthTx($transaction, Network::public());
             $sk = new XdrSigner($signer, 1);
             $transaction->addSignature(new XdrDecoratedSignature('sign', $sk->encode()));
@@ -234,7 +242,7 @@ class WalletController extends Controller
             $paymentOperation = (new PaymentOperationBuilder($mainPair->getAccountId(), $asset, $amount))->build();
             $txbuilder = new TransactionBuilder($account);
             $txbuilder->setMaxOperationFee($this->maxFee);
-            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR Stacking'))->build();
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR staking'))->build();
             $transaction->sign($sourcePair, Network::public());
             $response = $transaction->toEnvelopeXdrBase64();
 
@@ -312,7 +320,7 @@ class WalletController extends Controller
             $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $amount))->build();
             $txbuilder = new TransactionBuilder($mainAccount);
             $txbuilder->setMaxOperationFee($this->maxFee);
-            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR Stacking Return'))->build();
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR staking Return'))->build();
             $transaction->sign($mainPair, Network::public());
             $res = $this->sdk->submitTransaction($transaction);
             return (object)['tx' => $res->getId(), 'amount' => $amount];

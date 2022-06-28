@@ -10,7 +10,7 @@ class StakingResult extends Model
     use HasFactory;
     protected $fillable = ['staking_id', 'amount', 'transaction_id'];
 
-    public function stacking()
+    public function staking()
     {
         return $this->belongsTo(Staking::class);
     }

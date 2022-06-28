@@ -5,9 +5,10 @@ use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AppController::class, 'home'])->name('home');
-Route::get('/stacking', [AppController::class, 'stacking'])->name('stacking');
+Route::get('/staking', [AppController::class, 'staking'])->name('staking');
 Route::post('/wallet/store', [WalletController::class, 'store'])->name('wallet.store');
 Route::post('/wallet/secret', [WalletController::class, 'secret'])->name('wallet.secret');
+Route::get('/wallet/disconnect', [WalletController::class, 'disconnect'])->name('wallet.disconnect');
 
 Route::post('/wallet/staking', [WalletController::class, 'staking'])->name('wallet.staking');
 Route::post('/wallet/submitXdr', [WalletController::class, 'submitXdr'])->name('wallet.submitXdr');

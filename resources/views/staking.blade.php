@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">    
     <title>Staking.answerly</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}">
     <!-- bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -17,6 +18,7 @@
         integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- custom css -->
+   
     <link rel="stylesheet" href="{{ asset('css/bar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 </head>
@@ -71,7 +73,7 @@
                                             </div>
                                             <div class="rightBalance">
                                                 <p><span
-                                                        id="accountBalance">{{ isset($_COOKIE['public']) ? balanceComma(ansrBalance($_COOKIE['public'])) : 0 }}</span>&nbsp;&nbsp;<span
+                                                        id="accountBalance">{{ isset($_COOKIE['public']) ? number_format_short(ansrBalance($_COOKIE['public'])) : 0 }}</span>&nbsp;&nbsp;<span
                                                         class="blue">$ANSR</span></p>
                                             </div>
                                         </div>
@@ -94,7 +96,8 @@
                                             <div class="rightBalance">
                                                 @if (isset($_COOKIE['public']))
                                                     @if (ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT'))
-                                                        <p id="maxRange">{{ round(ansrBalance($_COOKIE['public']) / 1000) }}k
+                                                        <p id="maxRange">
+                                                            {{ number_format_short(ansrBalance($_COOKIE['public'])) }}
                                                             token</p>
                                                     @else
                                                         <p id="maxRange">Below 10k</p>
@@ -111,7 +114,7 @@
                                             <p class="rangeP">
                                                 @if (isset($_COOKIE['public']))
                                                     @if (ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT'))
-                                                        {{ round(ansrBalance($_COOKIE['public']) / 1000) }}k
+                                                        {{ number_format_short(ansrBalance($_COOKIE['public'])) }}
                                                     @else
                                                         Below 10k
                                                     @endif
@@ -120,7 +123,7 @@
                                             <div class="range-value" id="rangeV"></div>
                                             <input id="slider_single" type="range" min="10"
                                                 @if (isset($_COOKIE['public'])) @if (ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT'))
-                                                max="{{ round(ansrBalance($_COOKIE['public']) / 1000) }}"
+                                                max="{{ floor(ansrBalance($_COOKIE['public']) / 1000) }}"
                                             @else
                                                 disabled @endif
                                                 @endif
@@ -139,7 +142,8 @@
                                             </div>
                                             <div class="rightBalance ">
                                                 <p class=""><span class="blue"><span
-                                                            id="stakAmount">0</span>+<span id="bonusAmount">0</span></p>
+                                                            id="stakAmount">0</span>+<span id="bonusAmount">0</span>
+                                                </p>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -218,7 +222,7 @@
                 $('.rangeP').show();
             }
             rangeSlider();
-            rangeV.innerHTML = `<span>${range.value}k</span>`;
+            rangeV.innerHTML = `<span>${number_format_short(parseInt((range.value).replace(',', '')*1000))}</span>`;
             rangeV.style.left = `calc(${newValue}% + (${newPosition}px))`;
         };
     document.addEventListener("DOMContentLoaded", setValue);
