@@ -41,7 +41,7 @@ class AppController extends Controller
         }
 
         $toEmail = 'info@answerly.app';
-        $emailSubject = 'New email from your contant form';
+        $emailSubject = 'Email from Answerly Staking';
         $headers = ['From' => $email, 'Reply-To' => $email, 'Content-type' => 'text/html; charset=iso-8859-1'];
 
         $bodyParagraphs = ["<h3>Email from Answerly Staking</h3>","Name: {$name}<br>", "Email: {$email}<br>", "Message:", $message];
