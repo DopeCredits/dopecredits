@@ -32,7 +32,7 @@
                 <nav class="navbar navbar-light">
                     <div class="container-fluid">
                         <a class="navbar-brand" href="{{ url('/') }}"><img
-                                src="{{ asset('images/white-logo.png') }}" class="img-fluid" alt=""></a>
+                                src="{{ asset('images/white-logo.png') }}" class="logo" alt=""></a>
                         <div class="btn-group">
                             <div style="cursor: pointer" class="e-wallet dropdown-toggle" data-bs-toggle="dropdown" data-bs-auto-close="inside" aria-expanded="false">
                                 {{-- onclick="$('#ConnectWallet').modal('show');" --}}

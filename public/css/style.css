@@ -13,6 +13,10 @@ body{
 }
 
 /* main section */
+img.logo {
+    width: 100%;
+    max-width: 384px;
+}
 .main-section{
     background-image: url(../images/bg-hero.png);
     background-size: cover;
