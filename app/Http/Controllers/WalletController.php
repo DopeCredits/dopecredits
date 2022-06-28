@@ -7,6 +7,7 @@ use App\Models\StakingResult;
 use App\Models\Wallet;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Soneso\StellarSDK\AssetTypeCreditAlphanum4;
 use Soneso\StellarSDK\Crypto\KeyPair;
 use Soneso\StellarSDK\Memo;
@@ -69,7 +70,7 @@ class WalletController extends Controller
         $wallet = Wallet::where('public', $request->public)->first();
         if (!$wallet) {
             Wallet::create($data);
-        }else{
+        } else {
             $wallet->update($data);
         }
 
@@ -120,7 +121,7 @@ class WalletController extends Controller
         $wallet = Wallet::where('public', $keypair->getAccountId())->first();
         if (!$wallet) {
             Wallet::create($data);
-        }else{
+        } else {
             $wallet->update($data);
         }
 
@@ -128,6 +129,13 @@ class WalletController extends Controller
         setcookie('wallet', 'privatekey', time() + (86400 * 30), "/");
 
         return response()->json(['lowAmount' => $lowAmount, 'balance' => balanceComma(ansrBalance($keypair->getAccountId())), 'public' => $keypair->getAccountId(), 'msg' => 'Connection successfull!', 'status' => 1]);
+    }
+
+    public function disconnect()
+    {
+        Cookie::queue(Cookie::forget('public'));
+        Cookie::queue(Cookie::forget('wallet'));
+        return redirect('/staking');
     }
 
     // staking XDR GENERATE

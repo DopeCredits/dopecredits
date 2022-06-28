@@ -73,7 +73,7 @@
                                             </div>
                                             <div class="rightBalance">
                                                 <p><span
-                                                        id="accountBalance">{{ isset($_COOKIE['public']) ? balanceComma(ansrBalance($_COOKIE['public'])) : 0 }}</span>&nbsp;&nbsp;<span
+                                                        id="accountBalance">{{ isset($_COOKIE['public']) ? number_format_short(ansrBalance($_COOKIE['public'])) : 0 }}</span>&nbsp;&nbsp;<span
                                                         class="blue">$ANSR</span></p>
                                             </div>
                                         </div>
@@ -97,7 +97,7 @@
                                                 @if (isset($_COOKIE['public']))
                                                     @if (ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT'))
                                                         <p id="maxRange">
-                                                            {{ floor(ansrBalance($_COOKIE['public']) / 1000) }}k
+                                                            {{ number_format_short(ansrBalance($_COOKIE['public'])) }}
                                                             token</p>
                                                     @else
                                                         <p id="maxRange">Below 10k</p>
@@ -114,7 +114,7 @@
                                             <p class="rangeP">
                                                 @if (isset($_COOKIE['public']))
                                                     @if (ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT'))
-                                                        {{ floor(ansrBalance($_COOKIE['public']) / 1000) }}k
+                                                        {{ number_format_short(ansrBalance($_COOKIE['public'])) }}
                                                     @else
                                                         Below 10k
                                                     @endif
@@ -222,7 +222,7 @@
                 $('.rangeP').show();
             }
             rangeSlider();
-            rangeV.innerHTML = `<span>${range.value}k</span>`;
+            rangeV.innerHTML = `<span>${number_format_short(parseInt((range.value).replace(',', '')*1000))}</span>`;
             rangeV.style.left = `calc(${newValue}% + (${newPosition}px))`;
         };
     document.addEventListener("DOMContentLoaded", setValue);
