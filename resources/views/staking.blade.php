@@ -64,7 +64,7 @@
                             <h2 class="first-h2"><span class="purple">Built on Stellar</span></h2>
                             <h1>Staking your tokens
                                 with answerly</h1>
-                            <h2 class="Sec-h2"><span class="blue">2%</span> Monthly intrest in $ANSR</h2>
+                            <h2 class="Sec-h2"><span class="blue">2%</span> Monthly interest in $ANSR</h2>
                             <a href="" class="mt-4 stak-btn"><span class="stak-btns">Know More</span></a>
                         </div>
                     </div>
