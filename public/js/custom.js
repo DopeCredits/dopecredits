@@ -1,3 +1,29 @@
+// form Submittion
+$('#contact-form').submit(function (e) {
+	e.preventDefault();
+	var data = $(this).serialize();
+	$.ajax({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		},
+		url: base_url + '/contact',
+		type: "post",
+		data: data,
+		success: function (response) {
+			console.log(response);
+			if (response.status==1) {
+				toastr.success('Message successfully send!', 'Staking Answerly');
+			}else{
+				toastr.error('Something went wrong!', 'Staking Answerly');
+			}
+		},
+		error: function (xhr, status, error) {
+			console.log(xhr.responseText);
+			toastr.error('Mail server Issue!', 'Staking Answerly');
+        }
+
+	});
+});
 // form validation
 
 // Example starter JavaScript for disabling form submissions if there are invalid fields

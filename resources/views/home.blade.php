@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">  
     <title>Staking.answerly</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}">
     <!-- bootstrap 5 -->
@@ -27,8 +28,8 @@
             <div class="row">
                 <nav class="navbar navbar-light">
                     <div class="container-fluid">
-                        <a class="navbar-brand" href="{{url('/')}}"><img src="{{ asset('images/white-logo.png') }}"
-                                class="logo" alt=""></a>
+                        <a class="navbar-brand" href="{{ url('/') }}"><img
+                                src="{{ asset('images/white-logo.png') }}" class="logo" alt=""></a>
                     </div>
                 </nav>
             </div>
@@ -65,7 +66,10 @@
                         <div class="inform-left">
                             <h2 class="purple mb-4">About Answerly Staking</h2>
                             {{-- <h1>Information</h1> --}}
-                            <p>Answerly staking allow the token holders to earn 2% monthly interest just by locking their tokens for 1 month. The entire staking module is running decentrally on the Stellar blockchain. Moreover, Answerly Staking is open to everyone, no matter if you are an Answerly platform user or not</p>
+                            <p>Answerly staking allow the token holders to earn 2% monthly interest just by locking
+                                their tokens for 1 month. The entire staking module is running decentrally on the
+                                Stellar blockchain. Moreover, Answerly Staking is open to everyone, no matter if you are
+                                an Answerly platform user or not</p>
                             <a href="{{ url('/staking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
                                     Staking</span></a>
                         </div>
@@ -85,26 +89,28 @@
                         <div class="footer-content">
                             <h2 class="purple mb-4">Support System</h2>
                             {{-- <h1>Contact</h1> --}}
-                            <p>Get in touch with our support team if you have any questions regarding Answerly Staking</p>
+                            <p>Get in touch with our support team if you have any questions regarding Answerly Staking
+                            </p>
                             <a href="{{ url('/staking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
                                     Staking</span></a>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="form-div">
-                            <form class="row g-3 needs-validation" novalidate>
+                            <form id="contact-form" class="row g-3 needs-validation" novalidate>
                                 <div class="col-12">
-                                    <input type="text" class="form-control" id="validationCustom01"
-                                        placeholder="Answerly Username" required>
+                                    <input name="name" type="text" class="form-control" id="validationCustom01"
+                                        placeholder="Name" required>
                                 </div>
                                 <div class="col-12">
                                     <div class="input-group has-validation">
-                                        <input type="email" class="form-control" id="validationCustomUsername"
-                                            aria-describedby="inputGroupPrepend" placeholder="Email" required>
+                                        <input name="email" type="email" class="form-control"
+                                            id="validationCustomUsername" aria-describedby="inputGroupPrepend"
+                                            placeholder="Email" required>
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <textarea rows="4" class="form-control" id="validationTextarea" placeholder="Message" required></textarea>
+                                    <textarea name="message" rows="4" class="form-control" id="validationTextarea" placeholder="Message" required></textarea>
                                 </div>
                                 <div class="col-12">
                                     <button type="submit" class="mt-4 stak-btn form-sub"><span
@@ -137,7 +143,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
+        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- custom js -->
+    <script>
+        var base_url = "@php echo url('/') @endphp";
+    </script>
     <script src="{{ asset('js/custom.js') }}"></script>
 </body>
 
