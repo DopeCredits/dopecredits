@@ -2,7 +2,7 @@
 $('#contact-form').submit(function (e) {
 	e.preventDefault();
 	var data = $(this).serialize();
-	
+
 	$.ajax({
 		headers: {
 			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -12,17 +12,18 @@ $('#contact-form').submit(function (e) {
 		data: data,
 		success: function (response) {
 			console.log(response);
-			if (response.status==1) {
+			if (response.status == 1) {
 				document.getElementById("contact-form").reset();
+				$('#contact-form').removeClass('was-validated');
 				toastr.success('Message successfully send!', 'Staking Answerly');
-			}else{
-				toastr.error('Something went wrong!', 'Staking Answerly');
+			} else {
+				toastr.error('Some field are empty!', 'Staking Answerly');
 			}
 		},
 		error: function (xhr, status, error) {
 			console.log(xhr.responseText);
 			toastr.error('Mail server Issue!', 'Staking Answerly');
-        }
+		}
 
 	});
 });
