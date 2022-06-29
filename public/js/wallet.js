@@ -135,7 +135,6 @@ function kFormatter(num) {
 }
 
 function number_format_short(n) {
-    console.log(n);
     var n_format = 0;
     var suffix = '';
     if (n < 900) {
@@ -190,16 +189,16 @@ function storeWalletPublic(public, wallet) {
                     $('#btnStaking').removeAttr('disabled');
                     $('#slider_single').removeAttr('disabled');
                     $('#eligibleError').attr('hidden', true);
-                    // var accVal = Math.round((parseInt((response.balance).replace(',', '')) / 1000));
-                    var accVal = kFormatter(parseInt((response.balance).replace(',', '')));
+                    // var accVal = Math.round((parseInt((response.balance).replace(/,/g, '')) / 1000));                    
+                    var accVal = kFormatter(parseInt((response.balance).replace(/,/g, '')));
                     $('#slider_single').attr('max', Math.floor(accVal));
-                    $('.rangeP').text(number_format_short(parseInt((response.balance).replace(',', ''))));
-                    $('#maxRange').text(number_format_short(parseInt((response.balance).replace(',', ''))) + ' token');
+                    $('.rangeP').text(number_format_short(parseInt((response.balance).replace(/,/g, ''))));
+                    $('#maxRange').text(number_format_short(parseInt((response.balance).replace(/,/g, ''))) + ' token');
                 }
                 $('.remove-btn').show();
 
                 $('#topWallet').text((response.public).substring(0, 4) + '...' + (response.public).slice(-5));
-                $('#accountBalance').text(number_format_short(parseInt((response.balance).replace(',', ''))));
+                $('#accountBalance').text(number_format_short(parseInt((response.balance).replace(/,/g, ''))));
                 $('#walletImage').attr('src', base_url + '/images/' + wallet + '.png');
 
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
@@ -233,7 +232,7 @@ function storePublic(key) {
         success: function (response) {
             if (response.status == 1) {
                 $('#topWallet').text((response.public).substring(0, 4) + '...' + (response.public).slice(-5));
-                $('#accountBalance').text(number_format_short(parseInt((response.balance).replace(',', ''))));
+                $('#accountBalance').text(number_format_short(parseInt((response.balance).replace(/,/g, ''))));
 
                 $('#slider_single').val(10);
                 $('.range-value').css('left', 'calc(0% + 10px)');
@@ -249,11 +248,11 @@ function storePublic(key) {
                     $('#btnStaking').removeAttr('disabled');
                     $('#slider_single').removeAttr('disabled');
                     $('#eligibleError').attr('hidden', true);
-                    // var accVal = Math.round((parseInt((response.balance).replace(',', '')) / 1000));
-                    var accVal = kFormatter(parseInt((response.balance).replace(',', '')));
+                    // var accVal = Math.round((parseInt((response.balance).replace(/,/g, '')) / 1000));                    
+                    var accVal = kFormatter(parseInt((response.balance).replace(/,/g, '')));
                     $('#slider_single').attr('max', Math.floor(accVal));
-                    $('.rangeP').text(number_format_short(parseInt((response.balance).replace(',', ''))));
-                    $('#maxRange').text(number_format_short(parseInt((response.balance).replace(',', ''))) + ' token');
+                    $('.rangeP').text(number_format_short(parseInt((response.balance).replace(/,/g, ''))));
+                    $('#maxRange').text(number_format_short(parseInt((response.balance).replace(/,/g, ''))) + ' token');
                 }
                 $('.remove-btn').show();
 

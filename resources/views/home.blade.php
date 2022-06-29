@@ -58,8 +58,8 @@
 <body>
 
     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MHLHRJ6"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MHLHRJ6" height="0" width="0"
+            style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
     <!-- top section -->
@@ -81,8 +81,14 @@
                             <h2 class="first-h2"><span class="purple">Built on Stellar</span></h2>
                             <h1>The future of Staking is here</h1>
                             <h2 class="Sec-h2"><span class="blue">2%</span> Monthly interest in $ANSR</h2>
-                            <a href="{{ url('/staking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
-                                    Staking</span></a>
+                            <div class="row">
+                                <a href="{{ url('/staking') }}" class="mt-4 stak-btn m-2 col"><span
+                                        class="stak-btns">Start
+                                        Staking</span></a>
+                                <a target="_blank"
+                                    href="https://scopuly.com/trade/ANSR-XLM/GAEQFO7DDXQCJ4REZX6M6ULRNCI7WBXTJPMJRRWZQBA3C5T3LAWL7CQO/native"
+                                    class="mt-4 stak-btn m-2 col"><span class="stak-btns">Buy ANSR</span></a>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
@@ -151,7 +157,8 @@
                                     </div>
                                 </div>
                                 <div class="col-12">
-                                    <textarea name="message" rows="4" class="form-control" id="validationTextarea" placeholder="Message" required></textarea>
+                                    <textarea name="message" rows="4" class="form-control" id="validationTextarea" placeholder="Message"
+                                        required></textarea>
                                 </div>
                                 <div class="col-12">
                                     <button type="submit" class="mt-4 stak-btn form-sub"><span
