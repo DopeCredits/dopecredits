@@ -20,9 +20,9 @@
     <!-- custom css -->
     <link rel="stylesheet" href="{{ asset('css/bar.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    
+
     <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-233184292-1"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6D0Y0V0JD5"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -31,7 +31,7 @@
         }
         gtag('js', new Date());
 
-        gtag('config', 'UA-233184292-1');
+        gtag('config', 'G-6D0Y0V0JD5');
     </script>
 
 </head>
