@@ -193,7 +193,7 @@ class WalletController extends Controller
             return response()->json(['status' => 0, 'msg' => 'Something went wrong!']);
         }
 
-        return response()->json(['xdr' => $xdr, 'status' => 1, 'invest_id' => $invest->id]);
+        return response()->json(['xdr' => $xdr, 'status' => 1, 'staking_id' => $invest->id]);
     }
 
     private function stakePublic($wallet, $amount)
@@ -256,7 +256,7 @@ class WalletController extends Controller
     public function submitXdr(Request $request)
     {
         $xdr = $request->xdr;
-        $invest = Staking::where('id', $request->invest_id)->first();
+        $invest = Staking::where('id', $request->staking_id)->first();
         if (!$invest) {
             return response()->json(['status' => 0, 'msg' => 'Something went wrong!']);
         }
@@ -296,7 +296,7 @@ class WalletController extends Controller
             if ($result) {
                 $invest->status = 1;
                 $invest->save();
-                StakingResult::create(['invest_id' => $invest->id, 'amount' => $result->amount, 'transaction_id' => $result->tx]);
+                StakingResult::create(['staking_id' => $invest->id, 'amount' => $result->amount, 'transaction_id' => $result->tx]);
             }
         }
         return response()->json([$invests]);

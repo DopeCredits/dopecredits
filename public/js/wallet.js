@@ -298,7 +298,7 @@ function invest() {
         },
         success: function (response) {
             if (response.status == 1) {
-                signXdr(response.xdr, response.invest_id);
+                signXdr(response.xdr, response.staking_id);
             } else {
                 btnLoaderHide();
                 toastr.error(response.msg, "Staking Error");
@@ -311,13 +311,13 @@ function invest() {
     });
 }
 
-function signXdr(xdr, invest_id) {
+function signXdr(xdr, staking_id) {
     switch (wallet) {
         case 'rabet':
             rabet.sign(xdr, testnet ? 'testnet' : 'mainnet')
                 .then(function (result) {
                     const xdr = result.xdr;
-                    submitStakingXdr(xdr, invest_id);
+                    submitStakingXdr(xdr, staking_id);
                 }).catch(function (error) {
                     btnLoaderHide();
                     toastr.error('Rejected!', "Rabbet Wallet");
@@ -327,7 +327,7 @@ function signXdr(xdr, invest_id) {
         case 'frighter':
             window.freighterApi.signTransaction(xdr, testnet ? 'TESTNET' : 'PUBLIC').then(function (result) {
                 const xdr = result;
-                submitStakingXdr(xdr, invest_id);
+                submitStakingXdr(xdr, staking_id);
             }).catch(function (error) {
                 btnLoaderHide();
                 toastr.error('Rejected!', "Freighter Wallet");
@@ -341,7 +341,7 @@ function signXdr(xdr, invest_id) {
             })
                 .then(function (result) {
                     const xdr = result.signed_envelope_xdr;
-                    submitStakingXdr(xdr, invest_id);
+                    submitStakingXdr(xdr, staking_id);
                 }).catch(function (error) {
                     btnLoaderHide();
                     toastr.error('Rejected!', "Albeto Wallet");
@@ -351,18 +351,18 @@ function signXdr(xdr, invest_id) {
         case 'xbull':
             xBullSDK.signXDR(xdr).then(function (result) {
                 const xdr = result;
-                submitStakingXdr(xdr, invest_id);
+                submitStakingXdr(xdr, staking_id);
             }).catch(function (error) {
                 btnLoaderHide();
                 toastr.error('Rejected!', "xBull Wallet");
             });
             break;
         default:
-            submitStakingXdr(xdr, invest_id);
+            submitStakingXdr(xdr, staking_id);
     }
 }
 
-function submitStakingXdr(xdr, invest_id) {
+function submitStakingXdr(xdr, staking_id) {
     $.ajax({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -371,7 +371,7 @@ function submitStakingXdr(xdr, invest_id) {
         type: "post",
         data: {
             xdr: xdr,
-            invest_id: invest_id
+            staking_id: staking_id
         },
         success: function (response) {
             console.log(response);
