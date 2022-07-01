@@ -15,14 +15,14 @@ $('#contact-form').submit(function (e) {
 			if (response.status == 1) {
 				document.getElementById("contact-form").reset();
 				$('#contact-form').removeClass('was-validated');
-				toastr.success('Message successfully send!', 'Staking Answerly');
+				toastr.success('Message successfully send!', 'Answerly Invest');
 			} else {
-				toastr.error('Some field are empty!', 'Staking Answerly');
+				toastr.error('Some field are empty!', 'Answerly Invest');
 			}
 		},
 		error: function (xhr, status, error) {
 			console.log(xhr.responseText);
-			toastr.error('Mail server Issue!', 'Staking Answerly');
+			toastr.error('Mail server Issue!', 'Answerly Invest');
 		}
 
 	});
