@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Staking.answerly</title>
+    <title>Invest.answerly</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}">
     <!-- bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -79,12 +79,12 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="main-content">
                             <h2 class="first-h2"><span class="purple">Built on Stellar</span></h2>
-                            <h1>The future of Staking is here</h1>
+                            <h1>The future of Investing is here</h1>
                             <h2 class="Sec-h2"><span class="blue">2%</span> Monthly interest in $ANSR</h2>
                             <div class="row">
-                                <a href="{{ url('/staking') }}" class="mt-4 stak-btn m-2 col"><span
+                                <a href="{{ url('/invest') }}" class="mt-4 stak-btn m-2 col"><span
                                         class="stak-btns">Start
-                                        Staking</span></a>
+                                        Investing</span></a>
                                 <a target="_blank"
                                     href="https://scopuly.com/trade/ANSR-XLM/GAEQFO7DDXQCJ4REZX6M6ULRNCI7WBXTJPMJRRWZQBA3C5T3LAWL7CQO/native"
                                     class="mt-4 stak-btn m-2 col"><span class="stak-btns">Buy ANSR</span></a>
@@ -111,14 +111,14 @@
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="inform-left">
-                            <h2 class="purple mb-4">About Answerly Staking</h2>
+                            <h2 class="purple mb-4">About Answerly Invest</h2>
                             {{-- <h1>Information</h1> --}}
-                            <p>Answerly staking allow the token holders to earn 2% monthly interest just by locking
-                                their tokens for 1 month. The entire staking module is running decentrally on the
-                                Stellar blockchain. Moreover, Answerly Staking is open to everyone, no matter if you are
+                            <p>Answerly invest allow the token holders to earn 2% monthly interest just by locking
+                                their tokens for 1 month. The entire invest module is running decentrally on the
+                                Stellar blockchain. Moreover, Answerly Invest is open to everyone, no matter if you are
                                 an Answerly platform user or not</p>
-                            <a href="{{ url('/staking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
-                                    Staking</span></a>
+                            <a href="{{ url('/invest') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
+                                    Investing</span></a>
                         </div>
                     </div>
                 </div>
@@ -136,10 +136,9 @@
                         <div class="footer-content">
                             <h2 class="purple mb-4">Support System</h2>
                             {{-- <h1>Contact</h1> --}}
-                            <p>Get in touch with our support team if you have any questions regarding Answerly Staking
+                            <p>Get in touch with our support team if you have any questions regarding Answerly Invest
                             </p>
-                            <a href="{{ url('/staking') }}" class="mt-4 stak-btn"><span class="stak-btns">Start
-                                    Staking</span></a>
+                            <a href="{{ url('/invest') }}" class="mt-4 stak-btn"><span class="stak-btns">Start Investing</span></a>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">

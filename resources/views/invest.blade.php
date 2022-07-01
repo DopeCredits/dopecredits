@@ -62,7 +62,7 @@
             style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
 
-    <div class="staking-main">
+    <div class="invest-main">
         <img src="{{ asset('images/Shape 1.png') }}" class="top-shape" alt="">
         <div class="container">
             <div class="row">
@@ -101,16 +101,16 @@
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="main-content stak-content">
                             <h2 class="first-h2"><span class="purple">Built on Stellar</span></h2>
-                            <h1>Staking your tokens
+                            <h1>Investing your tokens
                                 with answerly</h1>
                             <h2 class="Sec-h2"><span class="blue">2%</span> Monthly interest in $ANSR</h2>
                             <a href="" class="mt-4 stak-btn"><span class="stak-btns">Know More</span></a>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
-                        <div class="staking-barBackground">
-                            <div class="staking-barform">
-                                <p class="text-center">Staking For <Span class="blue">30 Days</Span></p>
+                        <div class="invest-barBackground">
+                            <div class="invest-barform">
+                                <p class="text-center">Invest For <Span class="blue">30 Days</Span></p>
                                 <form class="row g-3 needs-validation" novalidate>
                                     <fieldset>
                                         <div class="balance-div">
@@ -195,14 +195,14 @@
                                     </fieldset>
                                     <div class="col-12">
                                         @if (isset($_COOKIE['public']))
-                                            <button onclick="staking()"
+                                            <button onclick="invest()"
                                                 {{ ansrBalance($_COOKIE['public']) >= env('MIN_AMOUNT') ? '' : 'disabled' }}
                                                 id="btnStaking" type="button" class=" mt-3 stak-btn form-sub"><span
-                                                    class="stak-btns form-btn">Start Staking</span></button>
+                                                    class="stak-btns form-btn">Start Investing</span></button>
                                         @else
-                                            <button onclick="staking()" id="btnStaking" type="button"
+                                            <button onclick="invest()" id="btnStaking" type="button"
                                                 class=" mt-3 stak-btn form-sub"><span class="stak-btns form-btn">Start
-                                                    Staking</span></button>
+                                                    Investing</span></button>
                                         @endif
                                         <button style="display: none" id="loadStaking" type="button"
                                             class=" mt-3 loader-btn"><span class="form-btn">

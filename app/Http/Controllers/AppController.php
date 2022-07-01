@@ -10,9 +10,9 @@ class AppController extends Controller
     {
         return view('home');
     }
-    public function staking()
+    public function invest()
     {
-        return view('staking');
+        return view('invest');
     }
     public function contact(Request $request)
     {

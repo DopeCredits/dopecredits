@@ -256,10 +256,10 @@ footer .footer-inner p{
 }
 /* footer */
 
-/* staking new page */
+/* invest new page */
 
-.staking-main{
-    background-image: url(../images/staking-wall.png);
+.invest-main{
+    background-image: url(../images/invest-wall.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -267,7 +267,7 @@ footer .footer-inner p{
     height: 100%;
     position: relative;
 }
-.staking-barBackground{
+.invest-barBackground{
     background: linear-gradient(179deg, #7d70ff, #23d7ff);
     width: 100%;
     max-width: 537px;
@@ -276,7 +276,7 @@ footer .footer-inner p{
     margin: auto;
     padding: 3px 2px;
 }
-.staking-barform{
+.invest-barform{
     background: #1b113b;
     /* background: lightskyblue; */
     width: 100%;
@@ -289,12 +289,12 @@ footer .footer-inner p{
 .stak-content h1{
     font-size: 64px;
 }
-.staking-barform p{
+.invest-barform p{
     font-size: 40px;
     color: white;
     margin-bottom: 20px;
 }
-.staking-barform .balance-div{
+.invest-barform .balance-div{
     width: 100%;
     max-width: 530px;
     height: 50px;
@@ -319,7 +319,7 @@ footer .footer-inner p{
     padding-top: 100px;
     padding-bottom: 102px;
 }
-/* staking new page */
+/* invest new page */
 
 
 /* connect wallet */
@@ -729,13 +729,13 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     .stak-content .first-h2:before{
         top: 11%;
     }
-    .staking-barBackground{
+    .invest-barBackground{
         margin-top: 40px;
     }
     .balance-div .leftBalance p, .balance-div .rightBalance p{
         font-size: 12px;
     }
-    .staking-barform p{
+    .invest-barform p{
         font-size: 25px;
     }
     .flat-slider{
@@ -783,7 +783,7 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     .stak-content .first-h2:before{
         top: 30% !important;
     }
-    .staking-barBackground{
+    .invest-barBackground{
         margin-top: 50px;
     }
     

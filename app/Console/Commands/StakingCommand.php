@@ -11,14 +11,14 @@ class StakingCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'staking:run';
+    protected $signature = 'invest:run';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Runs staking command when called';
+    protected $description = 'Runs invest command when called';
 
     /**
      * Execute the console command.
@@ -29,7 +29,7 @@ class StakingCommand extends Command
     {
         $curl = curl_init();
         curl_setopt_array($curl, array(
-            CURLOPT_URL => url('api/wallet/stakingresult'),
+            CURLOPT_URL => url('api/wallet/investresult'),
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,

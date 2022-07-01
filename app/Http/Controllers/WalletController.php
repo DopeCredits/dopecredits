@@ -135,11 +135,11 @@ class WalletController extends Controller
     {
         Cookie::queue(Cookie::forget('public'));
         Cookie::queue(Cookie::forget('wallet'));
-        return redirect('/staking');
+        return redirect('/invest');
     }
 
-    // staking XDR GENERATE
-    public function staking(Request $request)
+    // invest XDR GENERATE
+    public function invest(Request $request)
     {
         if (!isset($_COOKIE['public'])) {
             return response()->json(['status' => 0, 'msg' => 'Wallet Address not Found!']);
@@ -179,7 +179,7 @@ class WalletController extends Controller
             'status' => 0
         );
 
-        $staking = Staking::create($data);
+        $invest = Staking::create($data);
 
         if (empty($wallet->secret)) {
             $xdr = $this->stakePublic($wallet, $request->amount);
@@ -189,11 +189,11 @@ class WalletController extends Controller
 
         // Operation failed
         if (!$xdr) {
-            $staking->delete();
+            $invest->delete();
             return response()->json(['status' => 0, 'msg' => 'Something went wrong!']);
         }
 
-        return response()->json(['xdr' => $xdr, 'status' => 1, 'staking_id' => $staking->id]);
+        return response()->json(['xdr' => $xdr, 'status' => 1, 'invest_id' => $invest->id]);
     }
 
     private function stakePublic($wallet, $amount)
@@ -213,7 +213,7 @@ class WalletController extends Controller
             $paymentOperation = (new PaymentOperationBuilder($mainPair->getAccountId(), $asset, $amount))->build();
             $txbuilder = new TransactionBuilder($account);
             $txbuilder->setMaxOperationFee($this->maxFee);
-            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR staking'))->build();
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR invest'))->build();
             $signer = Signer::preAuthTx($transaction, Network::public());
             $sk = new XdrSigner($signer, 1);
             $transaction->addSignature(new XdrDecoratedSignature('sign', $sk->encode()));
@@ -242,7 +242,7 @@ class WalletController extends Controller
             $paymentOperation = (new PaymentOperationBuilder($mainPair->getAccountId(), $asset, $amount))->build();
             $txbuilder = new TransactionBuilder($account);
             $txbuilder->setMaxOperationFee($this->maxFee);
-            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR staking'))->build();
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR invest'))->build();
             $transaction->sign($sourcePair, Network::public());
             $response = $transaction->toEnvelopeXdrBase64();
 
@@ -256,8 +256,8 @@ class WalletController extends Controller
     public function submitXdr(Request $request)
     {
         $xdr = $request->xdr;
-        $staking = Staking::where('id', $request->staking_id)->first();
-        if (!$staking) {
+        $invest = Staking::where('id', $request->invest_id)->first();
+        if (!$invest) {
             return response()->json(['status' => 0, 'msg' => 'Something went wrong!']);
         }
         try {
@@ -269,49 +269,49 @@ class WalletController extends Controller
             $result = $sdk->submitTransaction($tx);
             $txID = $result->getId();
             if ($txID) {
-                $staking->transaction_id = $txID;
-                $staking->save();
+                $invest->transaction_id = $txID;
+                $invest->save();
             }
             return response()->json(['status' => 1, 'msg' => 'Success!']);
         } catch (\Throwable $th) {
-            $staking->delete();
+            $invest->delete();
             return response()->json(['status' => 0, 'msg' => 'Failed!']);
         }
     }
 
-    public function stakingresult()
+    public function investresult()
     {
         // removes NULL
         Staking::whereNull('transaction_id')->delete();
 
-        $stakings =  Staking::whereNotNull('transaction_id')
+        $invests =  Staking::whereNotNull('transaction_id')
             ->where('status', 0)
             // ->whereRaw('MINUTE(created_at) < 60')
             ->where('created_at', '<=', now()->subDays($this->returnDays)->endOfDay())
             ->get();
 
-        // Looping through staking
-        foreach ($stakings as $key => $staking) {
-            $result = $this->returnStaking($staking);
+        // Looping through invest
+        foreach ($invests as $key => $invest) {
+            $result = $this->returnStaking($invest);
             if ($result) {
-                $staking->status = 1;
-                $staking->save();
-                StakingResult::create(['staking_id' => $staking->id, 'amount' => $result->amount, 'transaction_id' => $result->tx]);
+                $invest->status = 1;
+                $invest->save();
+                StakingResult::create(['invest_id' => $invest->id, 'amount' => $result->amount, 'transaction_id' => $result->tx]);
             }
         }
-        return response()->json([$stakings]);
+        return response()->json([$invests]);
     }
 
-    private function returnStaking($staking)
+    private function returnStaking($invest)
     {
-        $amount = $staking->amount + (($staking->amount / 100) * 2);
+        $amount = $invest->amount + (($invest->amount / 100) * 2);
         try {
             // Destination Account
             $mainSecret = env('MAIN_WALLET');
             $mainPair = KeyPair::fromSeed($mainSecret);
 
             $mainAccount = $this->sdk->requestAccount($mainPair->getAccountId());
-            $account = $this->sdk->requestAccount($staking->public);
+            $account = $this->sdk->requestAccount($invest->public);
 
             $assetCode = 'ANSR';
             $assetIssuer = 'GAEQFO7DDXQCJ4REZX6M6ULRNCI7WBXTJPMJRRWZQBA3C5T3LAWL7CQO';
@@ -320,7 +320,7 @@ class WalletController extends Controller
             $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $amount))->build();
             $txbuilder = new TransactionBuilder($mainAccount);
             $txbuilder->setMaxOperationFee($this->maxFee);
-            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR staking Return'))->build();
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'ANSR invest Return'))->build();
             $transaction->sign($mainPair, Network::public());
             $res = $this->sdk->submitTransaction($transaction);
             return (object)['tx' => $res->getId(), 'amount' => $amount];
