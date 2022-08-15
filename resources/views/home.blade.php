@@ -82,7 +82,10 @@
                             <h1>The future of Investing is here</h1>
                             <h2 class="Sec-h2"><span class="blue">2%</span> Monthly interest in $ANSR</h2>
                             <div class="row">
-                                <a href="{{ url('/invest') }}" class="mt-4 stak-btn m-2 col"><span
+                                {{-- <a href="{{ url('/invest') }}" class="mt-4 stak-btn m-2 col"><span
+                                        class="stak-btns">Start
+                                        Investing</span></a> --}}
+                                <a href="javascript::void(0)" class="mt-4 stak-btn m-2 col"><span
                                         class="stak-btns">Start
                                         Investing</span></a>
                                 <a target="_blank"
@@ -106,8 +109,7 @@
             <div class="inform-inner">
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-12">
-                        <img src="{{ asset('images/inform-wallet.png') }}" class="img-fluid wallet-img"
-                            alt="">
+                        <img src="{{ asset('images/inform-wallet.png') }}" class="img-fluid wallet-img" alt="">
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="inform-left">
@@ -117,10 +119,15 @@
                                 their tokens for 1 month. The entire invest module is running decentrally on the
                                 Stellar blockchain. Moreover, Answerly Invest is open to everyone, no matter if you are
                                 an Answerly platform user or not</p>
-                            <a target="_blank" href="https://github.com/answerly-app/Answerly-Invest" class="mt-4 stak-btn"><span class="stak-btns">
-                                <svg style="fill:white" height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="32" data-view-component="true" class="octicon octicon-mark-github v-align-middle">
-                                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
-                            </svg>&nbsp Github</span></a>
+                            <a target="_blank" href="https://github.com/answerly-app/Answerly-Invest"
+                                class="mt-4 stak-btn"><span class="stak-btns">
+                                    <svg style="fill:white" height="32" aria-hidden="true" viewBox="0 0 16 16"
+                                        version="1.1" width="32" data-view-component="true"
+                                        class="octicon octicon-mark-github v-align-middle">
+                                        <path fill-rule="evenodd"
+                                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+                                        </path>
+                                    </svg>&nbsp Github</span></a>
                         </div>
                     </div>
                 </div>
@@ -140,15 +147,17 @@
                             {{-- <h1>Contact</h1> --}}
                             <p>Get in touch with our support team if you have any questions regarding Answerly Invest
                             </p>
-                            <a href="{{ url('/invest') }}" class="mt-4 stak-btn"><span class="stak-btns">Start Investing</span></a>
+                            {{-- <a href="{{ url('/invest') }}" class="mt-4 stak-btn"><span class="stak-btns">Start Investing</span></a> --}}
+                            <a href="javascript::void(0)" class="mt-4 stak-btn"><span class="stak-btns">Start
+                                    Investing</span></a>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="form-div">
                             <form id="contact-form" class="row g-3 needs-validation" novalidate>
                                 <div class="col-12">
-                                    <input name="name" type="text" class="form-control" id="validationCustom01"
-                                        placeholder="Name" required>
+                                    <input name="name" type="text" class="form-control"
+                                        id="validationCustom01" placeholder="Name" required>
                                 </div>
                                 <div class="col-12">
                                     <div class="input-group has-validation">
