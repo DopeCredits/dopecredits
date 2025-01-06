@@ -6,209 +6,613 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Invest.answerly</title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('images/favicon.png') }}">
+    <title>Dope Credits</title>
     <!-- bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
-        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+    <!-- paralucemnt font use -->
+    <link href="//db.onlinewebfonts.com/c/c1d440b87551df56c26f7e478436b8ce?family=ParalucentW00-Heavy" rel="stylesheet"
+        type="text/css" />
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
         integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- custom css -->
-    <link rel="stylesheet" href="{{ asset('css/bar.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6D0Y0V0JD5"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-
-        gtag('config', 'G-6D0Y0V0JD5');
-    </script>
-
-    <!-- Google Tag Manager -->
-    <script>
-        (function(w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start': new Date().getTime(),
-                event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src =
-                'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-MHLHRJ6');
-    </script>
-    <!-- End Google Tag Manager -->
+    <!-- custome style -->
+    {{-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('css/dope.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
 
 </head>
 
 <body>
 
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MHLHRJ6" height="0" width="0"
-            style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
-    <!-- top section -->
-    <div class="main-section">
-        <img src="{{ asset('images/Shape 1.png') }}" class="top-shape" alt="">
+    <!-- mainSection -->
+    <section class="bg-main">
         <div class="container">
+            <!-- navbar -->
             <div class="row">
-                <nav class="navbar navbar-light">
-                    <div class="container-fluid">
-                        <a class="navbar-brand" href="{{ url('/') }}"><img
-                                src="{{ asset('images/white-logo.png') }}" class="logo" alt=""></a>
-                    </div>
-                </nav>
+                <div class="mainNavbar">
+                    <nav>
+                        <div class="logo">
+                            <img src="{{ asset('images/logo.png') }}" alt="Logo Image">
+                        </div>
+                        <div class="hamburger">
+                            <div class="line1"></div>
+                            <div class="line2"></div>
+                            <div class="line3"></div>
+                        </div>
+                        <ul class="nav-links">
+                            <li><a href="{{ url('#') }}">Stakers</a></li>
+                            <li><a href="{{ url('#') }}">Whitepaper</a></li>
+                            <li><a href="{{ url('#') }}">Token explorer</a></li>
+                            <li><a href="{{ url('#') }}">About</a></li>
+                        </ul>
+                        {{-- <div class="wallet-btn">
+                                <a href="{{ url('#') }}" class="btn dope mt-0" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal">
+                                    <img src="{{ asset('images/key.png') }}" alt=""> {{ isset($_COOKIE['public']) ? substr($_COOKIE['public'], 0, 4) . '...' . substr($_COOKIE['public'], -5) : 'Connect Wallet' }}</a>
+                            
+                                <!-- modal wallet -->
+                                <div class="modal fade" id="exampleModal" tabindex="-1"
+                                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-12 text-center">
+                                                        <h3>Please Connect Your
+                                                            Account to Wallet</h3>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12 text-center">
+                                                        <label class="drop">
+                                                            <input type="checkbox" id="target-drop-example">
+                                                            <!-- Toggle Drop -->
+                                                            <span class="control">Choose your wallet</span>
+                                                            <!-- Fake button -->
+
+                                                            <!-- Items -->
+                                                            <ul class="drop-items">
+                                                                <li class="item-drop">
+                                                                    <a href="javascript:void(0);" onclick="rabbetWallet()">
+                                                                        <img class="rabet" src="{{ asset('images/rabit.png') }}" alt="">Rabet
+                                                                    </a>
+                                                                </li>
+                                                                <li class="item-drop">
+                                                                    <a href="javascript:void(0);" onclick="frighterWallet()">
+                                                                        <img class="rabet" src="{{ asset('images/fre.png') }}" alt="">Freighter
+                                                                    </a>
+                                                                </li>
+                                                                <li class="item-drop">
+                                                                    <a href="javascript:void(0);" onclick="xbullWallet()">
+                                                                        <img class="rabet" src="{{ asset('images/xbull.png') }}" alt="">Xbull
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
+
+                                                            <!-- Alternative to close dropdown with click out -->
+                                                            <label for="target-drop-example"
+                                                                class="overlay-close"></label>
+
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="cont-btn">
+                                                            <a href="{{ url('#') }}" class="btn dope mt-0">Connectasd Wallet</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- modal wallet -->
+
+                        </div> --}}
+                        <div class="wallet-btn">
+                            <div style="cursor: pointer" class="btn dope mt-0" data-bs-toggle="dropdown"
+                                data-bs-auto-close="inside" aria-expanded="false">
+                                <span class="e-wallInner">
+                                    @if (isset($_COOKIE['wallet']))
+                                        <img id='walletImage' src="{{ asset('images/' . $_COOKIE['wallet'] . '.png') }}"
+                                            alt="">
+                                    @else
+                                        <img id='walletImage' alt="">
+                                    @endif
+
+                                    <p id="topWallet" 
+                                    @if (!isset($_COOKIE['public'])) 
+                                        onclick="$('#ConnectWallet').modal('show');" 
+                                    @endif>
+                                        {{ isset($_COOKIE['public']) ? substr($_COOKIE['public'], 0, 4) . '...' . substr($_COOKIE['public'], -5) : 'Connect Wallet' }}
+                                    </p>
+
+                                </span>
+                            </div>
+                            @if (isset($_COOKIE['wallet']))
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuClickableOutside">
+                                <li><a class="dropdown-item" onclick="$('#ConnectWallet').modal('show');"
+                                        href="javascript::void(0)">Change</a></li>
+                                <li><a class="dropdown-item" href="{{ url('wallet/disconnect') }}">Disconnect</a></li>
+                            </ul>
+                            @endif
+                        </div>
+                    </nav>
+                </div>
             </div>
-            <div class="main-div">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <div class="main-content">
-                            <h2 class="first-h2"><span class="purple">Built on Stellar</span></h2>
-                            <h1>The future of Investing is here</h1>
-                            <h2 class="Sec-h2"><span class="blue">2%</span> Monthly interest in $ANSR</h2>
-                            <div class="row">
-                                {{-- <a href="{{ url('/invest') }}" class="mt-4 stak-btn m-2 col"><span
-                                        class="stak-btns">Start
-                                        Investing</span></a> --}}
-                                <a href="javascript::void(0)" class="mt-4 stak-btn m-2 col"><span
-                                        class="stak-btns">Start
-                                        Investing</span></a>
-                                <a target="_blank"
-                                    href="https://scopuly.com/trade/ANSR-XLM/GAEQFO7DDXQCJ4REZX6M6ULRNCI7WBXTJPMJRRWZQBA3C5T3LAWL7CQO/native"
-                                    class="mt-4 stak-btn m-2 col"><span class="stak-btns">Buy ANSR</span></a>
+            <!-- navbar -->
+            <div class="row text-center dopeRange">
+                <div class="col-12">
+                    <div class="mainRange">
+                        <div class="rangeBal">
+                            <div class="balLeft">
+                                <p>Balance - <span>125,000 $Dope</span></p>
+                            </div>
+                            <div class="balRight">
+                                <p>Minimun Staking = <span>1000 $Dope</span></p>
+                            </div>
+                        </div>
+                        <h1>How many $DOPE do you want to stake?</h1>
+                    </div>
+                    <div class="range2nd">
+                        <div class="center">
+                            <div class="dual-range" id="slider_single" data-min="1000" data-max="125000" data-value="1000">
+                                <span class="handle left"></span>
+                                <span class="highlight"></span>
+                                <span class="handle right"></span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <img src="{{ asset('images/main-img.png') }}" class="img-fluid main-img" alt="">
+                    <h2>12,000 $DOPE</h2>
+                    <p> <span class="demo2"><input type="checkbox" id="checkbox-2-1" class="regular-checkbox big-checkbox" /><label for="checkbox-2-1"></label></span> Read
+                        the <a href="{{ url('#') }}">Terms and conditions</a></p>
+                    {{-- <a href="{{ url('#') }}" class="btn dope mt-0">Stake</a> --}}
+
+                        @if (isset($_COOKIE['public']))
+                            <button style="background-image: linear-gradient(to right, #80c931, #08a6c3);"
+                            onclick="invest()"
+                                {{ dopeBalance($_COOKIE['public']) >= env('MIN_AMOUNT') ? '' : 'disabled' }}
+                                id="btnStaking" type="button" class="btn dope mt-0"><span
+                                    class="">Stake</span></button>
+                        @else
+                            {{-- <button style="background-image: linear-gradient(to right, #80c931, #08a6c3);" onclick="invest()" id="btnStaking" type="button"
+                                class="btn dope mt-0"><span class="">Start
+                                    Stake</span></button> --}}
+                            <a style="background-image: linear-gradient(to right, #80c931, #08a6c3);" class="btn dope mt-0" onclick="$('#ConnectWallet').modal('show');"
+                                href="javascript::void(0)">Connect Walet</a>
+                        @endif
+                        <button id="loadStaking" type="button" class="loader-btn" style="display: none;">
+                            <span class="form-btn">
+                                <div class="spinner-border text-light" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p>Processing</p>
+                            </span>
+                        </button>
+
+                </div>
+            </div>
+            <div class="row main2nd">
+                <div class="col-12">
+                    <!-- Title -->
+                    <h3 class="text-center">Staking Rewards</h3>
+                    <!-- DataTable -->
+                    <div class="table-responsive">
+                        <table id="stakingRewardsTable" class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Wallet Address</th>
+                                    <th>Transaction ID</th>
+                                    <th>Reward</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dynamic rows will be inserted here -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <!-- top section -->
+            
 
-    <!-- information section -->
-    <div class="information">
-        <div class="container">
-            <div class="inform-inner">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <img src="{{ asset('images/inform-wallet.png') }}" class="img-fluid wallet-img" alt="">
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <div class="inform-left">
-                            <h2 class="purple mb-4">About Answerly Invest</h2>
-                            {{-- <h1>Information</h1> --}}
-                            <p>Answerly invest allow the token holders to earn 2% monthly interest just by locking
-                                their tokens for 1 month. The entire invest module is running decentrally on the
-                                Stellar blockchain. Moreover, Answerly Invest is open to everyone, no matter if you are
-                                an Answerly platform user or not</p>
-                            <a target="_blank" href="https://github.com/answerly-app/Answerly-Invest"
-                                class="mt-4 stak-btn"><span class="stak-btns">
-                                    <svg style="fill:white" height="32" aria-hidden="true" viewBox="0 0 16 16"
-                                        version="1.1" width="32" data-view-component="true"
-                                        class="octicon octicon-mark-github v-align-middle">
-                                        <path fill-rule="evenodd"
-                                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
-                                        </path>
-                                    </svg>&nbsp Github</span></a>
+            <div class="row main2nd">
+                <div class="col-lg-8 col-md-8 col-sm-12">
+                    <div class="mainleft">
+                        <div class="emojiDiv">
+                            <h6>hi everyone</h6>
+                            <img src="{{ asset('images/hiemo.png') }}" alt="">
+                        </div>
+                        <h1>2% monthly interest <br> for staking $Dope</h1>
+                        <p>Dope Credit offers 2% monthly (26.28% <br> annually) interest for staking $DOPE. The <br>
+                        annuall return for $DOPE is among the highest <br> in the crypto market</p>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="dopeBtn">
+                                    <a href="{{ url('#') }}" class="btn dope">Buy $Dope</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="mainRight">
+                        <img src="{{ asset('images/mainRight.png') }}" alt="">
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <!-- information section -->
+    </section>
+    <!-- mainSection -->
+
+    <!-- 2nd section -->
+    <section class="Section2nd">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="inner2nd">
+                        <div class="emojiDiv">
+                            <h6>video intro</h6>
+                            <img src="{{ asset('images/filma.png') }}" alt="">
+                        </div>
+                    </div>
+                    <h3 class="text-center">Here's how it works</h3>
+                    <div class="playVideo">
+                        <img src="{{ asset('images/play.png') }}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 2nd section -->
+
+    <!-- 3rd section -->
+    <section class="Section3rd">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="left3rd">
+                        <img src="{{ asset('images/left3rdImg.png') }}" alt="">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="right3rd">
+                        <div class="emojiDiv">
+                            <h6>dope credits</h6>
+                            <img src="{{ asset('images/dopeIcon.png') }}" alt="">
+                        </div>
+                        <h3 class="">Token Details</h3>
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority have
+                            suffered alteration in some form, by injected humour, or randomised.</p>
+                        <a href="{{ url('#') }}" class="btn dope">$Dope</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 3rd section -->
+
+    <!-- 4rd Section -->
+    <section class="Section4rd">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="left4">
+                        <div class="emojiDiv">
+                            <h6>Distribution</h6>
+                            <img src="{{ asset('images/gift.png') }}" alt="">
+                        </div>
+                        <h3 class="">Token Distribution</h3>
+                        <ul>
+                            <li><img src="{{ asset('images/points.png') }}" alt="">Staking rewards -
+                                650,000,00 (65%)</li>
+                            <li><img src="{{ asset('images/points.png') }}" alt="">Presale - 200,000,000
+                                (20%)</li>
+                            <li><img src="{{ asset('images/points.png') }}" alt="">Team - 100,000,000 (10%)
+                            </li>
+                            <li><img src="{{ asset('images/points.png') }}" alt="">Liquidity Provider rewards
+                                - 50,000,00 (5%)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="right4">
+                        <img src="{{ asset('images/chart.png') }}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 4rd Section -->
+
+    <!-- 5th Section -->
+    <section class="Section5th">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="inner5th text-center">
+                        <div class="emojiDiv">
+                            <h6>Timeline</h6>
+                            <img class="time" src="{{ asset('images/time.png') }}" alt="">
+                        </div>
+                        <h3 class="">Timeline</h3>
+                        <p>There are many variations of passages.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row desktoptime">
+                <div class="col-lg-3 col-md-3">
+                    <div class="step1">
+                        <img src="{{ asset('images/step1.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="step1">
+                        <img src="{{ asset('images/Step3.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="step1">
+                        <img src="{{ asset('images/step5.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="step1">
+                        <img src="{{ asset('images/step7.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <img class="w-100" src="{{ asset('images/timearrow.png') }}" alt="">
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="step2">
+                        <img src="{{ asset('images/step2.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="step2">
+                        <img src="{{ asset('images/Step4.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="step2">
+                        <img src="{{ asset('images/step6.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3">
+                    <div class="step2">
+                        <img src="{{ asset('images/step8.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mobileTime">
+                <div class="col-6">
+                    <div class="step1">
+                        <img src="{{ asset('images/step1.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="step1">
+                        <img src="{{ asset('images/step2.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="step1">
+                        <img src="{{ asset('images/step1.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="step1">
+                        <img src="{{ asset('images/step2.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="step1">
+                        <img src="{{ asset('images/step1.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="step1">
+                        <img src="{{ asset('images/step2.png') }}" alt="">
+                        <p>There are many variations of passages of Lorem Ipsum available, but the majority.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <!-- 5th Section -->
+
+    <!-- 6th Section -->
+    <section class="Section6th">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-12">
+                    <div class="emojiDiv">
+                        <h6>about team</h6>
+                        <img src="{{ asset('images/team.png') }}" alt="">
+                    </div>
+                    <h3 class="">About the team</h3>
+                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered
+                        alteration in some form, by injected humour, or randomised</p>
+                </div>
+            </div>
+
+            {{-- <div class="teamImgs">
+                <div class="row">
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <div class="leftTeam">
+                            <div class="firstTeam">
+                                <div class="mobilehearts">
+                                    <img src="{{ asset('images/heart.png') }}" alt="">
+                                    <img src="{{ asset('images/heart.png') }}" alt="">
+                                </div>
+                                <img src="{{ asset('images/person2.png') }}" class="personImg" alt="">
+                                <img src="{{ asset('images/person1.png') }}" class="personImg" alt="">
+                            </div>
+                            <div class="SecndTeam SecndOne">
+                                <img src="{{ asset('images/person2.png') }}" class="personImg" alt="">
+                                <img src="{{ asset('images/person1.png') }}" class="personImg" alt="">
+                                <div class="desktophearts">
+                                    <img src="{{ asset('images/heart.png') }}" alt="">
+                                    <img src="{{ asset('images/heart.png') }}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 dopeImg">
+                        <img src="{{ asset('images/dopeImg.png') }}" alt="">
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12">
+                        <div class="rightTeam">
+                            <div class="firstTeam">
+                                <div class="desktophearts">
+                                    <img src="{{ asset('images/heart.png') }}" alt="">
+                                    <img src="{{ asset('images/heart.png') }}" alt="">
+                                </div>
+                                <img src="{{ asset('images/person2.png') }}" class="personImg" alt="">
+                                <img src="{{ asset('images/person1.png') }}" class="personImg" alt="">
+                            </div>
+                            <div class="SecndTeam SecndTwo">
+                                <img src="{{ asset('images/person2.png') }}" class="personImg" alt="">
+                                <img src="{{ asset('images/person1.png') }}" class="personImg" alt="">
+                                <div class="mobilehearts">
+                                    <img src="{{ asset('images/heart.png') }}" alt="">
+                                    <img src="{{ asset('images/heart.png') }}" alt="">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> --}}
+        </div>
+    </section>
+    <!-- 6th Section -->
 
     <!-- footer -->
     <footer>
         <div class="container">
-            <div class="footer-inner">
-                <div class="row">
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <div class="footer-content">
-                            <h2 class="purple mb-4">Support System</h2>
-                            {{-- <h1>Contact</h1> --}}
-                            <p>Get in touch with our support team if you have any questions regarding Answerly Invest
-                            </p>
-                            {{-- <a href="{{ url('/invest') }}" class="mt-4 stak-btn"><span class="stak-btns">Start Investing</span></a> --}}
-                            <a href="javascript::void(0)" class="mt-4 stak-btn"><span class="stak-btns">Start
-                                    Investing</span></a>
+            <div class="row">
+                <div class="col-12">
+                    <div class="innerFooter">
+                        <div class="leftFooter">
+                            <a href="{{ url('#') }}">How it works</a>
+                            <a href="{{ url('#') }}">Faqs</a>
+                            <a href="{{ url('#') }}">Token details</a>
+                            <a href="{{ url('#') }}">Distributuion</a>
                         </div>
-                    </div>
-                    <div class="col-lg-6 col-md-6 col-sm-12">
-                        <div class="form-div">
-                            <form id="contact-form" class="row g-3 needs-validation" novalidate>
-                                <div class="col-12">
-                                    <input name="name" type="text" class="form-control"
-                                        id="validationCustom01" placeholder="Name" required>
-                                </div>
-                                <div class="col-12">
-                                    <div class="input-group has-validation">
-                                        <input name="email" type="email" class="form-control"
-                                            id="validationCustomUsername" aria-describedby="inputGroupPrepend"
-                                            placeholder="Email" required>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <textarea name="message" rows="4" class="form-control" id="validationTextarea" placeholder="Message"
-                                        required></textarea>
-                                </div>
-                                <div class="col-12">
-                                    <button type="submit" class="mt-4 stak-btn form-sub"><span
-                                            class="stak-btns form-btn">Send Message</span></button>
-                                </div>
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="footer-bottom">
-                            <p>&copy; 2022 Answerly Inc.<br class="resevrd-mob"> All Rights Reserved</p>
+                        <div class="rightFooter">
+                            <div class="socialLinks">
+                                <a href="{{ url('#') }}">
+                                    <img src="{{ asset('images/Twitter.png') }}" alt="">
+                                </a>
+                                <a href="{{ url('#') }}">
+                                    <img src="{{ asset('images/medium-m.png') }}" alt="">
+                                </a>
+                            </div>
+                            <div class="powerd">
+                                <p>Powerd by <span>@Stellarorg</span></p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
     </footer>
     <!-- footer -->
 
-    <!-- bootstarp 5 js -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"
-        integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- custom js -->
-    <script>
-        var base_url = "@php echo url('/') @endphp";
-    </script>
-    <script src="{{ asset('js/custom.js') }}"></script>
+    @include('components.connectWallet')
+
 </body>
+<!-- bootstrap 5 js -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
+</script>
+
+<!-- custome js -->
+@include('components.scripts')
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stellar-freighter-api/3.0.0/index.min.js"></script>
+<script src="{{ asset('js/custom.js') }}"></script>
+<script src="{{ asset('js/dope.js') }}"></script>
+<script src="{{ asset('js/wallet.js') }}"></script>
+<script type="text/javascript">
+
+$(document).ready(function () {
+
+    $('#stakingRewardsTable').DataTable({
+        processing: true,
+        serverSide: false,
+        ajax: {
+            url: base_url + '/fetching_staking_data',
+            type: 'GET',
+            error: function (xhr, error, thrown) {
+                console.error('Error fetching data:', error);
+                $('#stakingRewardsTable').html('<tr><td colspan="3">Error loading data</td></tr>');
+            }
+        },
+        columns: [
+            { data: 'wallet_address', title: 'Wallet Address' },
+            { data: 'trxid', title: 'Transaction ID' },
+            { data: 'reward', title: 'Reward' }
+        ],
+        responsive: true,
+        pageLength: 10,
+        language: {
+            emptyTable: "No staking rewards available yet."
+        }
+    });
+
+
+    // Drag and update handle
+    $('.handle.left').on('mousedown', function (event) {
+        $(document).on('mousemove', function (e) {
+
+            let slider = $('#slider_single');
+            let span = slider.find('span'); // Finds the first <span>
+            let spanClass = span.attr('class'); // Gets the class attribute
+            let dataValue = span.attr('data-value'); // Gets the data-value attribute
+            slider.attr('data-value', dataValue);
+
+        });
+
+        $(document).on('mouseup', function () {
+            $(document).off('mousemove');
+        });
+    });
+});
+
+
+
+// @if (!isset($_COOKIE['public']))
+//     $(window).load(function() {
+//         $('#ConnectWallet').modal('show');
+//     });
+// @endif
+</script>
 
 </html>

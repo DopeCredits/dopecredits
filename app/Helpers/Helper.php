@@ -1,7 +1,7 @@
 <?php
 
 
-function ansrBalance($accountID)
+function dopeBalance($accountID)
 {
 
     $sdk = Soneso\StellarSDK\StellarSDK::getPublicNetInstance();
@@ -11,7 +11,7 @@ function ansrBalance($accountID)
     $balance = 0;
 
     foreach ($account->getBalances() as $bal) {
-        if ($bal->getAssetCode() == 'ANSR') {
+        if ($bal->getAssetCode() == 'DOPE') {
             if ($bal->getBalance()) {
                 $balance = $bal->getBalance();
                 break;

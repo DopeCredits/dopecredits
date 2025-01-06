@@ -438,7 +438,7 @@ footer .footer-inner p{
     pointer-events: none;
   }
   .walletconnect-btn {
-    background: linear-gradient(to left, #5747e5, #7d68fe);
+    background: linear-gradient(to right, #80c931, #08a6c3);
     padding: 0.9em 7.6em;
     border-radius: 50px;
     text-align: center;
@@ -502,7 +502,7 @@ a.connectLoading-btn {
     margin-right: 10px;
 }
 ul.dropdown-menu.show{
-    background-color: inherit;
+    background-image: linear-gradient(to right, #80c931, #08a6c3);
     border: 1px solid #23d7ff;
     margin-top: 10px;
 }

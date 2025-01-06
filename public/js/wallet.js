@@ -16,7 +16,7 @@ function connectWallet() {
         case 'rabet':
             rabbetWallet();
             break;
-        case 'frighter':
+        case 'freighter':
             frighterWallet();
             break;
         case 'ledger':
@@ -31,17 +31,55 @@ function connectWallet() {
             storePublic($('#walletPrivateKey').val())
             break;
         default:
-            $('.walletconnect-btn').show();
-            $('.connectLoading-btn').hide();
+            displayWalletButtons(); 
             toastr.warning('Please select Wallet', 'Selection');
     }
 }
 
+
+async function frighterWallet() {
+    // Step 1: Check if Freighter is connected
+    try {
+        const connected = await window.freighterApi.isConnected();
+        
+        if (!connected) {
+            toastr.error('Freighter wallet is not connected.', 'Freighter Wallet');
+            displayWalletButtons();
+            return;
+        }
+    } catch (error) {
+        toastr.error('Please install or connect the Freighter Extension!', 'Freighter Wallet');
+        displayWalletButtons();
+        return;
+    }
+
+    // Step 2: Retrieve the Public Key
+    try {
+        const publicKeyObject = await window.freighterApi.requestAccess();
+
+        // Access the 'address' property of the object
+        const publicKey = publicKeyObject.address;
+        
+        if (publicKey === 'User declined access') {
+            toastr.error('Access declined by user.', 'Freighter Wallet');
+            displayWalletButtons();
+            return;
+        }
+
+        // Handle the public key (e.g., store it)
+        storeWalletPublic(publicKey, 'freighter');
+        // toastr.success('Freighter wallet connected successfully!', 'Freighter Wallet');
+    } catch (error) {
+        toastr.error('An error occurred while retrieving the public key.', 'Freighter Wallet');
+        displayWalletButtons();
+    }
+}
+
+
 function rabbetWallet() {
     if (!window.rabet) {
         toastr.error('Please install Rabet Extension!', 'Rabbet Wallet');
-        $('.walletconnect-btn').show();
-        $('.connectLoading-btn').hide();
+        displayWalletButtons(); 
     }
     rabet.connect()
         .then(function (result) {
@@ -49,16 +87,14 @@ function rabbetWallet() {
         })
         .catch(function (error) {
             toastr.error(`Wallet Connection Rejected!`, 'Rabbet Wallet');
-            $('.walletconnect-btn').show();
-            $('.connectLoading-btn').hide();
+            displayWalletButtons(); 
         });
 }
 
 function xbullWallet() {
     if (typeof xBullSDK == "undefined") {
         toastr.error('Please install Xbull Extension!', 'Xbull Wallet');
-        $('.walletconnect-btn').show();
-        $('.connectLoading-btn').hide();
+        displayWalletButtons(); 
     }
     xBullSDK.connect({
         canRequestPublicKey: true,
@@ -70,63 +106,18 @@ function xbullWallet() {
     })
         .catch(function (error) {
             toastr.error(`Error Occured`, 'Xbull Wallet');
-            $('.walletconnect-btn').show();
-            $('.connectLoading-btn').hide();
+            displayWalletButtons(); 
         });
 }
 
 function albedoWallet() {
     albedo.publicKey()
         .then(function (res) {
-            console.log(res.pubkey, res.signed_message, res.signature);
             storeWalletPublic(res.pubkey, 'albeto');
         })
         .catch(function (error) {
             toastr.error(`Connection Rejected`, 'Albedo Wallet');
-            $('.walletconnect-btn').show();
-            $('.connectLoading-btn').hide();
-        });
-}
-
-const frighterPublicKey = async () => {
-    let publicKey = "";
-    let error = "";
-
-    try {
-        publicKey = await window.freighterApi.getPublicKey();
-    } catch (e) {
-        error = e;
-    }
-
-    if (error) {
-        return error;
-    }
-
-    return publicKey;
-};
-
-function frighterWallet() {
-    try {
-        window.freighterApi.isConnected();
-    } catch (error) {
-        toastr.error('Please install Frighter Extension!', 'Frighter Wallet');
-        $('.walletconnect-btn').show();
-        $('.connectLoading-btn').hide();
-    }
-    frighterPublicKey()
-        .then(function (publicKey) {
-            if (publicKey != 'User declined access') {
-                storeWalletPublic(publicKey, 'frighter');
-            } else {
-                toastr.error(publicKey, 'Frighter Wallet');
-                $('.walletconnect-btn').show();
-                $('.connectLoading-btn').hide();
-            }
-        })
-        .catch(function (error) {
-            toastr.error(`Error Occured`, 'Frighter Wallet');
-            $('.walletconnect-btn').show();
-            $('.connectLoading-btn').hide();
+            displayWalletButtons(); 
         });
 }
 
@@ -161,6 +152,7 @@ function number_format_short(n) {
     return Math.floor(n_format).toString() + suffix;
 }
 
+//Storing wallets connecting from extensions like rabet etc
 function storeWalletPublic(public, wallet) {
     $.ajax({
         headers: {
@@ -202,23 +194,26 @@ function storeWalletPublic(public, wallet) {
                 $('#walletImage').attr('src', base_url + '/images/' + wallet + '.png');
 
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
-                $('.walletconnect-btn').show();
-                $('.connectLoading-btn').hide();
+                displayWalletButtons(); 
                 $('#ConnectWallet').modal('hide');
             } else {
-                toastr.error(`Error: ${response.msg}`, 'Connection')
-                $('.walletconnect-btn').show();
-                $('.connectLoading-btn').hide();
+                toastr.error(`Error: ${response.msg}`, 'Connectionss')
+                displayWalletButtons(); 
             }
         },
         error: function (xhr, status, error) {
             toastr.error("Deposit 5 XLM lumens into your wallet", "Wallet Error");
-            $('.walletconnect-btn').show();
-            $('.connectLoading-btn').hide();
+            displayWalletButtons(); 
         }
     });
 }
 
+function displayWalletButtons() {
+    $('.walletconnect-btn').show();
+    $('.connectLoading-btn').hide();
+  }
+
+//Storing wallets connecting from secret key
 function storePublic(key) {
     $.ajax({
         headers: {
@@ -260,19 +255,16 @@ function storePublic(key) {
                 $('#walletImage').attr('src', base_url + '/images/' + wallet + '.png');
 
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
-                $('.walletconnect-btn').show();
-                $('.connectLoading-btn').hide();
+                displayWalletButtons(); 
                 $('#ConnectWallet').modal('hide');
             } else {
                 toastr.error(`Error: ${response.msg}`, 'Connection')
-                $('.walletconnect-btn').show();
-                $('.connectLoading-btn').hide();
+                displayWalletButtons(); 
             }
         },
         error: function (xhr, status, error) {
             toastr.error("Deposit 5 XLM lumens into your wallet", "Wallet Error");
-            $('.walletconnect-btn').show();
-            $('.connectLoading-btn').hide();
+            displayWalletButtons(); 
         }
     });
 }
@@ -283,15 +275,16 @@ function btnLoaderHide() {
 }
 
 function invest() {
-    var bal = $('#slider_single').val();
-    bal = (parseFloat(bal.replace(' K', "")) * 1000).toFixed(0);
+    // var bal = $('#slider_single').val();
+    var bal = $('#slider_single').attr('data-value');
+    // bal = (parseFloat(bal.replace(' K', "")) * 1000).toFixed(0);
     $('#btnStaking').hide();
     $('#loadStaking').show();
     $.ajax({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-        url: base_url + '/wallet/invest',
+url: base_url + '/wallet/invest',
         type: "post",
         data: {
             amount: bal,
@@ -324,8 +317,8 @@ function signXdr(xdr, staking_id) {
                 });
             break;
 
-        case 'frighter':
-            window.freighterApi.signTransaction(xdr, testnet ? 'TESTNET' : 'PUBLIC').then(function (result) {
+        case 'freighter':
+            window.freighterApi.signTransaction(xdr, testnet ? 'testnet' : 'mainnet').then(function (result) {
                 const xdr = result;
                 submitStakingXdr(xdr, staking_id);
             }).catch(function (error) {
@@ -374,7 +367,6 @@ function submitStakingXdr(xdr, staking_id) {
             staking_id: staking_id
         },
         success: function (response) {
-            console.log(response);
             if (response.status == 1) {
                 toastr.success("Successful", "Staking");
             } else {
@@ -383,7 +375,6 @@ function submitStakingXdr(xdr, staking_id) {
             btnLoaderHide();
         },
         error: function (xhr, status, error) {
-            console.log(xhr.responseText);
             btnLoaderHide();
             toastr.error('Something went wrong!', "Staking Error");
         }

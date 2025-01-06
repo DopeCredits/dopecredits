@@ -10,10 +10,6 @@ class AppController extends Controller
     {
         return view('home');
     }
-    public function invest()
-    {
-        return view('invest');
-    }
     public function contact(Request $request)
     {
         $email = $request->email;

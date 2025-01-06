@@ -24,8 +24,8 @@
                                             src="{{ asset('images/rabet.png') }}"> Rabet</a>
                                 </li>
                                 <li class="item-drop wallet-drop-items">
-                                    <a href="#" wallet="frighter"><img class=""
-                                            src="{{ asset('images/frighter.png') }}">Frighter</a>
+                                    <a href="#" wallet="freighter"><img class=""
+                                            src="{{ asset('images/freighter.png') }}">freighter</a>
                                 </li>
                                 <li class="item-drop wallet-drop-items">
                                     <a href="#" wallet="albeto"><img class=""

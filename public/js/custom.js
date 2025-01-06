@@ -20,8 +20,7 @@ $('#contact-form').submit(function (e) {
 				toastr.error('Some field are empty!', 'Answerly Invest');
 			}
 		},
-		error: function (xhr, status, error) {
-			console.log(xhr.responseText);
+	error: function (xhr, status, error) {
 			toastr.error('Mail server Issue!', 'Answerly Invest');
 		}
 
