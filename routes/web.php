@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\StakingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AppController::class, 'home'])->name('home');
@@ -20,3 +21,7 @@ Route::get('/fetching_staking_data', [WalletController::class, 'fetch_staking_da
 
 Route::post('/wallet/invest', [WalletController::class, 'invest'])->name('wallet.invest');
 Route::post('/wallet/submitXdr', [WalletController::class, 'submitXdr'])->name('wallet.submitXdr');
+
+Route::get('/dashboard', function() {
+    return view('staking-dashboard');
+})->name('dashboard');

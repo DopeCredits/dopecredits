@@ -23,14 +23,14 @@
     <link rel="stylesheet" href="{{ asset('css/dope.css') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
-
+    <link rel="stylesheet" href="{{ asset('css/staking-dashboard.css') }}">
 </head>
 
 <body>
 
     <!-- mainSection -->
     <section class="bg-main">
-        <div class="container">
+        <div style="color: black !important" class="container">
             <!-- navbar -->
             <div class="row">
                 <div class="mainNavbar">
@@ -53,7 +53,7 @@
                                 <a href="{{ url('#') }}" class="btn dope mt-0" data-bs-toggle="modal"
                                     data-bs-target="#exampleModal">
                                     <img src="{{ asset('images/key.png') }}" alt=""> {{ isset($_COOKIE['public']) ? substr($_COOKIE['public'], 0, 4) . '...' . substr($_COOKIE['public'], -5) : 'Connect Wallet' }}</a>
-                            
+
                                 <!-- modal wallet -->
                                 <div class="modal fade" id="exampleModal" tabindex="-1"
                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -125,9 +125,9 @@
                                         <img id='walletImage' alt="">
                                     @endif
 
-                                    <p id="topWallet" 
-                                    @if (!isset($_COOKIE['public'])) 
-                                        onclick="$('#ConnectWallet').modal('show');" 
+                                    <p id="topWallet"
+                                    @if (!isset($_COOKIE['public']))
+                                        onclick="$('#ConnectWallet').modal('show');"
                                     @endif>
                                         {{ isset($_COOKIE['public']) ? substr($_COOKIE['public'], 0, 4) . '...' . substr($_COOKIE['public'], -5) : 'Connect Wallet' }}
                                     </p>
@@ -218,16 +218,17 @@
                     </div>
                 </div>
             </div>
-            
+
 
             <div class="row main2nd">
-                <div class="col-lg-8 col-md-8 col-sm-12">
+                <div class="col-lg-6 col-md-8 col-sm-12">
                     <div class="mainleft">
                         <div class="emojiDiv">
                             <h6>hi everyone</h6>
                             <img src="{{ asset('images/hiemo.png') }}" alt="">
                         </div>
-                        <h1>2% monthly interest <br> for staking $Dope</h1>
+
+                        <h1><div class="stat-value">0.1% Daily | 36% Annual</div> <br> Interest for staking $Dope</h1>
                         <p>Dope Credit offers 2% monthly (26.28% <br> annually) interest for staking $DOPE. The <br>
                         annuall return for $DOPE is among the highest <br> in the crypto market</p>
                         <div class="row">
@@ -239,7 +240,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="mainRight">
                         <img src="{{ asset('images/mainRight.png') }}" alt="">
                     </div>
@@ -260,9 +261,9 @@
                             <img src="{{ asset('images/filma.png') }}" alt="">
                         </div>
                     </div>
-                    <h3 class="text-center">Here's how it works</h3>
+                    <h3 style="font-family:'ParalucentW00-Heavy';" class="text-center">Here's how it works</h3>
                     <div class="playVideo">
-                        <img src="{{ asset('images/play.png') }}" alt="">
+                        <img style="width: 100%;" src="{{ asset('images/play.png') }}" alt="">
                     </div>
                 </div>
             </div>
@@ -285,7 +286,12 @@
                             <h6>dope credits</h6>
                             <img src="{{ asset('images/dopeIcon.png') }}" alt="">
                         </div>
-                        <h3 class="">Token Details</h3>
+                        <h3 style="font-family:'ParalucentW00-Heavy';" class="">Token Details</h3>
+                        <div style="color:#85ca2a;">Contract Address</div>
+                        <div class="d-flex gap-2">
+                            DOPE-GA6XXNKX5LYLZGZ2QM5CHLZ4R66P4OCHSILUNIVZ7B4YB <a class="text-primary">Copy</a>
+                        </div>
+                        <br>
                         <p>There are many variations of passages of Lorem Ipsum available, but the majority have
                             suffered alteration in some form, by injected humour, or randomised.</p>
                         <a href="{{ url('#') }}" class="btn dope">$Dope</a>
@@ -299,29 +305,29 @@
     <!-- 4rd Section -->
     <section class="Section4rd">
         <div class="container">
-            <div class="row">
+            <div style="align-items: flex-end" class="row">
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="left4">
                         <div class="emojiDiv">
                             <h6>Distribution</h6>
                             <img src="{{ asset('images/gift.png') }}" alt="">
                         </div>
-                        <h3 class="">Token Distribution</h3>
+                        <h3 style="font-family:'ParalucentW00-Heavy';">Token Distribution</h3>
                         <ul>
                             <li><img src="{{ asset('images/points.png') }}" alt="">Staking rewards -
-                                650,000,00 (65%)</li>
+                                700,000,000 (70%)</li>
                             <li><img src="{{ asset('images/points.png') }}" alt="">Presale - 200,000,000
                                 (20%)</li>
-                            <li><img src="{{ asset('images/points.png') }}" alt="">Team - 100,000,000 (10%)
+                            <li><img src="{{ asset('images/points.png') }}" alt="">Partnerships - 50,000,000 (10%)
                             </li>
-                            <li><img src="{{ asset('images/points.png') }}" alt="">Liquidity Provider rewards
-                                - 50,000,00 (5%)</li>
+                            <li><img src="{{ asset('images/points.png') }}" alt="">Team
+                                - 50,000,000 (5%)</li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-6 col-sm-12">
-                    <div class="right4">
-                        <img src="{{ asset('images/chart.png') }}" alt="">
+                    <div class="">
+                        <img style="width: 100%" src="{{ asset('images/PieChart1.png') }}" alt="">
                     </div>
                 </div>
             </div>
@@ -339,7 +345,7 @@
                             <h6>Timeline</h6>
                             <img class="time" src="{{ asset('images/time.png') }}" alt="">
                         </div>
-                        <h3 class="">Timeline</h3>
+                        <h3 style="font-family:'ParalucentW00-Heavy';">Timeline</h3>
                         <p>There are many variations of passages.</p>
                     </div>
                 </div>
@@ -450,7 +456,7 @@
                         <h6>about team</h6>
                         <img src="{{ asset('images/team.png') }}" alt="">
                     </div>
-                    <h3 class="">About the team</h3>
+                    <h3 style="font-family:'ParalucentW00-Heavy';">About the team</h3>
                     <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered
                         alteration in some form, by injected humour, or randomised</p>
                 </div>
