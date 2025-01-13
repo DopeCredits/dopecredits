@@ -8,7 +8,8 @@ class AppController extends Controller
 {
     public function home()
     {
-        return view('home');
+        // return view('home');
+        return view('newhomepage');
     }
     public function contact(Request $request)
     {

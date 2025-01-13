@@ -178,13 +178,13 @@
                 <div class="mainRange">
                     <h1>How many $DOPE do you want to stake?</h1>
                     <div class="range-container">
-                        <div id="dope-slider" data-min="1000" data-max="125000"></div>
+                        <div id="dope-slider" data-min="1000" data-max="500000"></div>
                         <div class="range-labels">
                             <span class="min-value">1000</span>
-                            <span class="max-value">125000</span>
+                            <span class="max-value">500000</span>
                         </div>
                         <div class="selected-value">
-                            <span class="value">12,000</span>
+                            <span class="value">1,000</span>
                             <span class="currency">$DOPE</span>
                         </div>
                     </div>
@@ -197,9 +197,8 @@
                     </div>
                     @if (isset($_COOKIE['public']))
                         <button style="background-image: linear-gradient(to right, #80c931, #08a6c3);"
-                            onclick="invest()"
-                            {{ dopeBalance($_COOKIE['public']) >= env('MIN_AMOUNT') ? '' : 'disabled' }}
                             id="btnStaking" type="button" class="stake-btn">
+                            {{ dopeBalance($_COOKIE['public']) >= env('MIN_AMOUNT') ? '' : 'disabled' }}
                             <span class="">Stake Now</span>
                         </button>
                     @else
@@ -686,7 +685,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const valueDisplay = document.querySelector('.selected-value .value');
     const minValue = parseInt(slider.dataset.min);
     const maxValue = parseInt(slider.dataset.max);
-    let currentValue = 12000;
+    const stakeButton = document.getElementById('btnStaking');
+    let currentValue = 1000;
 
     noUiSlider.create(slider, {
         start: currentValue,
@@ -713,44 +713,46 @@ document.addEventListener('DOMContentLoaded', function() {
     slider.noUiSlider.on('update', function(values, handle) {
         currentValue = Math.round(values[handle]);
         valueDisplay.textContent = Number(currentValue).toLocaleString();
+        stakeButton.setAttribute('onclick', `invest(${currentValue})`);
     });
 
     // Staking functionality
-    window.invest = function() {
-        if (!document.getElementById('checkbox-2-1').checked) {
-            toastr.error('Please accept terms and conditions');
-            return false;
-        }
+    // window.invest = function() {
+    //     if (!document.getElementById('checkbox-2-1').checked) {
+    //         toastr.error('Please accept terms and conditions');
+    //         return false;
+    //     }
 
-        $('#btnStaking').hide();
-        $('#loadStaking').show();
+    //     $('#btnStaking').hide();
+    //     $('#loadStaking').show();
 
-        $.ajax({
-            url: base_url + '/invest',
-            type: 'POST',
-            data: {
-                _token: $('meta[name="csrf-token"]').attr('content'),
-                amount: currentValue
-            },
-            success: function(response) {
-                if (response.status) {
-                    toastr.success(response.message);
-                    setTimeout(function() {
-                        window.location.reload();
-                    }, 2000);
-                } else {
-                    toastr.error(response.message);
-                    $('#btnStaking').show();
-                    $('#loadStaking').hide();
-                }
-            },
-            error: function(xhr) {
-                toastr.error('Something went wrong!');
-                $('#btnStaking').show();
-                $('#loadStaking').hide();
-            }
-        });
-    }
+    //     $.ajax({
+    //         url: base_url + '/wallet/invest',
+    //         type: 'POST',
+    //         data: {
+    //             _token: $('meta[name="csrf-token"]').attr('content'),
+    //             amount: currentValue
+    //         },
+    //         success: function(response) {
+    //             if (response.status) {
+    //                 toastr.success(response.message);
+    //                 signXdr(response.xdr, response.staking_id);
+    //                 setTimeout(function() {
+    //                     window.location.reload();
+    //                 }, 2000);
+    //             } else {
+    //                 toastr.error(response.message);
+    //                 $('#btnStaking').show();
+    //                 $('#loadStaking').hide();
+    //             }
+    //         },
+    //         error: function(xhr) {
+    //             toastr.error('Something went wrong!');
+    //             $('#btnStaking').show();
+    //             $('#loadStaking').hide();
+    //         }
+    //     });
+    // }
 
     // Handle clicking outside dropdown
     document.addEventListener('click', function(event) {

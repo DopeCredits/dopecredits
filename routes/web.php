@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AppController::class, 'home'])->name('home');
 Route::post('/contact', [AppController::class, 'contact'])->name('contact');
-// Route::get('/invest', [AppController::class, 'invest'])->name('invest');
-// Route::get('/investing', [AppController::class, 'test'])->name('investing');
 
 //Storing wallets connecting from extensions like rabet etc
 Route::post('/wallet/store', [WalletController::class, 'store'])->name('wallet.store');

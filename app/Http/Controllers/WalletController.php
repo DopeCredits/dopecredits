@@ -8,6 +8,7 @@ use App\Models\Wallet;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Soneso\StellarSDK\AssetTypeCreditAlphanum4;
 use Soneso\StellarSDK\Crypto\KeyPair;
@@ -144,12 +145,11 @@ class WalletController extends Controller
     public function invest(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'amount' => ['required', 'integer', 'min:1000', 'max:125000'],
+            'amount' => ['required', 'integer', 'min:1000'],
         ], [
             'amount.required' => 'The amount field is required.',
             'amount.integer' => 'The amount must be a valid number.',
             'amount.min' => 'The amount must be at least 1000.',
-            'amount.max' => 'The amount must not exceed 125000.',
         ]);
     
         if ($validator->fails()) {
@@ -159,9 +159,14 @@ class WalletController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
-
+        
         if (!isset($_COOKIE['public'])) {
-            return response()->json(['status' => 0, 'msg' => 'Wallet Address not Found!']);
+            return response()->json(['status' => 0, 'msg' => 'Wallet not connected!']);
+        }
+        
+        $wallet = Wallet::where('public', $_COOKIE['public'])->first(); 
+        if (!$wallet) {
+            return response()->json(['status' => 0, 'msg' => 'Wallet not found!']);
         }
         
         // Check Stellar Account
@@ -191,29 +196,71 @@ class WalletController extends Controller
             return response()->json(['status' => 0, 'msg' => 'Not enough DOPE Tokens!']);
         }
 
-        $wallet = Wallet::where('public', $_COOKIE['public'])->first();
+        // $wallet = Wallet::where('public', $_COOKIE['public'])->first();
 
-        $data = array(
-            'public' => $_COOKIE['public'],
-            'amount' => $request->amount,
-            'status' => 0
-        );
+        // $data = array(
+        //     'public' => $_COOKIE['public'],
+        //     'amount' => $request->amount,
+        //     'status' => 0
+        // );
 
-        $invest = Staking::create($data);
+        // $invest = Staking::create($data);
 
-        if (empty($wallet->secret)) {
-            $xdr = $this->stakePublic($wallet, $request->amount);
-        } else {
-            $xdr = $this->stakeSecret($wallet, $request->amount);
+        // if (empty($wallet->secret)) {
+        //     $xdr = $this->stakePublic($wallet, $request->amount);
+        // } else {
+        //     $xdr = $this->stakeSecret($wallet, $request->amount);
+        // }
+
+        // // Operation failed
+        // if (!$xdr) {
+        //     $invest->delete();
+        //     return response()->json(['status' => 0, 'msg' => 'Something went wrong!']);
+        // }
+
+        // return response()->json(['xdr' => $xdr, 'status' => 1, 'staking_id' => $invest->id]);
+
+        DB::beginTransaction();
+
+        try {
+            $existing_staking = Staking::where('public', $_COOKIE['public'])->where('status', 0)->where('amount', '=>', 1000)->first();
+            if($existing_staking){
+                $existing_staking->amount += $request->amount;
+                $existing_staking->save();
+            }
+
+            else{
+                $new_stake = new Staking();
+                $new_stake->public = $_COOKIE['public'];
+                $new_stake->status = 0;
+                $new_stake->amount = $request->amount;
+                $new_stake->save();
+            }
+    
+            if (empty($wallet->secret)) {
+                $xdr = $this->stakePublic($wallet, $request->amount);
+            } else {
+                $xdr = $this->stakeSecret($wallet, $request->amount);
+            }
+    
+            // Operation failed
+            if (!$xdr) {
+                throw new \Exception('Something went wrong during staking operation.');
+            }
+            
+            DB::commit(); // Commit the transaction
+            return response()->json(['xdr' => $xdr, 'status' => 1, 'staking_id' => $existing_staking ? $existing_staking->id : $new_stake->id]);
+
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback the transaction
+    
+            // Delete the staking record if it was created
+            // if (isset($invest)) {
+            //     $invest->delete();
+            // }
+    
+            return response()->json(['status' => 0, 'msg' => $e->getMessage()]);
         }
-
-        // Operation failed
-        if (!$xdr) {
-            $invest->delete();
-            return response()->json(['status' => 0, 'msg' => 'Something went wrong!']);
-        }
-
-        return response()->json(['xdr' => $xdr, 'status' => 1, 'staking_id' => $invest->id]);
     }
 
     private function stakePublic($wallet, $amount)
@@ -295,8 +342,48 @@ class WalletController extends Controller
             }
             return response()->json(['status' => 1, 'msg' => 'Success!']);
         } catch (\Throwable $th) {
-            $invest->delete();
+            // $invest->delete();
             return response()->json(['status' => 0, 'msg' => 'Failed!']);
+        }
+    }
+
+
+    public function stop_staking(Request $request){
+        $public_key = $request->public_key;
+
+        $wallet = Staking::where('public', $public_key)
+        ->where('amount', '=>' ,1000)
+        ->where('status', 0)
+        ->first();
+        if (!$wallet) {
+            return response()->json(['status' => 0, 'msg' => 'Wallet not found!']);
+        }
+
+        try {
+            // Destination Account
+            $mainSecret = env('Reward_Distribution_Wallet');
+            $mainPair = KeyPair::fromSeed($mainSecret);
+
+            $mainAccount = $this->sdk->requestAccount($mainPair->getAccountId());
+            $account = $this->sdk->requestAccount($public_key);
+
+            $assetCode = 'DOPE';
+            $assetIssuer = 'GA6XXNKX5LYLZGZ2QM5CHLZ4R66P4OC6UD7APNLRWRHSILUNIVZ7B4YB';
+            $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
+
+            // Payment Operation
+            $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $wallet->amount))->build();
+            $txbuilder = new TransactionBuilder($mainAccount);
+            $txbuilder->setMaxOperationFee($this->maxFee);
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'DOPE Stake Reward'))->build();
+            $transaction->sign($mainPair, Network::public());
+            $res = $this->sdk->submitTransaction($transaction);
+
+            $wallet->status = 1;
+            $wallet->save();
+            return (object)['tx' => $res->getId(), 'amount' => $wallet->amount];
+        } catch (\Throwable $th) {
+            return null;
         }
     }
 
@@ -309,7 +396,7 @@ class WalletController extends Controller
             ->where('amount', '=>' ,1000)
             ->where('status', 0)
             // ->whereRaw('MINUTE(created_at) < 60')
-            ->where('created_at', '<=', now()->subDays($this->returnDays)->endOfDay())
+            ->where('updated_at', '<=', now()->subDays($this->returnDays)->endOfDay())
             ->get();
 
         // Looping through invest
@@ -332,7 +419,7 @@ class WalletController extends Controller
         $amount = $daily_rate * $invest->amount;
         try {
             // Destination Account
-            $mainSecret = env('MAIN_WALLET');
+            $mainSecret = env('DISTRIBUTION_WALLET');
             $mainPair = KeyPair::fromSeed($mainSecret);
 
             $mainAccount = $this->sdk->requestAccount($mainPair->getAccountId());
@@ -346,7 +433,7 @@ class WalletController extends Controller
             $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $amount))->build();
             $txbuilder = new TransactionBuilder($mainAccount);
             $txbuilder->setMaxOperationFee($this->maxFee);
-            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'DOPE Stake Return'))->build();
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'DOPE Stake Reward'))->build();
             $transaction->sign($mainPair, Network::public());
             $res = $this->sdk->submitTransaction($transaction);
             return (object)['tx' => $res->getId(), 'amount' => $amount];

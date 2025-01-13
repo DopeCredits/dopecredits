@@ -274,9 +274,9 @@ function btnLoaderHide() {
     $('#loadStaking').hide();
 }
 
-function invest() {
+function invest(currentValue) {
     // var bal = $('#slider_single').val();
-    var bal = $('#slider_single').attr('data-value');
+    // var bal = $('#slider_single').attr('data-value');
     // bal = (parseFloat(bal.replace(' K', "")) * 1000).toFixed(0);
     $('#btnStaking').hide();
     $('#loadStaking').show();
@@ -284,10 +284,10 @@ function invest() {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
-url: base_url + '/wallet/invest',
+        url: base_url + '/wallet/invest',
         type: "post",
         data: {
-            amount: bal,
+            amount: currentValue,
         },
         success: function (response) {
             if (response.status == 1) {
@@ -318,8 +318,8 @@ function signXdr(xdr, staking_id) {
             break;
 
         case 'freighter':
-            window.freighterApi.signTransaction(xdr, testnet ? 'testnet' : 'mainnet').then(function (result) {
-                const xdr = result;
+            window.freighterApi.signTransaction(xdr, testnet ? 'TESTNET' : 'PUBLIC').then(function (result) {
+                const xdr = result.signedTxXdr;
                 submitStakingXdr(xdr, staking_id);
             }).catch(function (error) {
                 btnLoaderHide();

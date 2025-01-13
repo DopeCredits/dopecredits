@@ -15,13 +15,10 @@ return new class extends Migration
     {
         Schema::create('staking_results', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('staking_id')->unsigned();
+            $table->bigInteger('staking_id')->index();
             $table->double('amount');
             $table->text('transaction_id');
             $table->timestamps();
-        });
-        Schema::table('staking_results', function (Blueprint $table) {
-            $table->foreign('staking_id')->references('id')->on('stakings')->onDelete('cascade');
         });
     }
 
