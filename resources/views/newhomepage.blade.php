@@ -48,7 +48,7 @@
                         </div>
                         <ul class="nav-links">
                             <li><a href="{{ url('#') }}">Stakers</a></li>
-                            <li><a href="{{ url('#') }}">Whitepaper</a></li>
+                            <li><a download href="{{ asset('images/DOPE Credits Whitepaper (1) (1).pdf') }}">Whitepaper</a></li>
                             <li><a href="{{ url('#') }}">Token explorer</a></li>
                             <li><a href="{{ url('#') }}">About</a></li>
                         </ul>
@@ -222,7 +222,7 @@
     <!-- mainSection -->
     <section class="enhanced-staking-section">
         <div class="container">
-            <div class="row staking-info-section">
+            <div style="align-items: center" class="row staking-info-section">
                 <div class="col-lg-6 col-md-12">
                     <div class="staking-info-card">
                         <div class="emoji-header">
@@ -230,30 +230,30 @@
                             <img src="{{ asset('images/hiemo.png') }}" alt="emoji">
                         </div>
                         <div class="staking-content">
-                            <h1>0.1% Daily | 36% Annual<br>Interest for staking $Dope</h1>
+                            <h1>Earn 0.1% Daily, Watch Your Wealth Grow</h1>
                             <div class="staking-description">
-                                <p>Dope Credit offers 2% monthly (26.28% annually) interest for staking $DOPE. The annual return for $DOPE is among the highest in the crypto market, providing secure and reliable staking options for our users.</p>
+                                <p>Why settle for low returns when you can earn 0.1% daily, 3% monthly, and a staggering 36.5% annually? With DOPE Credits, your tokens work for you every single day, providing consistent, straightforward rewards that outshine traditional investments.                                </p>
                             </div>
                             <div class="action-buttons">
-                                <a href="#" class="btn dope">Buy $Dope</a>
+                                <a style="margin-top: 0px !important" href="#" class="btn dope">Buy $Dope</a>
                                 <div class="stats-pill">
                                     <span class="stats-label">APY</span>
-                                    <span class="stats-value">36%</span>
+                                    <span class="stats-value">36.5%</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12">
+                <div style="display: flex; align-items:center;" class="col-lg-6 col-md-12">
                     <div class="staking-chart">
-                        <img src="{{ asset('images/mainRight.png') }}" alt="Staking Chart" class="img-fluid">
+                        <img src="{{ asset('images/mainRight1.png') }}" alt="Staking Chart" class="img-fluid">
                         <div class="floating-badges">
                             <div class="badge-item">
-                                <span class="badge-value">2%</span>
+                                <span class="badge-value">3%</span>
                                 <span class="badge-label">Monthly</span>
                             </div>
                             <div class="badge-item">
-                                <span class="badge-value">26.28%</span>
+                                <span class="badge-value">36.5%</span>
                                 <span class="badge-label">Annually</span>
                             </div>
                         </div>
@@ -270,7 +270,7 @@
                 <div class="title-badge">
                     <span class="badge-dot"></span>
                     <span class="badge-text">VIDEO INTRO</span>
-                    <img src="{{ asset('images/video-icon.png') }}" alt="Video Icon" class="badge-icon">
+                    <img src="{{ asset('images/filma.png') }}" alt="Video Icon" class="badge-icon">
                 </div>
                 <h2>Here's how it works</h2>
             </div>
@@ -282,8 +282,11 @@
                     <div class="frame-decoration bottom-right"></div>
                     <div class="video-wrapper">
                         <div class="video-thumbnail">
-                            <img src="https://www.youtube.com/watch?v=c3vnledCR64&ab_channel=FaisalShabbir" alt="Video Thumbnail">
-                            <div class="play-button">
+                            <video id="dopeVideo" controls playsinline style="width: 100%; border-radius: 12px;">
+                                <source src="{{ asset('images/DOPE explainer vid.mp4') }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="play-button" onclick="playVideo()">
                                 <div class="play-icon">
                                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M8 5v14l11-7z" fill="currentColor"/>
@@ -312,7 +315,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 col-md-12">
                     <div class="token-chart">
-                        <img src="{{ asset('images/left3rdImg.png') }}" alt="Token Details" class="img-fluid">
+                        <img src="{{ asset('images/Group2.png') }}" alt="Token Details" class="img-fluid">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
@@ -324,7 +327,7 @@
                             </div>
                         </div>
                         <div class="token-content">
-                            <h2>Token Details</h2>
+                            <h2>Token Details <span style="font-size:14px !important"> Built for Performance</span></h2>
                             <div class="token-details">
                                 <div class="detail-item">
                                     <span class="label">Contract Address</span>
@@ -334,10 +337,12 @@
                                     </div>
                                 </div>
                                 <div class="token-description">
-                                    <p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised.</p>
+                                    <p>
+                                        DOPE Credits leverages the Stellar Blockchain for lightning-fast transactions and minimal fees, ensuring seamless and efficient staking. Whether you’re earning rewards or transferring tokens, Stellar’s advanced infrastructure makes DOPE Credits a powerhouse of performance and reliability. 🚀✨
+                                    </p>
                                 </div>
                                 <div class="token-action">
-                                    <a href="#" class="btn dope">$Dope</a>
+                                    <a style="margin-top: 0px" href="#" class="btn dope">$Dope</a>
                                 </div>
                             </div>
                         </div>
@@ -762,6 +767,32 @@ document.addEventListener('DOMContentLoaded', function() {
         if (dropdown && !walletBtn.contains(event.target)) {
             dropdown.classList.remove('show');
         }
+    });
+
+    // Video playback functionality
+    const video = document.getElementById('dopeVideo');
+    const playButton = document.querySelector('.play-button');
+
+    window.playVideo = function() {
+        if (video.paused) {
+            video.play();
+            playButton.style.opacity = '0';
+            playButton.style.pointerEvents = 'none';
+        } else {
+            video.pause();
+            playButton.style.opacity = '1';
+            playButton.style.pointerEvents = 'auto';
+        }
+    }
+
+    video.addEventListener('ended', function() {
+        playButton.style.opacity = '1';
+        playButton.style.pointerEvents = 'auto';
+    });
+
+    video.addEventListener('pause', function() {
+        playButton.style.opacity = '1';
+        playButton.style.pointerEvents = 'auto';
     });
 });
 </script>
