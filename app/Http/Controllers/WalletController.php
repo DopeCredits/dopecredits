@@ -44,9 +44,9 @@ class WalletController extends Controller
         // Check Stellar Account
         // try {
             $account = $this->sdk->requestAccount($request->public);
-            if(!$account){
-                return response()->json(['status' => 0, 'msg' => 'Deposit 5 XLM lumens into your wallet!']);
-            }
+            // if(!$account){
+            //     return response()->json(['status' => 0, 'msg' => 'Deposit 5 XLM lumens into your wallet!']);
+            // }
         // } catch (Exception $th) {
         //     
         // }
