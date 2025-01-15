@@ -68,7 +68,6 @@ class WalletController extends Controller
             'public' => $request->public,
             'wallet' => $request->wallet
         ];
-        dd($data);
 
         // Store Stellar Account if not exist
         $wallet = Wallet::where('public', $request->public)->first();
@@ -80,6 +79,8 @@ class WalletController extends Controller
 
         setcookie('public', $request->public, time() + (86400 * 30), "/");
         setcookie('wallet', $request->wallet, time() + (86400 * 30), "/");
+
+        dd($lowAmount, $request->public);
 
         return response()->json(['lowAmount' => $lowAmount, 'balance' => balanceComma(dopeBalance($request->public)), 'public' => $request->public, 'msg' => 'Connection successfull!', 'status' => 1]);
     }
