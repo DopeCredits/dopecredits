@@ -42,11 +42,12 @@ class WalletController extends Controller
         }
 
         // Check Stellar Account
-        try {
+        // try {
             $account = $this->sdk->requestAccount($request->public);
-        } catch (Exception $th) {
-            return response()->json(['status' => 0, 'msg' => 'Deposit 5 XLM lumens into your wallet!']);
-        }
+            dd($account);
+        // } catch (Exception $th) {
+        //     return response()->json(['status' => 0, 'msg' => 'Deposit 5 XLM lumens into your wallet!']);
+        // }
 
         $dope = null;
         $lowAmount = null;

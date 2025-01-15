@@ -197,7 +197,7 @@ function storeWalletPublic(public, wallet) {
                 displayWalletButtons(); 
                 $('#ConnectWallet').modal('hide');
             } else {
-                toastr.error(`Error: ${response.msg}`, 'Connectionss')
+                toastr.error(`Error: ${response.msg}`, 'Connections')
                 displayWalletButtons(); 
             }
         },
