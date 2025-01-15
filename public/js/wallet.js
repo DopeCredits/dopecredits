@@ -196,6 +196,7 @@ function storeWalletPublic(public, wallet) {
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
                 displayWalletButtons(); 
                 $('#ConnectWallet').modal('hide');
+                location.reload();
             } else {
                 toastr.error(`Error: ${response.msg}`, 'Connections')
                 displayWalletButtons(); 
