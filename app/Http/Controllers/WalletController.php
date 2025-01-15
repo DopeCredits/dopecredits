@@ -68,7 +68,7 @@ class WalletController extends Controller
             'public' => $request->public,
             'wallet' => $request->wallet
         ];
-        dd($data)
+        dd($data);
 
         // Store Stellar Account if not exist
         $wallet = Wallet::where('public', $request->public)->first();
