@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class StakingCommand extends Command
 {
@@ -26,7 +27,7 @@ class StakingCommand extends Command
      * @return int
      */
     public function handle()
-    {
+    {   Log::info('Staking command started.');
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => url('api/wallet/investresult'),
@@ -40,6 +41,7 @@ class StakingCommand extends Command
         ));
         $response = curl_exec($curl);
         curl_close($curl);
+        Log::info('Staking command completed.');
         return 0;
     }
 }
