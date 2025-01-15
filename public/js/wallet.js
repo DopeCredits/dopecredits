@@ -33,7 +33,11 @@ function connectWallet() {
         default:
             displayWalletButtons(); 
             toastr.warning('Please select Wallet', 'Selection');
-    }
+            return;
+        }
+    
+        // Reload the page after a successful connection
+        location.reload(); // This will reload the current page after connection
 }
 
 
@@ -196,7 +200,6 @@ function storeWalletPublic(public, wallet) {
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
                 displayWalletButtons(); 
                 $('#ConnectWallet').modal('hide');
-                location.reload();
             } else {
                 toastr.error(`Error: ${response.msg}`, 'Connections')
                 displayWalletButtons(); 
