@@ -77,10 +77,10 @@ class WalletController extends Controller
             $wallet->update($data);
         }
 
+        dd($request->wallet, $request->public);
         setcookie('public', $request->public, time() + (86400 * 30), "/");
         setcookie('wallet', $request->wallet, time() + (86400 * 30), "/");
 
-        dd($lowAmount, $request->public);
 
         return response()->json(['lowAmount' => $lowAmount, 'balance' => balanceComma(dopeBalance($request->public)), 'public' => $request->public, 'msg' => 'Connection successfull!', 'status' => 1]);
     }
