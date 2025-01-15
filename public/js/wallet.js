@@ -202,7 +202,7 @@ function storeWalletPublic(public, wallet) {
             }
         },
         error: function (xhr, status, error) {
-            toastr.error("Deposit 5 XLM lumens into your wallet", "Wallet Error");
+            toastr.error("Deposit 5 XLM lumens into your wallet!", "Wallet Error");
             displayWalletButtons(); 
         }
     });

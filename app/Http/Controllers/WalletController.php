@@ -42,14 +42,11 @@ class WalletController extends Controller
         }
 
         // Check Stellar Account
-        // try {
+        try {
             $account = $this->sdk->requestAccount($request->public);
-            // if(!$account){
-            //     return response()->json(['status' => 0, 'msg' => 'Deposit 5 XLM lumens into your wallet!']);
-            // }
-        // } catch (Exception $th) {
-        //     
-        // }
+        } catch (Exception $th) {
+            return response()->json(['status' => 0, 'msg' => 'Deposit 5 XLM lumens into your wallet!!!']);
+        }
 
         $dope = null;
         $lowAmount = null;
@@ -63,9 +60,9 @@ class WalletController extends Controller
             }
         }
 
-        if (!$dope) {
-            return response()->json(['status' => 0, 'msg' => 'Account does not have DOPE trusline!']);
-        }
+        // if (!$dope) {
+        //     return response()->json(['status' => 0, 'msg' => 'Account does not have DOPE trusline!']);
+        // }
 
         $data = [
             'public' => $request->public,
@@ -98,7 +95,7 @@ class WalletController extends Controller
         try {
             $account = $this->sdk->requestAccount($keypair->getAccountId());
         } catch (Exception $th) {
-            return response()->json(['status' => 0, 'msg' => 'Deposit 5 XLM lumens into your wallet!']);
+            return response()->json(['status' => 0, 'msg' => 'Deposit 5 XLM lumens into your wallet!!']);
         }
 
         $dope = null;
