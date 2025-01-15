@@ -19,7 +19,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('invest:run')->hourly();
+        // $schedule->command('invest:run')->hourly();
+        $schedule->command('invest:run')->everyMinute();
     }
 
     /**

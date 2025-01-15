@@ -391,6 +391,7 @@ class WalletController extends Controller
 
     public function investresult()
     {
+        dd(1);
         // removes NULL
         Staking::whereNull('transaction_id')->delete();
 
