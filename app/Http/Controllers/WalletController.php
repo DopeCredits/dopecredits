@@ -45,7 +45,7 @@ class WalletController extends Controller
         try {
             $account = $this->sdk->requestAccount($request->public);
         } catch (Exception $th) {
-            return response()->json(['status' => 0, 'msg' => 'Deposit 5 XLM lumens into your wallet!!!']);
+            return response()->json(['status' => 0, 'msg' => 'Deposit 5 XLM lumens into your wallet']);
         }
 
         $dope = null;
@@ -60,14 +60,15 @@ class WalletController extends Controller
             }
         }
 
-        // if (!$dope) {
-        //     return response()->json(['status' => 0, 'msg' => 'Account does not have DOPE trusline!']);
-        // }
+        if (!$dope) {
+            return response()->json(['status' => 0, 'msg' => 'Account does not have DOPE trusline!']);
+        }
 
         $data = [
             'public' => $request->public,
             'wallet' => $request->wallet
         ];
+        dd($data)
 
         // Store Stellar Account if not exist
         $wallet = Wallet::where('public', $request->public)->first();
@@ -95,7 +96,7 @@ class WalletController extends Controller
         try {
             $account = $this->sdk->requestAccount($keypair->getAccountId());
         } catch (Exception $th) {
-            return response()->json(['status' => 0, 'msg' => 'Deposit 5 XLM lumens into your wallet!!']);
+            return response()->json(['status' => 0, 'msg' => 'Deposit 5 XLM lumens into your wallet']);
         }
 
         $dope = null;
