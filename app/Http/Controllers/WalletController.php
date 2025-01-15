@@ -71,13 +71,15 @@ class WalletController extends Controller
 
         // Store Stellar Account if not exist
         $wallet = Wallet::where('public', $request->public)->first();
+        
         if (!$wallet) {
             Wallet::create($data);
+            dd('Created new wallet: ', $data);
         } else {
             $wallet->update($data);
+            dd('Updated wallet: ', $data);
         }
 
-        dd($request->wallet, $request->public);
         setcookie('public', $request->public, time() + (86400 * 30), "/");
         setcookie('wallet', $request->wallet, time() + (86400 * 30), "/");
 
