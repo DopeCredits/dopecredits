@@ -342,7 +342,6 @@
                                     <div class="address-box">
                                         <span class="value">GA6XXNKX5LYLZG2ZQM5CHLZ4R66P4OCHSILUNVZ7B4YB</span>
                                         <button class="copy-btn">Copy</button>
-                                        <div class="copy-message" style="display: none;">Copied!</div>
                                     </div>
                                 </div>
                                 <div class="token-description">
@@ -743,19 +742,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const copyButton = document.querySelector('.copy-btn');
     const addressText = document.querySelector('.value');
-    const copyMessage = document.querySelector('.copy-message');
+
+    // Check if clipboard API is available
+    if (!navigator.clipboard) {
+        console.warn('Clipboard API is not available in this browser.');
+        return;
+    }
 
     copyButton.addEventListener('click', function () {
         const textToCopy = addressText.textContent;
 
         // Copy the text to the clipboard
         navigator.clipboard.writeText(textToCopy).then(function () {
-            // Show the "Copied!" message
-            copyMessage.style.display = 'block';
+            // Change the button text to "Copied!"
+            copyButton.textContent = 'Copied!';
 
-            // Hide the message after 2 seconds
+            // Optionally, you can reset the button text after 2 seconds
             setTimeout(function () {
-                copyMessage.style.display = 'none';
+                copyButton.textContent = 'Copy';
             }, 2000);
         }).catch(function (error) {
             console.error('Failed to copy text: ', error);
