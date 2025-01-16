@@ -752,18 +752,41 @@ document.addEventListener('DOMContentLoaded', function() {
     copyButton.addEventListener('click', function () {
         const textToCopy = addressText.textContent;
 
-        // Copy the text to the clipboard
-        navigator.clipboard.writeText(textToCopy).then(function () {
-            // Change the button text to "Copied!"
-            copyButton.textContent = 'Copied!';
+        // Try copying the text to clipboard
+        navigator.clipboard.writeText(textToCopy)
+            .then(function () {
+                // Change the button text to "Copied!"
+                copyButton.textContent = 'Copied!';
 
-            // Optionally, you can reset the button text after 2 seconds
-            setTimeout(function () {
-                copyButton.textContent = 'Copy';
-            }, 2000);
-        }).catch(function (error) {
-            console.error('Failed to copy text: ', error);
-        });
+                // Optionally, reset the button text after 2 seconds
+                setTimeout(function () {
+                    copyButton.textContent = 'Copy';
+                }, 2000);
+            })
+            .catch(function (error) {
+                console.error('Failed to copy text: ', error);
+                // Optionally, provide a fallback using a document.execCommand for older browsers
+                if (document.queryCommandSupported && document.queryCommandSupported('copy')) {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = textToCopy;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    try {
+                        document.execCommand('copy');
+                        // Change the button text to "Copied!"
+                        copyButton.textContent = 'Copied!';
+
+                        // Optionally, reset the button text after 2 seconds
+                        setTimeout(function () {
+                            copyButton.textContent = 'Copy';
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Fallback copy failed: ', err);
+                    } finally {
+                        document.body.removeChild(textArea);
+                    }
+                }
+            });
     });
 
     // Staking functionality
