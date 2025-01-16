@@ -28,6 +28,14 @@
     <link rel="stylesheet" href="{{ asset('css/staking-dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/range-slider.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-K0NR81GJ2F"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-K0NR81GJ2F');
+    </script>
 </head>
 
 <body>

@@ -4,9 +4,13 @@
         aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content modal-wallet">
-                {{-- <a href="{{ url('wallet/disconnect') }}" class="text-danger remove-btn"
+                 {{-- <a href="{{ url('wallet/disconnect') }}" class="text-danger remove-btn"
                     style="position: absolute;z-index: 1;top: 5%;right: 4%;text-decoration:none;{{ isset($_COOKIE['public']) ? '' : 'display:none' }}">Remove
                     Wallet</a> --}}
+                <div class="modal-header" style="padding: 0;">
+                    <!-- Close Button -->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
                 <div class="modal-body">
                     <h1>Please Connect Your <br>
                         Account to Wallet</h1>
