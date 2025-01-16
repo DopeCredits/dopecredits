@@ -14,6 +14,7 @@
     <link href="//db.onlinewebfonts.com/c/c1d440b87551df56c26f7e478436b8ce?family=ParalucentW00-Heavy" rel="stylesheet"
         type="text/css" />
     <!-- font awesome -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
         integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
@@ -178,10 +179,12 @@
                 <div class="mainRange">
                     <h1>How many $DOPE do you want to stake?</h1>
                     <div class="range-container">
-                        <div id="dope-slider" data-min="1000" data-max="500000"></div>
+                         <?php $balance = isset($_COOKIE['public']) ? dopeBalance($_COOKIE['public']) : 0;
+                        $maxValue = $balance > 0 ? $balance : 10000000; ?>
+                        <div id="dope-slider" data-min="1000" data-max="<?= $maxValue ?>"></div>
                         <div class="range-labels">
                             <span class="min-value">1000</span>
-                            <span class="max-value">500000</span>
+                            <span class="max-value"><?= number_format($maxValue) ?></span>
                         </div>
                         <div class="selected-value">
                             <span class="value">1,000</span>
@@ -190,31 +193,36 @@
                     </div>
                     <div class="terms-section">
                         <label class="custom-checkbox">
-                            <input type="checkbox" id="checkbox-2-1" class="regular-checkbox big-checkbox">
+                            <input type="checkbox" id="agree-checkbox" class="regular-checkbox big-checkbox">
                             <span class="checkmark"></span>
                             <span class="terms-text">Read the <a href="{{ url('#') }}" class="terms-link">Terms and conditions</a></span>
                         </label>
                     </div>
                     @if (isset($_COOKIE['public']))
-                        <button style="background-image: linear-gradient(to right, #80c931, #08a6c3);"
-                            id="btnStaking" type="button" class="stake-btn">
-                            {{ dopeBalance($_COOKIE['public']) >= env('MIN_AMOUNT') ? '' : 'disabled' }}
-                            <span class="">Stake Now</span>
-                        </button>
-                    @else
-                        <a style="background-image: linear-gradient(to right, #80c931, #08a6c3);"
-                           class="stake-btn"
-                           onclick="$('#ConnectWallet').modal('show');"
-                           href="javascript::void(0)">Connect Wallet</a>
-                    @endif
-                    <button id="loadStaking" type="button" class="loader-btn" style="display: none;">
-                        <span class="form-btn">
-                            <div class="spinner-border text-light" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                            <p>Processing</p>
-                        </span>
+                    <button 
+                        style="background-image: linear-gradient(to right, #80c931, #08a6c3);" 
+                        id="btnStaking" 
+                        type="button" 
+                        class="stake-btn" 
+                        >
+                        <span>Stake Now</span>
                     </button>
+                @else
+                    <a style="background-image: linear-gradient(to right, #80c931, #08a6c3);" 
+                       class="stake-btn" 
+                       onclick="$('#ConnectWallet').modal('show');" 
+                       href="javascript:void(0)">
+                        Connect Wallet
+                    </a>
+                @endif
+                <button id="loadStaking" type="button" class="loader-btn" style="display: none;">
+                    <span class="form-btn">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p>Processing</p>
+                    </span>
+                </button>
                 </div>
             </div>
         </div>
@@ -332,7 +340,7 @@
                                 <div class="detail-item">
                                     <span class="label">Contract Address</span>
                                     <div class="address-box">
-                                        <span class="value">DOPE-GA6XXNKX5LYLZG2ZQM5CHLZ4R66P4OCHSILUNVZ7B4YB</span>
+                                        <span class="value">GA6XXNKX5LYLZG2ZQM5CHLZ4R66P4OCHSILUNVZ7B4YB</span>
                                         <button class="copy-btn">Copy</button>
                                     </div>
                                 </div>
@@ -691,7 +699,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const minValue = parseInt(slider.dataset.min);
     const maxValue = parseInt(slider.dataset.max);
     const stakeButton = document.getElementById('btnStaking');
-    let currentValue = 1000;
+    let currentValue = minValue;
+    const agreeCheckbox = document.getElementById('agree-checkbox');
 
     noUiSlider.create(slider, {
         start: currentValue,
@@ -720,6 +729,17 @@ document.addEventListener('DOMContentLoaded', function() {
         valueDisplay.textContent = Number(currentValue).toLocaleString();
         stakeButton.setAttribute('onclick', `invest(${currentValue})`);
     });
+
+    if (stakeButton && agreeCheckbox) {
+        stakeButton.addEventListener('click', function (e) {
+            if (!agreeCheckbox.checked) {
+                e.preventDefault(); // Prevent default action
+                toastr.error('Please accept terms and conditions');
+            } else {
+                invest(currentValue);
+            }
+        });
+    }
 
     // Staking functionality
     // window.invest = function() {
