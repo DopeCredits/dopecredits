@@ -271,7 +271,7 @@ class WalletController extends Controller
 
             // Destination Account
             $mainSecret = env('MAIN_WALLET');
-            dd($mainSecret);
+            dd(1, $mainSecret);
             $mainPair = KeyPair::fromSeed($mainSecret);
 
             $account = $this->sdk->requestAccount($wallet->public);
