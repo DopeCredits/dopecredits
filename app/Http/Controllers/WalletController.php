@@ -241,7 +241,9 @@ class WalletController extends Controller
     
             if (empty($wallet->secret)) {
                 $xdr = $this->stakePublic($wallet, $request->amount);
+                dd($xdr);
             } else {
+                dd(2);
                 $xdr = $this->stakeSecret($wallet, $request->amount);
             }
     
