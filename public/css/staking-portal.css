@@ -7,6 +7,19 @@
     margin-top: -1px;
 }
 
+.copy-message {
+    position: absolute;
+    background-color: #4CAF50;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    display: none;
+    z-index: 10;
+    top: 10px;
+    left: 10px;
+}
+
 .enhanced-staking-section::before {
     content: '';
     position: absolute;

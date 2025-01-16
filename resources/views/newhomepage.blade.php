@@ -342,6 +342,7 @@
                                     <div class="address-box">
                                         <span class="value">GA6XXNKX5LYLZG2ZQM5CHLZ4R66P4OCHSILUNVZ7B4YB</span>
                                         <button class="copy-btn">Copy</button>
+                                        <div class="copy-message" style="display: none;">Copied!</div>
                                     </div>
                                 </div>
                                 <div class="token-description">
@@ -350,7 +351,7 @@
                                     </p>
                                 </div>
                                 <div class="token-action">
-                                    <a style="margin-top: 0px" href="#" class="btn dope">$Dope</a>
+                                    <a style="margin-top: 0px" href="#" class="btn dope">DOPE Explorer</a>
                                 </div>
                             </div>
                         </div>
@@ -739,6 +740,27 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    const copyButton = document.querySelector('.copy-btn');
+    const addressText = document.querySelector('.value');
+    const copyMessage = document.querySelector('.copy-message');
+
+    copyButton.addEventListener('click', function () {
+        const textToCopy = addressText.textContent;
+
+        // Copy the text to the clipboard
+        navigator.clipboard.writeText(textToCopy).then(function () {
+            // Show the "Copied!" message
+            copyMessage.style.display = 'block';
+
+            // Hide the message after 2 seconds
+            setTimeout(function () {
+                copyMessage.style.display = 'none';
+            }, 2000);
+        }).catch(function (error) {
+            console.error('Failed to copy text: ', error);
+        });
+    });
 
     // Staking functionality
     // window.invest = function() {
