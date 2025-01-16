@@ -340,8 +340,8 @@
                                 <div class="detail-item">
                                     <span class="label">Contract Address</span>
                                     <div class="address-box">
-                                        <span class="value">GA6XXNKX5LYLZG2ZQM5CHLZ4R66P4OCHSILUNVZ7B4YB</span>
-                                        <button class="copy-btn">Copy</button>
+                                        <span class="value" id="myInput">GA6XXNKX5LYLZG2ZQM5CHLZ4R66P4OCHSILUNVZ7B4YB</span>
+                                        <button class="copy-btn" onclick="myFunction()">Copy</button>
                                     </div>
                                 </div>
                                 <div class="token-description">
@@ -693,6 +693,37 @@
 <script src="{{ asset('js/wallet.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 <script>
+     function myFunction() {
+        var copyText = document.getElementById("myInput");
+
+        // Create a temporary text area to select the text
+        var tempTextArea = document.createElement("textarea");
+        tempTextArea.value = copyText.textContent;  // Get the text to copy
+        document.body.appendChild(tempTextArea); // Append it to the body
+
+        tempTextArea.select();  // Select the text
+        tempTextArea.setSelectionRange(0, 99999); // For mobile devices
+
+        // Execute the copy command
+        var successful = document.execCommand("copy");
+        // Copy the text inside the text area
+        document.execCommand("copy");
+
+        // Remove the temporary text area
+        document.body.removeChild(tempTextArea);
+
+        // If copy was successful, update button text to "Copied!"
+        if (successful) {
+            const button = document.querySelector(".copy-btn");
+            button.textContent = "Copied!";
+
+            // Reset the button text to "Copy" after 2 seconds
+            setTimeout(function() {
+                button.textContent = "Copy";
+            }, 2000);
+        }
+    }
+
 document.addEventListener('DOMContentLoaded', function() {
     const slider = document.getElementById('dope-slider');
     const valueDisplay = document.querySelector('.selected-value .value');
@@ -740,55 +771,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    const copyButton = document.querySelector('.copy-btn');
-    const addressText = document.querySelector('.value');
-
-    // Check if clipboard API is available
-    if (!navigator.clipboard) {
-        console.warn('Clipboard API is not available in this browser.');
-        return;
-    }
-
-    copyButton.addEventListener('click', function () {
-        const textToCopy = addressText.textContent;
-
-        // Try copying the text to clipboard
-        navigator.clipboard.writeText(textToCopy)
-            .then(function () {
-                // Change the button text to "Copied!"
-                copyButton.textContent = 'Copied!';
-
-                // Optionally, reset the button text after 2 seconds
-                setTimeout(function () {
-                    copyButton.textContent = 'Copy';
-                }, 2000);
-            })
-            .catch(function (error) {
-                console.error('Failed to copy text: ', error);
-                // Optionally, provide a fallback using a document.execCommand for older browsers
-                if (document.queryCommandSupported && document.queryCommandSupported('copy')) {
-                    const textArea = document.createElement('textarea');
-                    textArea.value = textToCopy;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    try {
-                        document.execCommand('copy');
-                        // Change the button text to "Copied!"
-                        copyButton.textContent = 'Copied!';
-
-                        // Optionally, reset the button text after 2 seconds
-                        setTimeout(function () {
-                            copyButton.textContent = 'Copy';
-                        }, 2000);
-                    } catch (err) {
-                        console.error('Fallback copy failed: ', err);
-                    } finally {
-                        document.body.removeChild(textArea);
-                    }
-                }
-            });
-    });
-
+   
     // Staking functionality
     // window.invest = function() {
     //     if (!document.getElementById('checkbox-2-1').checked) {
