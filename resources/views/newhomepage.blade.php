@@ -49,7 +49,7 @@
                         </div>
                         <ul class="nav-links">
                             <li><a href="{{ url('#') }}">Stakers</a></li>
-                            <li><a download href="{{ asset('images/DOPE Credits Whitepaper (1) (1).pdf') }}">Whitepaper</a></li>
+                            <li><a href="{{ asset('images/DOPE Credits Whitepaper.pdf') }}" target="_blank">Whitepaper</a></li>
                             <li><a href="{{ url('#') }}">Token explorer</a></li>
                             <li><a href="{{ url('#') }}">About</a></li>
                         </ul>
