@@ -727,7 +727,6 @@ document.addEventListener('DOMContentLoaded', function() {
     slider.noUiSlider.on('update', function(values, handle) {
         currentValue = Math.round(values[handle]);
         valueDisplay.textContent = Number(currentValue).toLocaleString();
-        stakeButton.setAttribute('onclick', `invest(${currentValue})`);
     });
 
     if (stakeButton && agreeCheckbox) {
