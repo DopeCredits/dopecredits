@@ -241,9 +241,7 @@ class WalletController extends Controller
     
             if (empty($wallet->secret)) {
                 $xdr = $this->stakePublic($wallet, $request->amount);
-                dd($xdr);
             } else {
-                dd(2);
                 $xdr = $this->stakeSecret($wallet, $request->amount);
             }
     
@@ -273,6 +271,7 @@ class WalletController extends Controller
 
             // Destination Account
             $mainSecret = env('MAIN_WALLET');
+            dd($mainSecret);
             $mainPair = KeyPair::fromSeed($mainSecret);
 
             $account = $this->sdk->requestAccount($wallet->public);
