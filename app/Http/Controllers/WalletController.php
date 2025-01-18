@@ -21,6 +21,7 @@ use Soneso\StellarSDK\Transaction;
 use Soneso\StellarSDK\TransactionBuilder;
 use Soneso\StellarSDK\Xdr\XdrDecoratedSignature;
 use Soneso\StellarSDK\Xdr\XdrSigner;
+use Illuminate\Support\Facades\Log;
 
 class WalletController extends Controller
 {
@@ -410,15 +411,13 @@ class WalletController extends Controller
         $invests = Staking::whereNotNull('transaction_id')
             ->where('amount', '>=' ,1000)
             ->where('status', 0)
-            // ->where('updated_at', '<=', now()->subDays($this->returnDays)->endOfDay())
+            ->where('updated_at', '<=', now()->subDays($this->returnDays)->endOfDay())
             ->get();
 
         // Looping through invest
         foreach ($invests as $key => $invest) {
             $result = $this->returnStaking($invest);
             if ($result) {
-                // $invest->status = 1;
-                // $invest->save();
                 StakingResult::create(['staking_id' => $invest->id, 'amount' => $result->amount, 'transaction_id' => $result->tx]);
             }
         }
@@ -450,7 +449,14 @@ class WalletController extends Controller
             $res = $this->sdk->submitTransaction($transaction);
             return (object)['tx' => $res->getId(), 'amount' => $amount];
         } catch (\Throwable $th) {
-            return null;
+            Log::info('Error in returnStaking method', [
+                'invest_id' => $invest->id ?? null,
+                'public' => $invest->public ?? null,
+                'amount' => $amount,
+                'message' => $th->getMessage(),
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+            ]);
         }
     }
 
