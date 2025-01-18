@@ -1,4 +1,98 @@
 /* Enhanced Staking Section Styles */
+
+.buy-dope-section {
+    padding: 80px 0;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.buy-dope-section h2{
+    font-family: "ParalucentW00-Heavy";
+    font-size: 42px;
+    line-height: 1.2;
+    color: #333;
+    margin-bottom: 25px;
+    background: linear-gradient(90deg, #333, #80c931);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.buy-dope-section .section-subtitle {
+    color: #666;
+    font-size: 18px;
+    margin-top: 15px;
+}
+
+.buy-options-container {
+    margin-top: 50px;
+}
+
+.buy-options-row {
+    margin-bottom: 30px;
+}
+
+.buy-option-card {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.buy-option-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-color: #80c931;
+}
+
+.platform-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.platform-icon img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+
+.buy-option-card h4 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.buy-link {
+    display: inline-block;
+    padding: 8px 20px;
+    background: linear-gradient(to right, #80c931, #08a6c3);
+    color: #fff;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.buy-link:hover {
+    background: linear-gradient(to right, #08a6c3, #80c931);
+    color: #fff;
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .buy-option-card {
+        margin-bottom: 20px;
+    }
+}
+
 .enhanced-staking-section {
     padding: 80px 0;
     background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(247,252,245,1) 100%);
