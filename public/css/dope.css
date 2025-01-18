@@ -253,6 +253,7 @@ nav {
 .logo img {
     height: 82px;
     /* width: 100%; */
+    object-fit: contain;
     max-width: 258px;
 }
 
@@ -1160,6 +1161,7 @@ ul.dropdown-menu.show{
     }
     .logo img {
         max-width: 115px !important;
+        object-fit: contain;
     }
 
     .wallet-btn a.btn.dope {
@@ -1243,6 +1245,7 @@ ul.dropdown-menu.show{
     .logo img {
         height: auto;
         max-width: 156px;
+        object-fit: contain;
     }
 
     .wallet-btn {
@@ -1572,6 +1575,7 @@ ul.dropdown-menu.show{
 @media only screen and (min-device-width: 390px) and (-webkit-device-pixel-ratio: 3) {
     .logo img {
         max-width: 140px !important;
+        object-fit: contain;
     }
 
     .wallet-btn a.btn.dope {
@@ -2001,6 +2005,7 @@ ul.dropdown-menu.show{
 @media screen and (max-width: 576px) {
     .logo img {
         height: 60px;
+        object-fit: contain  !important;
     }
 
     .mainleft h1 {
