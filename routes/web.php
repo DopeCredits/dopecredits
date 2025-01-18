@@ -15,10 +15,12 @@ Route::post('/wallet/store', [WalletController::class, 'store'])->name('wallet.s
 Route::post('/wallet/secret', [WalletController::class, 'secret'])->name('wallet.secret');
 
 Route::get('/wallet/disconnect', [WalletController::class, 'disconnect'])->name('wallet.disconnect');
-Route::get('/fetching_staking_data', [WalletController::class, 'fetch_staking_data']);
+Route::get('/fetch_dashboard_data', [WalletController::class, 'fetch_dashboard_data']);
+Route::get('/fetch_wallet_data/{wallet_address?}', [WalletController::class, 'fetch_wallet_data']);
 
 Route::post('/wallet/invest', [WalletController::class, 'invest'])->name('wallet.invest');
 Route::post('/wallet/submitXdr', [WalletController::class, 'submitXdr'])->name('wallet.submitXdr');
+Route::post('/stop_staking/{wallet_address?}', [WalletController::class, 'stop_staking'])->name('stop_staking');
 
 Route::get('/dashboard', function() {
     return view('staking-dashboard');
