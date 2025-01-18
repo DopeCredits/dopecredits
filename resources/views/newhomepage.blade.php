@@ -1573,7 +1573,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Populate the stats with the response data
                 $('#total-stakers').text(response.total_stakers);
                 $('#total-staked').text(response.total_staked + ' DOPE');
-                $('#unlocked').text(formatUnlockedTokens(response.unlocked_tokens + ' / 700M'));
+                $('#unlocked').text(formatUnlockedTokens(response.unlocked_tokens)+ ' / 700M');
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching dashboard data:', error);
