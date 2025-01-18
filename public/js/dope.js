@@ -15,12 +15,13 @@ hamburger.addEventListener('click', () => {
 });
 // navbarjs
 
-
-
-// range bar js
-window.addEventListener('DOMContentLoaded', () => {
-  new dualRangeSlider(document.querySelector(".dual-range"))
-})
+// range bar js - only initialize after DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  const dualRangeElement = document.querySelector(".dual-range");
+  if (dualRangeElement) {
+    new dualRangeSlider(dualRangeElement);
+  }
+});
 
 class dualRangeSlider {
   constructor(rangeElement) {

@@ -576,7 +576,7 @@
                         </div>
                     </div>
                 </div>
-            </div>            
+            </div>
 
             <!-- Your Stats -->
             @if (isset($_COOKIE['public']))
@@ -604,7 +604,7 @@
                 </div>
             </div>
             @endif
-            
+
 
             <!-- Latest Transactions -->
             <div class="row">
@@ -843,7 +843,7 @@
                                 </div>
                                 <div class="token-description">
                                     <p>
-                                        DOPE Credits leverages the Stellar Blockchain for lightning-fast transactions and minimal fees, ensuring seamless and efficient staking. Whether you’re earning rewards or transferring tokens, Stellar’s advanced infrastructure makes DOPE Credits a powerhouse of performance and reliability. 🚀✨
+                                        DOPE Credits leverages the Stellar Blockchain for lightning-fast transactions and minimal fees, ensuring seamless and efficient staking. Whether you're earning rewards or transferring tokens, Stellar's advanced infrastructure makes DOPE Credits a powerhouse of performance and reliability. 🚀✨
                                     </p>
                                 </div>
                                 <div class="token-action">
@@ -1172,108 +1172,264 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Slider initialization
         const slider = document.getElementById('dope-slider');
-        const valueInput = document.getElementById('value-input');
-        const errorMessage = document.getElementById('value-error');
-        const minValue = parseInt(slider.dataset.min);
-        const maxValue = parseInt(slider.dataset.max);
+        if (slider && !slider.noUiSlider) {
+            const valueInput = document.getElementById('value-input');
+            const errorMessage = document.getElementById('value-error');
+            const minValue = parseInt(slider.dataset.min);
+            const maxValue = parseInt(slider.dataset.max);
+            let currentValue = minValue;
 
-        // Initialize noUiSlider
-        noUiSlider.create(slider, {
-            start: minValue,
-            connect: 'lower',
-            range: {
-                'min': minValue,
-                'max': maxValue
-            },
-            tooltips: {
-                to: function(value) {
-                    return formatNumber(Math.round(value));
+            // Format number with commas
+            function formatNumber(num) {
+                return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            // Parse number removing commas
+            function parseFormattedNumber(str) {
+                return parseInt(str.replace(/,/g, ''));
+            }
+
+            // Validate and update value
+            function validateAndUpdateValue(value) {
+                const numValue = parseFormattedNumber(value);
+
+                if (isNaN(numValue)) {
+                    errorMessage.textContent = "Please enter a valid number";
+                    return false;
                 }
-            },
-            format: {
-                to: function(value) {
-                    return Math.round(value);
+
+                if (numValue < minValue) {
+                    errorMessage.textContent = `Minimum value is ${formatNumber(minValue)} $DOPE`;
+                    return false;
+                }
+
+                if (numValue > maxValue) {
+                    errorMessage.textContent = `Maximum value is ${formatNumber(maxValue)} $DOPE`;
+                    return false;
+                }
+
+                errorMessage.textContent = "";
+                return true;
+            }
+
+            noUiSlider.create(slider, {
+                start: currentValue,
+                connect: 'lower',
+                range: {
+                    'min': minValue,
+                    'max': maxValue
                 },
-                from: function(value) {
-                    return Number(value);
+                tooltips: {
+                    to: function(value) {
+                        return formatNumber(Math.round(value));
+                    }
+                },
+                format: {
+                    to: function(value) {
+                        return Math.round(value);
+                    },
+                    from: function(value) {
+                        return Number(value);
+                    }
+                }
+            });
+
+            // Update input when slider changes
+            slider.noUiSlider.on('update', function(values, handle) {
+                const value = Math.round(values[handle]);
+                valueInput.value = formatNumber(value);
+                validateAndUpdateValue(valueInput.value);
+                currentValue = value;
+            });
+
+            // Update slider when input changes
+            if (valueInput) {
+                valueInput.addEventListener('input', function(e) {
+                    let value = e.target.value;
+                    // Remove any non-digit characters except commas
+                    value = value.replace(/[^\d,]/g, '');
+
+                    // Format the number
+                    const numValue = parseFormattedNumber(value);
+                    if (!isNaN(numValue)) {
+                        e.target.value = formatNumber(numValue);
+
+                        // Only update slider if value is valid
+                        if (validateAndUpdateValue(value)) {
+                            slider.noUiSlider.set(numValue);
+                            currentValue = numValue;
+                        }
+                    }
+                });
+
+                // Validate on blur
+                valueInput.addEventListener('blur', function(e) {
+                    const value = e.target.value;
+                    const numValue = parseFormattedNumber(value);
+
+                    if (validateAndUpdateValue(value)) {
+                        e.target.value = formatNumber(numValue);
+                        slider.noUiSlider.set(numValue);
+                        currentValue = numValue;
+                    } else {
+                        // Reset to valid value if invalid
+                        const currentSliderValue = slider.noUiSlider.get();
+                        e.target.value = formatNumber(Math.round(currentSliderValue));
+                    }
+                });
+            }
+
+            // Stake button functionality
+            const stakeButton = document.getElementById('btnStaking');
+            const agreeCheckbox = document.getElementById('agree-checkbox');
+
+            if (stakeButton && agreeCheckbox) {
+                stakeButton.addEventListener('click', function (e) {
+                    if (!agreeCheckbox.checked) {
+                        e.preventDefault();
+                        toastr.error('Please accept terms and conditions');
+                    } else {
+                        invest(currentValue);
+                    }
+                });
+            }
+        }
+
+        // Handle clicking outside dropdown
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.modern-dropdown');
+            const walletBtn = document.querySelector('.wallet-btn');
+
+            if (dropdown && !walletBtn.contains(event.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+
+        // Video playback functionality
+        const video = document.getElementById('dopeVideo');
+        const playButton = document.querySelector('.play-button');
+
+        if (video && playButton) {
+            window.playVideo = function() {
+                if (video.paused) {
+                    video.play();
+                    playButton.style.opacity = '0';
+                    playButton.style.pointerEvents = 'none';
+                } else {
+                    video.pause();
+                    playButton.style.opacity = '1';
+                    playButton.style.pointerEvents = 'auto';
                 }
             }
-        });
 
-        // Format number with commas
-        function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            video.addEventListener('ended', function() {
+                playButton.style.opacity = '1';
+                playButton.style.pointerEvents = 'auto';
+            });
+
+            video.addEventListener('pause', function() {
+                playButton.style.opacity = '1';
+                playButton.style.pointerEvents = 'auto';
+            });
         }
 
-        // Parse number removing commas
-        function parseFormattedNumber(str) {
-            return parseInt(str.replace(/,/g, ''));
-        }
-
-        // Validate and update value
-        function validateAndUpdateValue(value) {
-            const numValue = parseFormattedNumber(value);
-
-            if (isNaN(numValue)) {
-                errorMessage.textContent = "Please enter a valid number";
-                return false;
-            }
-
-            if (numValue < minValue) {
-                errorMessage.textContent = `Minimum value is ${formatNumber(minValue)} $DOPE`;
-                return false;
-            }
-
-            if (numValue > maxValue) {
-                errorMessage.textContent = `Maximum value is ${formatNumber(maxValue)} $DOPE`;
-                return false;
-            }
-
-            errorMessage.textContent = "";
-            return true;
-        }
-
-        // Update input when slider changes
-        slider.noUiSlider.on('update', function(values, handle) {
-            const value = Math.round(values[handle]);
-            valueInput.value = formatNumber(value);
-            validateAndUpdateValue(valueInput.value);
-        });
-
-        // Update slider when input changes
-        valueInput.addEventListener('input', function(e) {
-            let value = e.target.value;
-
-            // Remove any non-digit characters except commas
-            value = value.replace(/[^\d,]/g, '');
-
-            // Format the number
-            const numValue = parseFormattedNumber(value);
-            if (!isNaN(numValue)) {
-                e.target.value = formatNumber(numValue);
-
-                // Only update slider if value is valid
-                if (validateAndUpdateValue(value)) {
-                    slider.noUiSlider.set(numValue);
-                }
-            }
-        });
-
-        // Validate on blur
-        valueInput.addEventListener('blur', function(e) {
-            const value = e.target.value;
-            const numValue = parseFormattedNumber(value);
-
-            if (validateAndUpdateValue(value)) {
-                e.target.value = formatNumber(numValue);
-                slider.noUiSlider.set(numValue);
+        function formatUnlockedTokens(unlockedTokens) {
+            if (unlockedTokens >= 1000000) {
+                return (unlockedTokens / 1000000).toFixed(1) + 'M';
+            } else if (unlockedTokens >= 10000) {
+                return (unlockedTokens / 1000).toFixed(1) + 'K';
             } else {
-                // Reset to valid value if invalid
-                const currentValue = slider.noUiSlider.get();
-                e.target.value = formatNumber(Math.round(currentValue));
+                return unlockedTokens;
             }
-        });
+        }
+
+        // Initialize DataTable only once
+        const table = $('#transactionsTable');
+        if (table.length && !$.fn.DataTable.isDataTable(table)) {
+            const dataTable = table.DataTable({
+                processing: true,
+                serverSide: false,
+                ajax: {
+                    url: base_url + '/fetch_dashboard_data',
+                    type: 'GET',
+                    error: function (xhr, error, thrown) {
+                        console.error('Error fetching data:', error);
+                        table.html('<tr><td colspan="3">Error loading data</td></tr>');
+                    }
+                },
+                columns: [
+                    { data: 'wallet_address', title: 'Wallet Address' },
+                    { data: 'staked_amount', title: 'DOPE Staked' },
+                    {
+                        data: 'reward',
+                        title: 'Staking Reward',
+                        render: function (data) {
+                            return `${data} DOPE`;
+                        }
+                    },
+                    {
+                        data: 'explorer_link',
+                        title: 'Explorer Link',
+                        render: function (data) {
+                            if (data) {
+                                const url = `https://stellar.expert/explorer/public/tx/${data}`;
+                                return `<a href="${url}" class="view-link" target="_blank">View on Stellar.expert</a>`;
+                            }
+                            return 'N/A';
+                        }
+                    }
+                ],
+                responsive: true,
+                pageLength: 10,
+                language: {
+                    emptyTable: "No staking rewards available yet."
+                }
+            });
+
+            // Fetch dashboard data
+            $.ajax({
+                url: '/fetch_dashboard_data',
+                type: 'GET',
+                success: function (response) {
+                    $('#total-stakers').text(response.total_stakers);
+                    $('#total-staked').text(response.total_staked + ' DOPE');
+                    $('#unlocked').text(formatUnlockedTokens(response.unlocked_tokens) + ' / 700M');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching dashboard data:', error);
+                    $('#total-stakers').text('Error');
+                    $('#total-staked').text('Error');
+                    $('#unlocked').text('Error');
+                }
+            });
+
+            // Stop staking functionality
+            $('.stop-staking').on('click', function() {
+                const walletAddress = "{{ $_COOKIE['public'] ?? '' }}";
+                $.ajax({
+                    url: `/stop_staking/${walletAddress}`,
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        if (response.status === 1) {
+                            toastr.success('Dope Tokens Successfully Sent to your wallet');
+                            setTimeout(function() {
+                                location.reload();
+                            }, 3000);
+                        } else {
+                            toastr.error(response.msg || 'An error occurred while processing the request');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        toastr.error('An unexpected error occurred: ' + error);
+                    }
+                });
+            });
+        }
     });
     </script>
 
@@ -1403,8 +1559,6 @@
 <script src="{{ asset('js/custom.js') }}"></script>
 <script src="{{ asset('js/dope.js') }}"></script>
 <script src="{{ asset('js/wallet.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
-
 
 @if (isset($_COOKIE['wallet']))
     <script>
@@ -1472,6 +1626,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentValue = minValue;
     const agreeCheckbox = document.getElementById('agree-checkbox');
 
+    // Only initialize if slider exists and hasn't been initialized
+    if (slider && !slider.noUiSlider) {
     noUiSlider.create(slider, {
         start: currentValue,
         connect: 'lower',
@@ -1496,13 +1652,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     slider.noUiSlider.on('update', function(values, handle) {
         currentValue = Math.round(values[handle]);
+            if (valueDisplay) {
         valueDisplay.textContent = Number(currentValue).toLocaleString();
+            }
     });
+    }
 
     if (stakeButton && agreeCheckbox) {
         stakeButton.addEventListener('click', function (e) {
             if (!agreeCheckbox.checked) {
-                e.preventDefault(); // Prevent default action
+                e.preventDefault();
                 toastr.error('Please accept terms and conditions');
             } else {
                 invest(currentValue);
@@ -1524,65 +1683,65 @@ document.addEventListener('DOMContentLoaded', function() {
     const video = document.getElementById('dopeVideo');
     const playButton = document.querySelector('.play-button');
 
-    window.playVideo = function() {
-        if (video.paused) {
-            video.play();
-            playButton.style.opacity = '0';
-            playButton.style.pointerEvents = 'none';
-        } else {
-            video.pause();
+    if (video && playButton) {
+        window.playVideo = function() {
+            if (video.paused) {
+                video.play();
+                playButton.style.opacity = '0';
+                playButton.style.pointerEvents = 'none';
+            } else {
+                video.pause();
+                playButton.style.opacity = '1';
+                playButton.style.pointerEvents = 'auto';
+            }
+        }
+
+        video.addEventListener('ended', function() {
             playButton.style.opacity = '1';
             playButton.style.pointerEvents = 'auto';
-        }
+        });
+
+        video.addEventListener('pause', function() {
+            playButton.style.opacity = '1';
+            playButton.style.pointerEvents = 'auto';
+        });
     }
 
-    video.addEventListener('ended', function() {
-        playButton.style.opacity = '1';
-        playButton.style.pointerEvents = 'auto';
-    });
-
-    video.addEventListener('pause', function() {
-        playButton.style.opacity = '1';
-        playButton.style.pointerEvents = 'auto';
-    });
-
-    
     function formatUnlockedTokens(unlockedTokens) {
         if (unlockedTokens >= 1000000) {
-            // If more than 1 million, append 'M'
             return (unlockedTokens / 1000000).toFixed(1) + 'M';
         } else if (unlockedTokens >= 10000) {
-            // If more than 10,000, append 'K'
             return (unlockedTokens / 1000).toFixed(1) + 'K';
         } else {
-            // Otherwise, display the number as is
             return unlockedTokens;
         }
     }
 
-    $(document).ready(function() {
-        $('#transactionsTable').DataTable({
+    // Initialize DataTable only once
+    const table = $('#transactionsTable');
+    if (table.length && !$.fn.DataTable.isDataTable(table)) {
+        const dataTable = table.DataTable({
             processing: true,
             serverSide: false,
             ajax: {
-            url: base_url + '/fetch_dashboard_data',
-            type: 'GET',
-            error: function (xhr, error, thrown) {
-                console.error('Error fetching data:', error);
-                $('#transactionsTable').html('<tr><td colspan="3">Error loading data</td></tr>');
-            }
+                url: base_url + '/fetch_dashboard_data',
+                type: 'GET',
+                error: function (xhr, error, thrown) {
+                    console.error('Error fetching data:', error);
+                    table.html('<tr><td colspan="3">Error loading data</td></tr>');
+                }
             },
             columns: [
                 { data: 'wallet_address', title: 'Wallet Address' },
                 { data: 'staked_amount', title: 'DOPE Staked' },
-                { 
-                    data: 'reward', 
+                {
+                    data: 'reward',
                     title: 'Staking Reward',
-                    render: function (data, type, row) {
-                        return `${data} DOPE </span>`;
-                    },
+                    render: function (data) {
+                        return `${data} DOPE`;
+                    }
                 },
-                { 
+                {
                     data: 'explorer_link',
                     title: 'Explorer Link',
                     render: function (data) {
@@ -1591,8 +1750,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             return `<a href="${url}" class="view-link" target="_blank">View on Stellar.expert</a>`;
                         }
                         return 'N/A';
-                    },
-                },
+                    }
+                }
             ],
             responsive: true,
             pageLength: 10,
@@ -1601,56 +1760,48 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        // Fetch dashboard data when the page loads
+        // Fetch dashboard data
         $.ajax({
-            url: '/fetch_dashboard_data', // URL for your route
+            url: '/fetch_dashboard_data',
             type: 'GET',
             success: function (response) {
-                // Populate the stats with the response data
                 $('#total-stakers').text(response.total_stakers);
                 $('#total-staked').text(response.total_staked + ' DOPE');
-                $('#unlocked').text(formatUnlockedTokens(response.unlocked_tokens + ' / 700M'));
+                $('#unlocked').text(formatUnlockedTokens(response.unlocked_tokens) + ' / 700M');
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching dashboard data:', error);
-                // Display error messages or fallback values
                 $('#total-stakers').text('Error');
                 $('#total-staked').text('Error');
                 $('#unlocked').text('Error');
             }
         });
 
+        // Stop staking functionality
         $('.stop-staking').on('click', function() {
             const walletAddress = "{{ $_COOKIE['public'] ?? '' }}";
-
-            // alert('Stop staking functionality will be implemented here');
             $.ajax({
-                url: `/stop_staking/${walletAddress}`, // Corrected: use backticks for string interpolation
+                url: `/stop_staking/${walletAddress}`,
                 type: 'POST',
                 data: {
-                    _token: "{{ csrf_token() }}" // For CSRF protection
+                    _token: "{{ csrf_token() }}"
                 },
                 success: function(response) {
-                    // Check if the response has the status
                     if (response.status === 1) {
                         toastr.success('Dope Tokens Successfully Sent to your wallet');
-
-                        // Wait 5 seconds before reloading the page
                         setTimeout(function() {
                             location.reload();
                         }, 3000);
                     } else {
-                        // If status is 0, wallet was not found or error occurred
                         toastr.error(response.msg || 'An error occurred while processing the request');
                     }
                 },
                 error: function(xhr, status, error) {
-                    // Handle any errors that occur during the AJAX request
                     toastr.error('An unexpected error occurred: ' + error);
                 }
             });
         });
-    });
+    }
 });
 </script>
 
