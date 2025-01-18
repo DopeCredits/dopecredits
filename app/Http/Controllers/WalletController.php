@@ -350,24 +350,26 @@ class WalletController extends Controller
     }
 
 
-    public function stop_staking($wallet_address = null){
-        if($wallet_address){
+    public function stop_staking($wallet_address = null)
+    {
+        if ($wallet_address) {
             $public_key = $wallet_address;
-            
-            $wallet = Staking::where('public', $public_key)
-            ->where('amount', '>=', 1000)
-            ->where('status', 0)
-            ->whereNotNull('transaction_id')
-            ->get();
-            
-            if ($wallet->isEmpty()) {
+
+            $wallets = Staking::where('public', $public_key)
+                ->where('amount', '>=', 1000)
+                ->where('status', 0)
+                ->whereNotNull('transaction_id')
+                ->get();
+
+            if ($wallets->isEmpty()) {
                 return response()->json(['status' => 0, 'msg' => 'Wallet not found!']);
             }
-            $amount = $wallet->sum('amount');
+
+            $amount = $wallets->sum('amount');
 
             try {
                 // Destination Account
-                $mainSecret = env('Reward_Distribution_Wallet');
+                $mainSecret = env('DISTRIBUTION_WALLET');
                 $mainPair = KeyPair::fromSeed($mainSecret);
 
                 $mainAccount = $this->sdk->requestAccount($mainPair->getAccountId());
@@ -381,19 +383,22 @@ class WalletController extends Controller
                 $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $amount))->build();
                 $txbuilder = new TransactionBuilder($mainAccount);
                 $txbuilder->setMaxOperationFee($this->maxFee);
-                $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'DOPE Stake Reward'))->build();
+                $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(Memo::text('DOPE Stake Return'))->build();
                 $transaction->sign($mainPair, Network::public());
                 $res = $this->sdk->submitTransaction($transaction);
 
-                $wallet->status = 1;
-                $wallet->save();
+                foreach ($wallets as $wallet) {
+                    $wallet->status = 1;
+                    $wallet->save();
+                }
+
                 return response()->json(['status' => 1, 'msg' => 'Success', 'tx' => $res->getId()]);
             } catch (\Throwable $th) {
-                return null;
+                \Log::error('Stop Staking Error: ' . $th->getMessage());
+                return response()->json(['status' => 0, 'msg' => 'An error occurred while processing the transaction.']);
             }
-        }
-        else {
-            return response()->json(['status' => 0, 'msg' => 'Wallet not found!']);
+        } else {
+            return response()->json(['status' => 0, 'msg' => 'Wallet address not provided!']);
         }
     }
 

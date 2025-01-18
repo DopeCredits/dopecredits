@@ -731,10 +731,10 @@
             <div style="align-items: center" class="row staking-info-section">
                 <div class="col-lg-6 col-md-12">
                     <div class="staking-info-card">
-                        <   div class="emoji-header">
+                        <div class="emoji-header">
                             <h6>Hi Everyone</h6>
                             <img src="{{ asset('images/hiemo.png') }}" alt="emoji">
-                        </>
+                        </div>
                         <div class="staking-content">
                             <h1>Earn 0.1% Daily, Watch Your Wealth Grow</h1>
                             <div class="staking-description">
@@ -1169,114 +1169,6 @@
 
     @include('components.connectWallet')
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const slider = document.getElementById('dope-slider');
-        const valueInput = document.getElementById('value-input');
-        const errorMessage = document.getElementById('value-error');
-        const minValue = parseInt(slider.dataset.min);
-        const maxValue = parseInt(slider.dataset.max);
-
-        // Initialize noUiSlider
-        noUiSlider.create(slider, {
-            start: minValue,
-            connect: 'lower',
-            range: {
-                'min': minValue,
-                'max': maxValue
-            },
-            tooltips: {
-                to: function(value) {
-                    return formatNumber(Math.round(value));
-                }
-            },
-            format: {
-                to: function(value) {
-                    return Math.round(value);
-                },
-                from: function(value) {
-                    return Number(value);
-                }
-            }
-        });
-
-        // Format number with commas
-        function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-
-        // Parse number removing commas
-        function parseFormattedNumber(str) {
-            return parseInt(str.replace(/,/g, ''));
-        }
-
-        // Validate and update value
-        function validateAndUpdateValue(value) {
-            const numValue = parseFormattedNumber(value);
-
-            if (isNaN(numValue)) {
-                errorMessage.textContent = "Please enter a valid number";
-                return false;
-            }
-
-            if (numValue < minValue) {
-                errorMessage.textContent = `Minimum value is ${formatNumber(minValue)} $DOPE`;
-                return false;
-            }
-
-            if (numValue > maxValue) {
-                errorMessage.textContent = `Maximum value is ${formatNumber(maxValue)} $DOPE`;
-                return false;
-            }
-
-            errorMessage.textContent = "";
-            return true;
-        }
-
-        // Update input when slider changes
-        slider.noUiSlider.on('update', function(values, handle) {
-            const value = Math.round(values[handle]);
-            valueInput.value = formatNumber(value);
-            validateAndUpdateValue(valueInput.value);
-        });
-
-        // Update slider when input changes
-        valueInput.addEventListener('input', function(e) {
-            let value = e.target.value;
-
-            // Remove any non-digit characters except commas
-            value = value.replace(/[^\d,]/g, '');
-
-            // Format the number
-            const numValue = parseFormattedNumber(value);
-            if (!isNaN(numValue)) {
-                e.target.value = formatNumber(numValue);
-
-                // Only update slider if value is valid
-                if (validateAndUpdateValue(value)) {
-                    slider.noUiSlider.set(numValue);
-                }
-            }
-        });
-
-        // Validate on blur
-        valueInput.addEventListener('blur', function(e) {
-            const value = e.target.value;
-            const numValue = parseFormattedNumber(value);
-
-            if (validateAndUpdateValue(value)) {
-                e.target.value = formatNumber(numValue);
-                slider.noUiSlider.set(numValue);
-            } else {
-                // Reset to valid value if invalid
-                const currentValue = slider.noUiSlider.get();
-                e.target.value = formatNumber(Math.round(currentValue));
-            }
-        });
-    });
-    </script>
-
     <!-- Terms and Conditions Modal -->
     <div class="modal fade" id="termsModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -1353,37 +1245,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function acceptTerms() {
-            document.getElementById('agree-checkbox').checked = true;
-            $('#termsModal').modal('hide');
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const checkbox = document.getElementById('agree-checkbox');
-            const termsLink = document.querySelector('.terms-link');
-
-            checkbox.addEventListener('click', function(e) {
-                if (!this.checked) {
-                    e.preventDefault();
-                    $('#termsModal').modal('show');
-                }
-            });
-
-            termsLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                $('#termsModal').modal('show');
-            });
-
-            $('#termsModal').on('hidden.bs.modal', function () {
-                if (!checkbox.checked) {
-                    checkbox.checked = false;
-                }
-            });
-        });
-    </script>
-
 </body>
 <!-- bootstrap 5 js -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -1430,38 +1291,64 @@
     </script>
 @endif
 <script>
+ function acceptTerms() {
+    document.getElementById('agree-checkbox').checked = true;
+    $('#termsModal').modal('hide');
+}
 
+document.addEventListener('DOMContentLoaded', function() {
+    const checkbox = document.getElementById('agree-checkbox');
+    const termsLink = document.querySelector('.terms-link');
 
-     function myFunction() {
-        var copyText = document.getElementById("myInput");
-
-        // Create a temporary text area to select the text
-        var tempTextArea = document.createElement("textarea");
-        tempTextArea.value = copyText.textContent;  // Get the text to copy
-        document.body.appendChild(tempTextArea); // Append it to the body
-
-        tempTextArea.select();  // Select the text
-        tempTextArea.setSelectionRange(0, 99999); // For mobile devices
-
-        // Execute the copy command
-        var successful = document.execCommand("copy");
-        // Copy the text inside the text area
-        document.execCommand("copy");
-
-        // Remove the temporary text area
-        document.body.removeChild(tempTextArea);
-
-        // If copy was successful, update button text to "Copied!"
-        if (successful) {
-            const button = document.querySelector(".copy-btn");
-            button.textContent = "Copied!";
-
-            // Reset the button text to "Copy" after 2 seconds
-            setTimeout(function() {
-                button.textContent = "Copy";
-            }, 2000);
+    checkbox.addEventListener('click', function(e) {
+        if (!this.checked) {
+            e.preventDefault();
+            $('#termsModal').modal('show');
         }
+    });
+
+    termsLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        $('#termsModal').modal('show');
+    });
+
+    $('#termsModal').on('hidden.bs.modal', function () {
+        if (!checkbox.checked) {
+            checkbox.checked = false;
+        }
+    });
+});
+
+function myFunction() {
+    var copyText = document.getElementById("myInput");
+
+    // Create a temporary text area to select the text
+    var tempTextArea = document.createElement("textarea");
+    tempTextArea.value = copyText.textContent;  // Get the text to copy
+    document.body.appendChild(tempTextArea); // Append it to the body
+
+    tempTextArea.select();  // Select the text
+    tempTextArea.setSelectionRange(0, 99999); // For mobile devices
+
+    // Execute the copy command
+    var successful = document.execCommand("copy");
+    // Copy the text inside the text area
+    document.execCommand("copy");
+
+    // Remove the temporary text area
+    document.body.removeChild(tempTextArea);
+
+    // If copy was successful, update button text to "Copied!"
+    if (successful) {
+        const button = document.querySelector(".copy-btn");
+        button.textContent = "Copied!";
+
+        // Reset the button text to "Copy" after 2 seconds
+        setTimeout(function() {
+            button.textContent = "Copy";
+        }, 2000);
     }
+}
 
 document.addEventListener('DOMContentLoaded', function() {
     const slider = document.getElementById('dope-slider');
@@ -1471,6 +1358,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const stakeButton = document.getElementById('btnStaking');
     let currentValue = minValue;
     const agreeCheckbox = document.getElementById('agree-checkbox');
+    const valueInput = document.getElementById('value-input');
+    const errorMessage = document.getElementById('value-error');
 
     noUiSlider.create(slider, {
         start: currentValue,
@@ -1494,21 +1383,91 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    slider.noUiSlider.on('update', function(values, handle) {
-        currentValue = Math.round(values[handle]);
-        valueDisplay.textContent = Number(currentValue).toLocaleString();
-    });
+     // Update input when slider changes
+     slider.noUiSlider.on('update', function(values, handle) {
+            const value = Math.round(values[handle]);
+            valueInput.value = formatNumber(value);
+            validateAndUpdateValue(valueInput.value);
+        });
+         // Format number with commas
+         function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
 
-    if (stakeButton && agreeCheckbox) {
-        stakeButton.addEventListener('click', function (e) {
-            if (!agreeCheckbox.checked) {
-                e.preventDefault(); // Prevent default action
-                toastr.error('Please accept terms and conditions');
-            } else {
-                invest(currentValue);
+        // Parse number removing commas
+        function parseFormattedNumber(str) {
+            return parseInt(str.replace(/,/g, ''));
+        }
+
+        // Validate and update value
+        function validateAndUpdateValue(value) {
+            const numValue = parseFormattedNumber(value);
+
+            if (isNaN(numValue)) {
+                errorMessage.textContent = "Please enter a valid number";
+                return false;
+            }
+
+            if (numValue < minValue) {
+                errorMessage.textContent = `Minimum value is ${formatNumber(minValue)} $DOPE`;
+                return false;
+            }
+
+            if (numValue > maxValue) {
+                errorMessage.textContent = `Maximum value is ${formatNumber(maxValue)} $DOPE`;
+                return false;
+            }
+
+            errorMessage.textContent = "";
+            return true;
+        }
+
+       
+
+        // Update slider when input changes
+        valueInput.addEventListener('input', function(e) {
+            let value = e.target.value;
+
+            // Remove any non-digit characters except commas
+            value = value.replace(/[^\d,]/g, '');
+
+            // Format the number
+            const numValue = parseFormattedNumber(value);
+            if (!isNaN(numValue)) {
+                e.target.value = formatNumber(numValue);
+
+                // Only update slider if value is valid
+                if (validateAndUpdateValue(value)) {
+                    slider.noUiSlider.set(numValue);
+                }
             }
         });
-    }
+
+        // Validate on blur
+        valueInput.addEventListener('blur', function(e) {
+            const value = e.target.value;
+            const numValue = parseFormattedNumber(value);
+
+            if (validateAndUpdateValue(value)) {
+                e.target.value = formatNumber(numValue);
+                slider.noUiSlider.set(numValue);
+            } else {
+                // Reset to valid value if invalid
+                const currentValue = slider.noUiSlider.get();
+                e.target.value = formatNumber(Math.round(currentValue));
+            }
+        });
+        if (stakeButton && agreeCheckbox) {
+            stakeButton.addEventListener('click', function (e) {
+                if (!agreeCheckbox.checked) {
+                    e.preventDefault(); // Prevent default action
+                    toastr.error('Please accept terms and conditions');
+                } else {
+                    invest(currentValue);
+                }
+            });
+        }
+    });
 
     // Handle clicking outside dropdown
     document.addEventListener('click', function(event) {
@@ -1651,7 +1610,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
-});
 </script>
 
 </html>

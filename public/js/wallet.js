@@ -276,9 +276,7 @@ function btnLoaderHide() {
 }
 
 function invest(currentValue) {
-    // var bal = $('#slider_single').val();
-    // var bal = $('#slider_single').attr('data-value');
-    // bal = (parseFloat(bal.replace(' K', "")) * 1000).toFixed(0);
+
     $('#btnStaking').hide();
     $('#loadStaking').show();
     $.ajax({
@@ -370,6 +368,11 @@ function submitStakingXdr(xdr, staking_id) {
         success: function (response) {
             if (response.status == 1) {
                 toastr.success("Successful", "Staking");
+                // console.log("Staking successful. Reloading page...");
+                
+                // setTimeout(function () {
+                //     location.reload(true); // Force reload
+                // }, 1000);
             } else {
                 toastr.error(response.msg, "Staking Error");
             }
