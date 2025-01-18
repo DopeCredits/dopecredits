@@ -276,7 +276,7 @@ class WalletController extends Controller
             $account = $this->sdk->requestAccount($wallet->public);
             
             $assetCode = 'DOPE';
-            $assetIssuer = 'GA6XXNKX5LYLZGZ2QM5CHLZ4R66P4OC6UD7APNLRWRHSILUNIVZ7B4YB';
+            $assetIssuer = 'GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B';
             $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
             // Payment Operation
             $paymentOperation = (new PaymentOperationBuilder($mainPair->getAccountId(), $asset, $amount))->build();
@@ -306,7 +306,7 @@ class WalletController extends Controller
             $sourcePair = KeyPair::fromSeed($wallet->secret);
 
             $assetCode = 'DOPE';
-            $assetIssuer = 'GA6XXNKX5LYLZGZ2QM5CHLZ4R66P4OC6UD7APNLRWRHSILUNIVZ7B4YB';
+            $assetIssuer = 'GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B';
             $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
             // Payment Operation
             $paymentOperation = (new PaymentOperationBuilder($mainPair->getAccountId(), $asset, $amount))->build();
@@ -350,42 +350,50 @@ class WalletController extends Controller
     }
 
 
-    public function stop_staking(Request $request){
-        $public_key = $request->public_key;
+    public function stop_staking($wallet_address = null){
+        if($wallet_address){
+            $public_key = $wallet_address;
+            
+            $wallet = Staking::where('public', $public_key)
+            ->where('amount', '>=', 1000)
+            ->where('status', 0)
+            ->whereNotNull('transaction_id')
+            ->get();
+            
+            if ($wallet->isEmpty()) {
+                return response()->json(['status' => 0, 'msg' => 'Wallet not found!']);
+            }
+            $amount = $wallet->sum('amount');
 
-        $wallet = Staking::where('public', $public_key)
-        ->where('amount', '=>' ,1000)
-        ->where('status', 0)
-        ->first();
-        if (!$wallet) {
-            return response()->json(['status' => 0, 'msg' => 'Wallet not found!']);
+            try {
+                // Destination Account
+                $mainSecret = env('Reward_Distribution_Wallet');
+                $mainPair = KeyPair::fromSeed($mainSecret);
+
+                $mainAccount = $this->sdk->requestAccount($mainPair->getAccountId());
+                $account = $this->sdk->requestAccount($public_key);
+
+                $assetCode = 'DOPE';
+                $assetIssuer = 'GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B';
+                $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
+
+                // Payment Operation
+                $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $amount))->build();
+                $txbuilder = new TransactionBuilder($mainAccount);
+                $txbuilder->setMaxOperationFee($this->maxFee);
+                $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'DOPE Stake Reward'))->build();
+                $transaction->sign($mainPair, Network::public());
+                $res = $this->sdk->submitTransaction($transaction);
+
+                $wallet->status = 1;
+                $wallet->save();
+                return response()->json(['status' => 1, 'msg' => 'Success', 'tx' => $res->getId()]);
+            } catch (\Throwable $th) {
+                return null;
+            }
         }
-
-        try {
-            // Destination Account
-            $mainSecret = env('Reward_Distribution_Wallet');
-            $mainPair = KeyPair::fromSeed($mainSecret);
-
-            $mainAccount = $this->sdk->requestAccount($mainPair->getAccountId());
-            $account = $this->sdk->requestAccount($public_key);
-
-            $assetCode = 'DOPE';
-            $assetIssuer = 'GA6XXNKX5LYLZGZ2QM5CHLZ4R66P4OC6UD7APNLRWRHSILUNIVZ7B4YB';
-            $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
-
-            // Payment Operation
-            $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $wallet->amount))->build();
-            $txbuilder = new TransactionBuilder($mainAccount);
-            $txbuilder->setMaxOperationFee($this->maxFee);
-            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(new Memo(1, 'DOPE Stake Reward'))->build();
-            $transaction->sign($mainPair, Network::public());
-            $res = $this->sdk->submitTransaction($transaction);
-
-            $wallet->status = 1;
-            $wallet->save();
-            return (object)['tx' => $res->getId(), 'amount' => $wallet->amount];
-        } catch (\Throwable $th) {
-            return null;
+        else {
+            return response()->json(['status' => 0, 'msg' => 'Wallet not found!']);
         }
     }
 
@@ -395,9 +403,8 @@ class WalletController extends Controller
         Staking::whereNull('transaction_id')->delete();
 
         $invests = Staking::whereNotNull('transaction_id')
-            ->where('amount', '=>' ,1000)
+            ->where('amount', '>=' ,1000)
             ->where('status', 0)
-            // ->whereRaw('MINUTE(created_at) < 60')
             ->where('updated_at', '<=', now()->subDays($this->returnDays)->endOfDay())
             ->get();
 
@@ -415,8 +422,6 @@ class WalletController extends Controller
 
     private function returnStaking($invest)
     {
-        // $amount = $invest->amount + (($invest->amount / 100) * 2);
-
         $daily_rate = 0.06395 / 100;
         $amount = $daily_rate * $invest->amount;
         try {
@@ -428,7 +433,7 @@ class WalletController extends Controller
             $account = $this->sdk->requestAccount($invest->public);
 
             $assetCode = 'DOPE';
-            $assetIssuer = 'GA6XXNKX5LYLZGZ2QM5CHLZ4R66P4OC6UD7APNLRWRHSILUNIVZ7B4YB';
+            $assetIssuer = 'GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B';
             $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
 
             // Payment Operation
@@ -444,12 +449,64 @@ class WalletController extends Controller
         }
     }
 
-    public function fetch_staking_data() {
+    public function fetch_dashboard_data() {
+
+        $account = $this->sdk->requestAccount('GBAXVSMRA5YDYT3HSHBWTNRFCX6E6DZO7IKSIFDBKYGIRPYL4QP2TJ64');
+        
+        $unlocked_tokens = 0;
+
+        foreach ($account->getBalances() as $bal) {
+            if ($bal->getAssetCode() == 'DOPE') {
+                $unlocked_tokens = 700000000 - $bal->getBalance();
+            }
+        }
+
         $data = StakingResult::Join('stakings as s' ,'s.id', 'staking_results.staking_id')
-        ->select('staking_results.amount as reward', 'staking_results.transaction_id as trxid', 's.public as wallet_address')
+        ->orderBy('staking_results.updated_at', 'desc')
+        ->select(
+            'staking_results.amount as reward', 
+            'staking_results.transaction_id as explorer_link', 
+            's.public as wallet_address', 
+            's.amount as staked_amount' // Assuming `amount` represents staked amount in the `stakings` table
+        )
         ->orderBy('staking_results.updated_at', 'desc')
         ->get();
-            
-        return response()->json(['data' => $data]);
+
+        $total_stakers = Staking::whereNotNull('transaction_id')
+        ->distinct('public')
+        ->count('public'); // Assuming `public` is the identifier for stakers
+
+        // Sum the amount where transaction_id is not null
+        $total_staked = Staking::whereNotNull('transaction_id')
+        ->sum('amount'); // Assuming `amount` is the column holding staked values
+
+        return response()->json([
+            'data' => $data,
+            'total_stakers' => $total_stakers,
+            'total_staked' => $total_staked,
+            'unlocked_tokens' => $unlocked_tokens,
+        ]);
+        
+    }
+
+    public function fetch_wallet_data($wallet_address = null){
+        if ($wallet_address) {
+            $staked = Staking::whereNotNull('transaction_id')
+            ->where('public', $wallet_address)
+            ->sum('amount'); // Assuming `amount` is the staked amount column
+    
+            // Sum the amount where transaction_id is not null
+            $total_reward_received = StakingResult::join('stakings as s', 's.id', '=', 'staking_results.staking_id')
+            ->whereNotNull('staking_results.transaction_id')
+            ->where('s.public', $wallet_address)
+            ->sum('staking_results.amount'); // Sum of rewards
+    
+            return response()->json([
+                'staked' => $staked,
+                'total_reward_received' => $total_reward_received,
+            ]);
+        } else {
+            return response()->json(['message' => 'No wallet address provided']);
+        }
     }
 }

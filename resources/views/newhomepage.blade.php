@@ -550,6 +550,88 @@
             </div>
         </div>
     </section>
+
+     <!-- Main Dashboard Section -->
+     <section style="background: white" class="staking-dashboard">
+        <div class="container">
+            <!-- Staking Stats -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="stats-card">
+                        <h2 class="section-title">Staking Stats</h2>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <h3>Total Stakers</h3>
+                                <p class="stat-value" id="total-stakers">Loading...</p>
+                            </div>
+                            <div class="stat-item">
+                                <h3>Total Staked</h3>
+                                <p class="stat-value" id="total-staked">Loading...</p>
+                            </div>
+                            <div class="stat-item">
+                                <h3>DOPE Unlocked</h3>
+                                {{-- <p class="stat-value">25K / 700M</p> --}}
+                                <p class="stat-value" id="unlocked">Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+
+            <!-- Your Stats -->
+            @if (isset($_COOKIE['public']))
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="your-stats-card">
+                        <h2 class="section-title">Your Stats</h2>
+                        <div class="your-stats-content">
+                            <div class="stat-group">
+                                <h3>Staked:</h3>
+                                <p class="stat-value" id="wallet-total-staked">Loading...</p>
+                                {{-- <p class="stat-value">10,000 DOPE</p> --}}
+                                <a href="#" class="view-link">View trx on explorer</a>
+                            </div>
+                            <div class="stat-group">
+                                <h3>Total reward received</h3>
+                                {{-- <p class="stat-value">52 DOPE</p> --}}
+                                <p class="stat-value" id="total_reward_received">Loading...</p>
+                            </div>
+                            <div class="action-group">
+                                <button class="btn btn-danger stop-staking">Stop Staking</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+            
+
+            <!-- Latest Transactions -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="transactions-card">
+                        <h2 class="section-title">Latest Transactions</h2>
+                        <div class="table-responsive">
+                            <table id="transactionsTable" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Wallet address</th>
+                                        <th>DOPE staked</th>
+                                        <th>Staking reward</th>
+                                        <th>Explorer link</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Rows will be dynamically populated -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- mainSection -->
     <section class="buy-dope-section">
         <div class="container">
@@ -1322,7 +1404,34 @@
 <script src="{{ asset('js/dope.js') }}"></script>
 <script src="{{ asset('js/wallet.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+
+
+@if (isset($_COOKIE['wallet']))
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Check if wallet public key is set
+            const walletAddress = "{{ $_COOKIE['public'] ?? '' }}";
+
+            if (walletAddress) {
+                // Make an AJAX request to fetch wallet data
+                fetch(`/fetch_wallet_data/${walletAddress}`)
+                    .then(response => response.json()) // Parse JSON
+                    .then(data => {
+                        // Update UI with fetched data
+                        $('#wallet-total-staked').text(data.staked);  // Assuming data.staked for staked value
+                        $('#total_reward_received').text(data.total_reward_received); // Assuming data.total_reward_received
+                    })
+                    .catch(error => {
+                        // Handle error gracefully
+                        console.error('Error fetching wallet data:', error);
+                    });
+            }
+        });
+    </script>
+@endif
 <script>
+
+
      function myFunction() {
         var copyText = document.getElementById("myInput");
 
@@ -1401,45 +1510,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-
-    // Staking functionality
-    // window.invest = function() {
-    //     if (!document.getElementById('checkbox-2-1').checked) {
-    //         toastr.error('Please accept terms and conditions');
-    //         return false;
-    //     }
-
-    //     $('#btnStaking').hide();
-    //     $('#loadStaking').show();
-
-    //     $.ajax({
-    //         url: base_url + '/wallet/invest',
-    //         type: 'POST',
-    //         data: {
-    //             _token: $('meta[name="csrf-token"]').attr('content'),
-    //             amount: currentValue
-    //         },
-    //         success: function(response) {
-    //             if (response.status) {
-    //                 toastr.success(response.message);
-    //                 signXdr(response.xdr, response.staking_id);
-    //                 setTimeout(function() {
-    //                     window.location.reload();
-    //                 }, 2000);
-    //             } else {
-    //                 toastr.error(response.message);
-    //                 $('#btnStaking').show();
-    //                 $('#loadStaking').hide();
-    //             }
-    //         },
-    //         error: function(xhr) {
-    //             toastr.error('Something went wrong!');
-    //             $('#btnStaking').show();
-    //             $('#loadStaking').hide();
-    //         }
-    //     });
-    // }
-
     // Handle clicking outside dropdown
     document.addEventListener('click', function(event) {
         const dropdown = document.querySelector('.modern-dropdown');
@@ -1474,6 +1544,112 @@ document.addEventListener('DOMContentLoaded', function() {
     video.addEventListener('pause', function() {
         playButton.style.opacity = '1';
         playButton.style.pointerEvents = 'auto';
+    });
+
+    
+    function formatUnlockedTokens(unlockedTokens) {
+        if (unlockedTokens >= 1000000) {
+            // If more than 1 million, append 'M'
+            return (unlockedTokens / 1000000).toFixed(1) + 'M';
+        } else if (unlockedTokens >= 10000) {
+            // If more than 10,000, append 'K'
+            return (unlockedTokens / 1000).toFixed(1) + 'K';
+        } else {
+            // Otherwise, display the number as is
+            return unlockedTokens;
+        }
+    }
+
+    $(document).ready(function() {
+        $('#transactionsTable').DataTable({
+            processing: true,
+            serverSide: false,
+            ajax: {
+            url: base_url + '/fetch_dashboard_data',
+            type: 'GET',
+            error: function (xhr, error, thrown) {
+                console.error('Error fetching data:', error);
+                $('#transactionsTable').html('<tr><td colspan="3">Error loading data</td></tr>');
+            }
+            },
+            columns: [
+                { data: 'wallet_address', title: 'Wallet Address' },
+                { data: 'staked_amount', title: 'DOPE Staked' },
+                { 
+                    data: 'reward', 
+                    title: 'Staking Reward',
+                    render: function (data, type, row) {
+                        return `${data} DOPE </span>`;
+                    },
+                },
+                { 
+                    data: 'explorer_link',
+                    title: 'Explorer Link',
+                    render: function (data) {
+                        if (data) {
+                            const url = `https://stellar.expert/explorer/public/tx/${data}`;
+                            return `<a href="${url}" class="view-link" target="_blank">View on Stellar.expert</a>`;
+                        }
+                        return 'N/A';
+                    },
+                },
+            ],
+            responsive: true,
+            pageLength: 10,
+            language: {
+                emptyTable: "No staking rewards available yet."
+            }
+        });
+
+        // Fetch dashboard data when the page loads
+        $.ajax({
+            url: '/fetch_dashboard_data', // URL for your route
+            type: 'GET',
+            success: function (response) {
+                // Populate the stats with the response data
+                $('#total-stakers').text(response.total_stakers);
+                $('#total-staked').text(response.total_staked + ' DOPE');
+                $('#unlocked').text(formatUnlockedTokens(response.unlocked_tokens + ' / 700M'));
+            },
+            error: function (xhr, status, error) {
+                console.error('Error fetching dashboard data:', error);
+                // Display error messages or fallback values
+                $('#total-stakers').text('Error');
+                $('#total-staked').text('Error');
+                $('#unlocked').text('Error');
+            }
+        });
+
+        $('.stop-staking').on('click', function() {
+            const walletAddress = "{{ $_COOKIE['public'] ?? '' }}";
+
+            // alert('Stop staking functionality will be implemented here');
+            $.ajax({
+                url: `/stop_staking/${walletAddress}`, // Corrected: use backticks for string interpolation
+                type: 'POST',
+                data: {
+                    _token: "{{ csrf_token() }}" // For CSRF protection
+                },
+                success: function(response) {
+                    // Check if the response has the status
+                    if (response.status === 1) {
+                        toastr.success('Dope Tokens Successfully Sent to your wallet');
+
+                        // Wait 5 seconds before reloading the page
+                        setTimeout(function() {
+                            location.reload();
+                        }, 3000);
+                    } else {
+                        // If status is 0, wallet was not found or error occurred
+                        toastr.error(response.msg || 'An error occurred while processing the request');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    toastr.error('An unexpected error occurred: ' + error);
+                }
+            });
+        });
     });
 });
 </script>
