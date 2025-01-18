@@ -1581,6 +1581,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         $('.stop-staking').on('click', function() {
             const walletAddress = "{{ $_COOKIE['public'] ?? '' }}";
+            const button = $(this); // Reference to the clicked button
+            button.text('Processing...').prop('disabled', true); // Disable the button to prevent multiple clicks
 
             // alert('Stop staking functionality will be implemented here');
             $.ajax({
@@ -1594,18 +1596,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (response.status === 1) {
                         toastr.success('Dope Tokens Successfully Sent to your wallet');
 
-                        // Wait 5 seconds before reloading the page
+                        // Wait 3 seconds before reloading the page
                         setTimeout(function() {
                             location.reload();
                         }, 3000);
                     } else {
                         // If status is 0, wallet was not found or error occurred
                         toastr.error(response.msg || 'An error occurred while processing the request');
+                        button.text('Stop Staking').prop('disabled', false);
                     }
                 },
                 error: function(xhr, status, error) {
                     // Handle any errors that occur during the AJAX request
                     toastr.error('An unexpected error occurred: ' + error);
+                    button.text('Stop Staking').prop('disabled', false);
                 }
             });
         });

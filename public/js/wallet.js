@@ -291,6 +291,10 @@ function invest(currentValue) {
         success: function (response) {
             if (response.status == 1) {
                 signXdr(response.xdr, response.staking_id);
+                // Wait 3 seconds before reloading the page
+                setTimeout(function() {
+                    location.reload();
+                }, 3000);
             } else {
                 btnLoaderHide();
                 toastr.error(response.msg, "Staking Error");
