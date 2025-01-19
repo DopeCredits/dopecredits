@@ -370,7 +370,7 @@ class WalletController extends Controller
 
             try {
                 // Destination Account
-                $mainSecret = env('DISTRIBUTION_WALLET');
+                $mainSecret = env('MAIN_WALLET');
                 $mainPair = KeyPair::fromSeed($mainSecret);
 
                 $mainAccount = $this->sdk->requestAccount($mainPair->getAccountId());
@@ -426,7 +426,7 @@ class WalletController extends Controller
 
     private function returnStaking($invest)
     {
-        $daily_rate = 0.06395 / 100;
+        $daily_rate = 0.1 / 100; 
         $amount = $daily_rate * $invest->amount;
         try {
             // Destination Account
