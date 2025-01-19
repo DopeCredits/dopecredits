@@ -1264,6 +1264,7 @@
 <script src="{{ asset('js/dope.js') }}"></script>
 <script src="{{ asset('js/wallet.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
 @if (isset($_COOKIE['wallet']))
@@ -1587,37 +1588,64 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        $('.stop-staking').on('click', function() {
+        $('.stop-staking').on('click', function () 
+        {
             const walletAddress = "{{ $_COOKIE['public'] ?? '' }}";
             const button = $(this); // Reference to the clicked button
-            button.text('Processing...').prop('disabled', true); // Disable the button to prevent multiple clicks
 
-            // alert('Stop staking functionality will be implemented here');
-            $.ajax({
-                url: `/stop_staking/${walletAddress}`, // Corrected: use backticks for string interpolation
-                type: 'POST',
-                data: {
-                    _token: "{{ csrf_token() }}" // For CSRF protection
-                },
-                success: function(response) {
-                    // Check if the response has the status
-                    if (response.status === 1) {
-                        toastr.success('Dope Tokens Successfully Sent to your wallet');
+            // Show SweetAlert2 confirmation popup
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you really want to stop staking?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, stop staking!',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    button.text('Processing...').prop('disabled', true); // Disable the button to prevent multiple clicks
 
-                        // Wait 3 seconds before reloading the page
-                        location.reload();
-                        // setTimeout(function() {
-                        // }, 3000);
-                    } else {
-                        // If status is 0, wallet was not found or error occurred
-                        toastr.error(response.msg || 'An error occurred while processing the request');
-                        button.text('Stop Staking').prop('disabled', false);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    // Handle any errors that occur during the AJAX request
-                    toastr.error('An unexpected error occurred: ' + error);
-                    button.text('Stop Staking').prop('disabled', false);
+                    $.ajax({
+                        url: `/stop_staking/${walletAddress}`, // Corrected: use backticks for string interpolation
+                        type: 'POST',
+                        data: {
+                            _token: "{{ csrf_token() }}" // For CSRF protection
+                        },
+                        success: function (response) {
+                            // Check if the response has the status
+                            if (response.status === 1) {
+                                Swal.fire(
+                                    'Stopped!',
+                                    'Dope Tokens Successfully Sent to your wallet.',
+                                    'success'
+                                );
+
+                                // Reload the page after 3 seconds
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 3000);
+                            } else {
+                                // If status is 0, wallet was not found or error occurred
+                                Swal.fire(
+                                    'Error!',
+                                    response.msg || 'An error occurred while processing the request.',
+                                    'error'
+                                );
+                                button.text('Stop Staking').prop('disabled', false);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle any errors that occur during the AJAX request
+                            Swal.fire(
+                                'Error!',
+                                'An unexpected error occurred: ' + error,
+                                'error'
+                            );
+                            button.text('Stop Staking').prop('disabled', false);
+                        }
+                    });
                 }
             });
         });
