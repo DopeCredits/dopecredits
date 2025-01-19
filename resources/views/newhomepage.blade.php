@@ -653,7 +653,7 @@
                                 <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2Fa55c99f2652b4466932d9b74893f232e&methods=resize%2C900%2C5000" alt="LOBSTR">
                             </div>
                             <h4>LOBSTR</h4>
-                            <a href="https://lobstr.co/home/" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
+                            <a href="https://lobstr.co/trade/native/DOPE:GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-6">
@@ -662,16 +662,16 @@
                                 <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F2ddf9bd39f4d4f8ba2e475921f51c8db&methods=resize%2C900%2C5000" alt="StellarX">
                             </div>
                             <h4>StellarX</h4>
-                            <a href="https://www.stellarx.com/" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
+                            <a href="https://www.stellarx.com/markets/DOPE:GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/native" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-6">
                         <div class="buy-option-card">
                             <div class="platform-icon">
-                                <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2Fa89a4e078c9f4a5d99d874ed8ebb2002&methods=resize%2C900%2C5000" alt="StellarTerm">
+                                <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2Fa89a4e078c9f4a5d99d874ed8ebb2002&methods=resize%2C900%2C5000" alt="Lumenswap">
                             </div>
                             <h4>Lumenswap</h4>
-                            <a href="https://obm.lumenswap.io/" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
+                            <a href="https://obm.lumenswap.io/spot/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/XLM" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-6">
@@ -680,7 +680,7 @@
                                 <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2Fa8a31ad8d5854309a51aad3debba9251&methods=resize%2C900%2C5000" alt="Dogstar">
                             </div>
                             <h4>Dogstar</h4>
-                            <a href="https://app.dogstarcoin.com/trade/DOPE-XLM/GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/native" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
+                            <a href="#" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
                         </div>
                     </div>
                 </div>
@@ -698,10 +698,10 @@
                     <div class="col-md-3 col-sm-6">
                         <div class="buy-option-card">
                             <div class="platform-icon">
-                                <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F67af86ffd80d470eb75ca76b632067cd&methods=resize%2C900%2C5000" alt="Lumenswap">
+                                <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F67af86ffd80d470eb75ca76b632067cd&methods=resize%2C900%2C5000" alt="StellarTerm">
                             </div>
-                            <h4>Stellar Term</h4>
-                            <a href="#" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
+                            <h4>StellarTerm</h4>
+                            <a href="https://stellarterm.com/exchange/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/XLM-native" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-6">
@@ -710,7 +710,7 @@
                                 <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F357b2e0801d347ba9af61d487eca2e91&methods=resize%2C900%2C5000" alt="Interstellar">
                             </div>
                             <h4>Interstellar</h4>
-                            <a href="#" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
+                            <a href="https://interstellar.exchange/app/#/trade/guest/DOPE/GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/XLM/native" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
                         </div>
                     </div>
                     <div class="col-md-3 col-sm-6">
@@ -719,7 +719,7 @@
                                 <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F260e959279a740ae8fcafe15cbe529bc&methods=resize%2C900%2C5000" alt="XSTAR">
                             </div>
                             <h4>Stellarport</h4>
-                            <a href="#" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
+                            <a href="https://stellarport.io/exchange/GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/DOPE" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
                         </div>
                     </div>
                 </div>
