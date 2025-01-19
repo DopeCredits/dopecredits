@@ -368,9 +368,8 @@
                             <div class="line3"></div>
                         </div>
                         <ul class="nav-links">
-                            <li><a href="{{ url('#') }}">Stakers</a></li>
                             <li><a href="{{ asset('images/DOPE Credits Whitepaper.pdf') }}" target="_blank">Whitepaper</a></li>
-                            <li><a href="{{ url('#') }}">Token explorer</a></li>
+                            <li><a href="{{ url('https://stellar.expert/explorer/public/asset/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B') }}">Token explorer</a></li>
                             <li><a href="{{ url('#') }}">About</a></li>
                         </ul>
                         {{-- <div class="wallet-btn">
@@ -1383,91 +1382,95 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-     // Update input when slider changes
-     slider.noUiSlider.on('update', function(values, handle) {
-            const value = Math.round(values[handle]);
-            valueInput.value = formatNumber(value);
-            validateAndUpdateValue(valueInput.value);
-        });
-         // Format number with commas
-         function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    // Update input when slider changes
+    slider.noUiSlider.on('update', function(values, handle) {
+        const value = Math.round(values[handle]);
+        currentValue = value; // Update currentValue
+        valueInput.value = formatNumber(value);
+        validateAndUpdateValue(valueInput.value);
+    });
+    // Format number with commas
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Parse number removing commas
+    function parseFormattedNumber(str) {
+        return parseInt(str.replace(/,/g, ''));
+    }
+
+    // Validate and update value
+    function validateAndUpdateValue(value) {
+        const numValue = parseFormattedNumber(value);
+
+        if (isNaN(numValue)) {
+            errorMessage.textContent = "Please enter a valid number";
+            return false;
         }
 
-        // Parse number removing commas
-        function parseFormattedNumber(str) {
-            return parseInt(str.replace(/,/g, ''));
+        if (numValue < minValue) {
+            errorMessage.textContent = `Minimum value is ${formatNumber(minValue)} $DOPE`;
+            return false;
         }
 
-        // Validate and update value
-        function validateAndUpdateValue(value) {
-            const numValue = parseFormattedNumber(value);
-
-            if (isNaN(numValue)) {
-                errorMessage.textContent = "Please enter a valid number";
-                return false;
-            }
-
-            if (numValue < minValue) {
-                errorMessage.textContent = `Minimum value is ${formatNumber(minValue)} $DOPE`;
-                return false;
-            }
-
-            if (numValue > maxValue) {
-                errorMessage.textContent = `Maximum value is ${formatNumber(maxValue)} $DOPE`;
-                return false;
-            }
-
-            errorMessage.textContent = "";
-            return true;
+        if (numValue > maxValue) {
+            errorMessage.textContent = `Maximum value is ${formatNumber(maxValue)} $DOPE`;
+            return false;
         }
 
-       
+        errorMessage.textContent = "";
+        return true;
+    }
 
-        // Update slider when input changes
-        valueInput.addEventListener('input', function(e) {
-            let value = e.target.value;
 
-            // Remove any non-digit characters except commas
-            value = value.replace(/[^\d,]/g, '');
 
-            // Format the number
-            const numValue = parseFormattedNumber(value);
-            if (!isNaN(numValue)) {
-                e.target.value = formatNumber(numValue);
+    // Update slider when input changes
+    valueInput.addEventListener('input', function(e) {
+        let value = e.target.value;
 
-                // Only update slider if value is valid
-                if (validateAndUpdateValue(value)) {
-                    slider.noUiSlider.set(numValue);
-                }
-            }
-        });
+        // Remove any non-digit characters except commas
+        value = value.replace(/[^\d,]/g, '');
 
-        // Validate on blur
-        valueInput.addEventListener('blur', function(e) {
-            const value = e.target.value;
-            const numValue = parseFormattedNumber(value);
+        // Format the number
+        const numValue = parseFormattedNumber(value);
+        if (!isNaN(numValue)) {
+            e.target.value = formatNumber(numValue);
 
+            // Only update slider if value is valid
             if (validateAndUpdateValue(value)) {
-                e.target.value = formatNumber(numValue);
                 slider.noUiSlider.set(numValue);
-            } else {
-                // Reset to valid value if invalid
-                const currentValue = slider.noUiSlider.get();
-                e.target.value = formatNumber(Math.round(currentValue));
+                currentValue = numValue; // Update currentValue
             }
-        });
-        if (stakeButton && agreeCheckbox) {
-            stakeButton.addEventListener('click', function (e) {
-                if (!agreeCheckbox.checked) {
-                    e.preventDefault(); // Prevent default action
-                    toastr.error('Please accept terms and conditions');
-                } else {
-                    invest(currentValue);
-                }
-            });
         }
     });
+
+    // Validate on blur
+    valueInput.addEventListener('blur', function(e) {
+        const value = e.target.value;
+        const numValue = parseFormattedNumber(value);
+
+        if (validateAndUpdateValue(value)) {
+            e.target.value = formatNumber(numValue);
+            slider.noUiSlider.set(numValue);
+            currentValue = numValue; // Update currentValue
+        } else {
+            // Reset to valid value if invalid
+            const validValue = slider.noUiSlider.get();
+            e.target.value = formatNumber(Math.round(validValue));
+            currentValue = Math.round(validValue); // Reset currentValue
+        }
+    });
+    if (stakeButton && agreeCheckbox) {
+        stakeButton.addEventListener('click', function (e) {
+            if (!agreeCheckbox.checked) {
+                e.preventDefault(); // Prevent default action
+                toastr.error('Please accept terms and conditions');
+            } else {
+                invest(currentValue);
+            }
+        });
+    }
+});
 
     // Handle clicking outside dropdown
     document.addEventListener('click', function(event) {

@@ -505,6 +505,7 @@ class WalletController extends Controller
         if ($wallet_address) {
             $staked = Staking::whereNotNull('transaction_id')
             ->where('public', $wallet_address)
+            ->where('status', 0) //active staking
             ->sum('amount'); // Assuming `amount` is the staked amount column
     
             // Sum the amount where transaction_id is not null
