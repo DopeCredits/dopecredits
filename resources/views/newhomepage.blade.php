@@ -1605,9 +1605,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         toastr.success('Dope Tokens Successfully Sent to your wallet');
 
                         // Wait 3 seconds before reloading the page
-                        setTimeout(function() {
-                            location.reload();
-                        }, 3000);
+                        location.reload();
+                        // setTimeout(function() {
+                        // }, 3000);
                     } else {
                         // If status is 0, wallet was not found or error occurred
                         toastr.error(response.msg || 'An error occurred while processing the request');
