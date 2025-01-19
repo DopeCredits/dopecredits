@@ -411,7 +411,7 @@ class WalletController extends Controller
         $invests = Staking::whereNotNull('transaction_id')
             ->where('amount', '>=' ,1000)
             ->where('status', 0)
-            ->where('updated_at', '<=', now()->subDays($this->returnDays)->endOfDay())
+            // ->where('updated_at', '<=', now()->subDays($this->returnDays)->endOfDay())
             ->get();
 
         // Looping through invest
