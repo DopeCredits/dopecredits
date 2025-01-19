@@ -369,7 +369,7 @@
                         </div>
                         <ul class="nav-links">
                             <li><a href="{{ asset('images/DOPE Credits Whitepaper.pdf') }}" target="_blank">Whitepaper</a></li>
-                            <li><a href="{{ url('https://stellar.expert/explorer/public/asset/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B') }}">Token explorer</a></li>
+                            <li><a href="{{ url('https://stellar.expert/explorer/public/asset/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B') }}" target="_blank" rel="noopener noreferrer">Token explorer</a></li>
                             <li><a href="{{ url('#') }}">About</a></li>
                         </ul>
                         {{-- <div class="wallet-btn">
