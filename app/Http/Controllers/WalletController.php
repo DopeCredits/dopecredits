@@ -484,11 +484,12 @@ class WalletController extends Controller
         ->get();
 
         $total_stakers = Staking::whereNotNull('transaction_id')
+        ->where('status', 0) //active stakers
         ->distinct('public')
         ->count('public'); // Assuming `public` is the identifier for stakers
 
         // Sum the amount where transaction_id is not null
-        $total_staked = Staking::whereNotNull('transaction_id')
+        $total_staked = Staking::whereNotNull('transaction_id')->where('status', 0) //active stakers
         ->sum('amount'); // Assuming `amount` is the column holding staked values
 
         return response()->json([

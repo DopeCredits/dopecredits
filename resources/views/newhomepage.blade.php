@@ -589,7 +589,7 @@
                                 <h3>Staked:</h3>
                                 <p class="stat-value" id="wallet-total-staked">Loading...</p>
                                 {{-- <p class="stat-value">10,000 DOPE</p> --}}
-                                <a href="#" class="view-link">View trx on explorer</a>
+                                <a href="https://stellar.expert/explorer/public/account/{{ $_COOKIE['public'] }}" class="view-link" target="_blank" rel="noopener noreferrer">View trx on explorer</a>
                             </div>
                             <div class="stat-group">
                                 <h3>Total reward received</h3>
