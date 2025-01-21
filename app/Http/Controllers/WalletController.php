@@ -32,7 +32,6 @@ class WalletController extends Controller
         $this->sdk = StellarSDK::getPublicNetInstance();
         // $this->sdk = StellarSDK::getTestNetInstance();
         $this->minAmount = 10;
-        $this->returnDays = 1;
         $this->maxFee = 3000;
     }
 
@@ -406,22 +405,24 @@ class WalletController extends Controller
     public function investresult()
     {
         // removes NULL
-        // Staking::whereNull('transaction_id')->delete();
+        Staking::whereNull('transaction_id')->delete();
 
-        // $invests = Staking::whereNotNull('transaction_id')
-        //     ->where('amount', '>=' ,1000)
-        //     ->where('status', 0)
-        //     ->where('updated_at', '<=', now()->subDays($this->returnDays)->endOfDay())
-        //     ->get();
+        $invests = Staking::whereNotNull('transaction_id')
+            ->where('amount', '>=' ,1000)
+            ->where('status', 0)
+            ->where('updated_at', '<=', now()->subHours(24))
+            ->get();
 
-        // // Looping through invest
-        // foreach ($invests as $key => $invest) {
-        //     $result = $this->returnStaking($invest);
-        //     if ($result) {
-        //         StakingResult::create(['staking_id' => $invest->id, 'amount' => $result->amount, 'transaction_id' => $result->tx]);
-        //     }
-        // }
-        // return response()->json([$invests]);
+        // Looping through invest
+        foreach ($invests as $key => $invest) {
+            $result = $this->returnStaking($invest);
+            if ($result) {
+                StakingResult::create(['staking_id' => $invest->id, 'amount' => $result->amount, 'transaction_id' => $result->tx]);
+            }
+            // Update the `updated_at` field to current time
+            $invest->update(['updated_at' => now()]);
+        }
+        return response()->json([$invests]);
     }
 
     private function returnStaking($invest)
@@ -473,7 +474,6 @@ class WalletController extends Controller
         }
 
         $data = StakingResult::Join('stakings as s' ,'s.id', 'staking_results.staking_id')
-        ->orderBy('staking_results.updated_at', 'desc')
         ->select(
             'staking_results.amount as reward', 
             'staking_results.transaction_id as explorer_link', 

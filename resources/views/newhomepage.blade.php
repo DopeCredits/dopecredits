@@ -1511,21 +1511,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     
     function formatUnlockedTokens(unlockedTokens) {
-        if (unlockedTokens >= 1000000) {
-            // If more than 1 million, append 'M'
-            let result = (unlockedTokens / 1000000).toFixed(1);
-            // Remove decimal if the result is a whole number
-            return result % 1 === 0 ? result.split('.')[0] + 'M' : result + 'M';
-        } else if (unlockedTokens >= 10000) {
-            // If more than 10,000, append 'K'
-            let result = (unlockedTokens / 1000).toFixed(1);
-            // Remove decimal if the result is a whole number
-            return result % 1 === 0 ? result.split('.')[0] + 'K' : result + 'K';
-        } else {
-            // Otherwise, display the number as is
-            return unlockedTokens;
-        }
+    // Round to two decimal places first
+    unlockedTokens = parseFloat(unlockedTokens.toFixed(2));
+
+    if (unlockedTokens >= 1000000) {
+        // If more than 1 million, append 'M'
+        let result = (unlockedTokens / 1000000).toFixed(1);
+        // Remove decimal if the result is a whole number
+        return result % 1 === 0 ? result.split('.')[0] + 'M' : result + 'M';
+    } else if (unlockedTokens >= 10000) {
+        // If more than 10,000, append 'K'
+        let result = (unlockedTokens / 1000).toFixed(1);
+        // Remove decimal if the result is a whole number
+        return result % 1 === 0 ? result.split('.')[0] + 'K' : result + 'K';
+    } else {
+        // Otherwise, display the number as is
+        return unlockedTokens;
     }
+}
 
 
     $(document).ready(function() {
