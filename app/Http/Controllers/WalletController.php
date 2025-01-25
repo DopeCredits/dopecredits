@@ -481,6 +481,11 @@ class WalletController extends Controller
             's.public as wallet_address', 
             's.amount as staked_amount' // Assuming `amount` represents staked amount in the `stakings` table
         )
+        ->whereRaw('staking_results.updated_at = (
+            SELECT MAX(sr.updated_at) 
+            FROM staking_results sr 
+            WHERE sr.staking_id = staking_results.staking_id
+        )')
         ->orderBy('staking_results.updated_at', 'desc')
         ->get();
 
