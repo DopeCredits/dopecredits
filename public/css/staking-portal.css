@@ -23,22 +23,25 @@
 }
 
 .buy-options-container {
-    margin-top: 50px;
+    margin-top: 30px;
+    padding: 0px;
 }
 
-.buy-options-row {
-    margin-bottom: 30px;
+.buy-options-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
 }
 
 .buy-option-card {
+    flex: 0 1 250px;
     background: #ffffff;
-    border-radius: 15px;
-    padding: 25px;
-    text-align: center;
+    border-radius: 12px;
+    padding: 15px;
     transition: all 0.3s ease;
     border: 1px solid #eee;
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
 }
 
 .buy-option-card:hover {
@@ -48,9 +51,8 @@
 }
 
 .platform-icon {
-    width: 60px;
-    height: 60px;
-    margin: 0 auto 15px;
+    width: 35px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -65,8 +67,38 @@
 .buy-option-card h4 {
     color: #333;
     font-size: 18px;
-    margin-bottom: 15px;
+    margin-bottom: 0;
     font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .buy-dope-heading {
+        font-size: 32px;
+        margin-bottom: 25px;
+    }
+
+    .buy-options-container {
+        padding: 15px;
+    }
+
+    .buy-option-card {
+        flex: 0 1 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .buy-dope-heading {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+
+    .buy-options-container {
+        padding: 10px;
+    }
+
+    .buy-option-card {
+        flex: 0 1 100%;
+    }
 }
 
 .buy-link {
@@ -89,7 +121,7 @@
 
 @media (max-width: 768px) {
     .buy-option-card {
-        margin-bottom: 20px;
+        margin-bottom: 10px;
     }
 }
 
@@ -2989,5 +3021,413 @@
     .video-features .feature-icon img {
         width: 25px;
         height: 25px;
+    }
+}
+
+.buy-dope-heading {
+    font-family: "ParalucentW00-Heavy";
+    font-size: 42px;
+    line-height: 1.2;
+    color: #333;
+    margin-bottom: 35px;
+    text-align: center;
+    /* background: linear-gradient(90deg, #333, #80c931);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; */
+}
+a{
+    color: #80c931;
+}
+
+.insufficient-dope {
+    padding: 40px 20px;
+    text-align: center;
+    margin: 20px 0;
+}
+
+.insufficient-content {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.insufficient-icon {
+    font-size: 48px;
+    color: #ff6b6b;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite;
+}
+
+.insufficient-dope h2 {
+    font-family: "ParalucentW00-Heavy";
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 15px;
+    background: linear-gradient(90deg, #ff6b6b, #ff8787);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.insufficient-dope p {
+    color: #666;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.insufficient-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.current-balance {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.current-balance span {
+    font-weight: 600;
+    color: #ff6b6b;
+}
+
+.required-more {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+
+.get-dope-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(8, 166, 195, 0.2);
+    color: white;
+}
+
+.get-dope-btn i {
+    transition: transform 0.3s ease;
+}
+
+.get-dope-btn:hover i {
+    transform: translateX(5px);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 768px) {
+    .insufficient-dope {
+        padding: 30px 15px;
+    }
+
+    .insufficient-dope h2 {
+        font-size: 28px;
+    }
+
+    .insufficient-dope p {
+        font-size: 16px;
+    }
+
+    .current-balance,
+    .required-more {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .insufficient-dope {
+        padding: 25px 15px;
+    }
+
+    .insufficient-icon {
+        font-size: 40px;
+    }
+
+    .insufficient-dope h2 {
+        font-size: 24px;
+    }
+
+    .insufficient-dope p {
+        font-size: 14px;
+    }
+
+    .get-dope-btn {
+        padding: 10px 25px;
+        font-size: 14px;
+    }
+}
+/* From Uiverse.io by elijahgummer */
+.checkbox {
+    --blue: #80c931;
+    --g08: #e1e5eb;
+    --g04: #848ea1;
+    text-align: center;
+  }
+
+  .checkbox .tgl {
+    display: none;
+  }
+  .checkbox .tgl,
+  .checkbox .tgl:after,
+  .checkbox .tgl:before,
+  .checkbox .tgl *,
+  .checkbox .tgl *:after,
+  .checkbox .tgl *:before,
+  .checkbox .tgl + .tgl-btn {
+    box-sizing: border-box;
+  }
+  .checkbox .tgl::selection,
+  .checkbox .tgl:after::selection,
+  .checkbox .tgl:before::selection,
+  .checkbox .tgl *::selection,
+  .checkbox .tgl *:after::selection,
+  .checkbox .tgl *:before::selection,
+  .checkbox .tgl + .tgl-btn::selection {
+    background: none;
+  }
+  .checkbox .tgl + .tgl-btn {
+    outline: 0;
+    display: block;
+    width: 57px;
+    height: 27px;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    font-size: 12px;
+    font-weight: 400;
+    color: #fff;
+  }
+  .checkbox .tgl + .tgl-btn:after,
+  .checkbox .tgl + .tgl-btn:before {
+    position: relative;
+    display: block;
+    content: "";
+    width: 44%;
+    height: 100%;
+  }
+  .checkbox .tgl + .tgl-btn:after {
+    left: 0;
+  }
+  .checkbox .tgl + .tgl-btn:before {
+    display: inline;
+    position: absolute;
+    top: 7px;
+  }
+  .checkbox .tgl:checked + .tgl-btn:after {
+    left: 56.5%;
+  }
+
+  .checkbox .tgl + .tgl-btn {
+    background: var(--g08);
+    border-radius: 20rem;
+    padding: 2px;
+    transition: all 0.4s ease;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  }
+  .checkbox .tgl + .tgl-btn:after {
+    border-radius: 2em;
+    background: #fff;
+    transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+      padding 0.3s ease, margin 0.3s ease;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
+  }
+  .checkbox .tgl + .tgl-btn:before {
+    content: "No";
+    left: 28px;
+    color: var(--g04);
+    transition: left 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .checkbox .tgl + .tgl-btn:active {
+    box-shadow: inset 0 0 0 30px rgba(0, 0, 0, 0.1);
+  }
+  .checkbox .tgl + .tgl-btn:active:after {
+    padding-right: 0.4em;
+  }
+  .checkbox .tgl:checked + .tgl-btn {
+    background: var(--blue);
+  }
+  .checkbox .tgl:checked + .tgl-btn:active {
+    box-shadow: inset 0 0 0 30px rgba(0, 0, 0, 0.1);
+  }
+  .checkbox .tgl:checked + .tgl-btn:active:after {
+    margin-left: -0.4em;
+  }
+  .checkbox .tgl:checked + .tgl-btn:before {
+    content: "Yes";
+    left: 4px;
+    color: #fff;
+  }
+  .tooltip-container {
+    position: relative;
+    display: inline-block;
+    margin:0px 20px 0px 5px;
+  }
+
+  .text {
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    background: #80c931;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2px;
+  }
+
+  .tooltip {
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    background: #0b798a;
+    color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    transition: opacity 0.3s, visibility 0.3s, top 0.3s, background 0.3s;
+    z-index: 1;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    width: 300px;
+  }
+
+  .tooltip::before {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    border-width: 8px;
+    border-style: solid;
+    border-color: transparent transparent #0b798a transparent;
+    transform: translateX(-50%);
+  }
+
+  .tooltip-container:hover .tooltip {
+    top: 120%;
+    opacity: 1;
+    visibility: visible;
+    background: #0e94a0;
+    transform: translate(-50%, -5px);
+  }
+
+/* Filter Checkbox Styles */
+.table-filters {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+.filter-checkbox {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 50px;
+    background: white;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.filter-checkbox .checkmark {
+    position: relative;
+    height: 18px;
+    width: 18px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.filter-checkbox:hover .checkmark {
+    border-color: #80c931;
+}
+
+.filter-checkbox input:checked ~ .checkmark {
+    background: linear-gradient(to right, #80c931, #08a6c3);
+    border-color: transparent;
+}
+
+.filter-checkbox .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.filter-checkbox input:checked ~ .checkmark:after {
+    display: block;
+}
+
+.filter-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-label i {
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.filter-checkbox:hover i {
+    transform: scale(1.1);
+}
+
+.filter-checkbox input:checked ~ .filter-label {
+    color: #80c931;
+}
+
+@media (max-width: 768px) {
+    .table-filters {
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .filter-checkbox {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .table-filters {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .filter-checkbox {
+        width: 100%;
+        justify-content: flex-start;
     }
 }
