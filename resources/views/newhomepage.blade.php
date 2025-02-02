@@ -1548,12 +1548,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 { 
                     data: 'reward', 
                     title: 'Staking Reward',
-                    render: function (data) {
-                        // Remove non-numeric characters for sorting, keep only the number
-                        var numericValue = parseFloat(data.replace(/[^0-9.-]+/g, ""));
-                        return numericValue + " DOPE";  // Format back with 'DOPE'
+                    render: function (data, type, row) {
+                        if (type === 'display') {
+                            return `${data} DOPE`;  // Display with the 'DOPE' suffix
+                        }
+                        return data;  // For sorting purposes, return the raw numeric value
                     },
-                    orderDataType: 'dom-text', // Allow sorting based on numeric value
+                    orderData: [2],  // Ensure sorting uses the raw numeric value
                 },
                 { 
                     data: 'explorer_link',
