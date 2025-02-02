@@ -1548,9 +1548,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 { 
                     data: 'reward', 
                     title: 'Staking Reward',
-                    render: function (data, type, row) {
-                        return `${data} DOPE </span>`;
+                    render: function (data) {
+                        // Remove non-numeric characters for sorting, keep only the number
+                        var numericValue = parseFloat(data.replace(/[^0-9.-]+/g, ""));
+                        return numericValue + " DOPE";  // Format back with 'DOPE'
                     },
+                    orderDataType: 'dom-text', // Allow sorting based on numeric value
                 },
                 { 
                     data: 'explorer_link',
