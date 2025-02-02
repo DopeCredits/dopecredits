@@ -464,25 +464,29 @@ class WalletController extends Controller
 
     public function fetch_dashboard_data() {
 
-        $account = $this->sdk->requestAccount('GBAXVSMRA5YDYT3HSHBWTNRFCX6E6DZO7IKSIFDBKYGIRPYL4QP2TJ64');
+        // $account = $this->sdk->requestAccount('GBAXVSMRA5YDYT3HSHBWTNRFCX6E6DZO7IKSIFDBKYGIRPYL4QP2TJ64');
         
-        $unlocked_tokens = 0;
+        // $unlocked_tokens = 0;
 
-        foreach ($account->getBalances() as $bal) {
-            if ($bal->getAssetCode() == 'DOPE') {
-                $unlocked_tokens = 850000000 - $bal->getBalance();
-            }
-        }
-
+        // foreach ($account->getBalances() as $bal) {
+        //     if ($bal->getAssetCode() == 'DOPE') {
+        //         $unlocked_tokens = 850000000 - $bal->getBalance();
+        //     }
+        // }
+        
+        
         $data = StakingResult::Join('stakings as s' ,'s.id', 'staking_results.staking_id')
         ->select(
             'staking_results.amount as reward', 
             'staking_results.transaction_id as explorer_link', 
             's.public as wallet_address', 
             's.amount as staked_amount' // Assuming `amount` represents staked amount in the `stakings` table
-        )
-        ->orderBy('staking_results.updated_at', 'desc')
-        ->get();
+            )
+            ->orderBy('staking_results.updated_at', 'desc')
+            ->get();
+            
+        $unlocked_tokens = $data->sum('reward');
+
 
         $total_stakers = Staking::whereNotNull('transaction_id')
         ->where('status', 0) //active stakers
