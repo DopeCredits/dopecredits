@@ -569,7 +569,6 @@
                             </div>
                             <div class="stat-item">
                                 <h3>DOPE Unlocked</h3>
-                                {{-- <p class="stat-value">25K / 700M</p> --}}
                                 <p class="stat-value" id="unlocked">Loading...</p>
                             </div>
                         </div>
@@ -874,7 +873,7 @@
                                 <div class="distribution-item">
                                     <div class="item-header">
                                         <div class="indicator" style="background: #08a6c3"></div>
-                                        <h4>Staking rewards - 700,000,000 (70%)</h4>
+                                        <h4>Staking rewards - 850,000,000 (85%)</h4>
                                     </div>
                                     <div class="progress-bar">
                                         <div class="progress" style="width: 70%; background: #08a6c3"></div>
@@ -1580,7 +1579,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Populate the stats with the response data
                 $('#total-stakers').text(response.total_stakers);
                 $('#total-staked').text(response.total_staked + ' DOPE');
-                $('#unlocked').text(formatUnlockedTokens(response.unlocked_tokens)+ ' / 700M');
+                $('#unlocked').text(formatUnlockedTokens(response.unlocked_tokens)+ ' / 850M');
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching dashboard data:', error);
