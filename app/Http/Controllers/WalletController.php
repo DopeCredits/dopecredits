@@ -475,16 +475,17 @@ class WalletController extends Controller
         // }
         
         
-        $data = StakingResult::Join('stakings as s' ,'s.id', 'staking_results.staking_id')
+        $data = StakingResult::join('stakings as s', 's.id', '=', 'staking_results.staking_id')
         ->select(
             'staking_results.amount as reward', 
             'staking_results.transaction_id as explorer_link', 
             's.public as wallet_address', 
-            's.amount as staked_amount' // Assuming `amount` represents staked amount in the `stakings` table
-            )
-            ->orderBy('staking_results.updated_at', 'desc')
-            ->get();
-            
+            's.amount as staked_amount' 
+        )
+        ->orderBy('staking_results.updated_at', 'desc')
+        ->get();
+
+        // Calculate unlocked tokens count
         $unlocked_tokens = $data->sum('reward');
 
 
