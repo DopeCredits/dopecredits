@@ -315,7 +315,7 @@
                         <h3 style="font-family:'ParalucentW00-Heavy';">Token Distribution</h3>
                         <ul>
                             <li><img src="{{ asset('images/points.png') }}" alt="">Staking rewards -
-                                700,000,000 (70%)</li>
+                                850,000,000 (70%)</li>
                             <li><img src="{{ asset('images/points.png') }}" alt="">Presale - 200,000,000
                                 (20%)</li>
                             <li><img src="{{ asset('images/points.png') }}" alt="">Partnerships - 50,000,000 (10%)
