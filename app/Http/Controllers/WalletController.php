@@ -470,7 +470,7 @@ class WalletController extends Controller
 
         foreach ($account->getBalances() as $bal) {
             if ($bal->getAssetCode() == 'DOPE') {
-                $unlocked_tokens = 700000000 - $bal->getBalance();
+                $unlocked_tokens = 850000000 - $bal->getBalance();
             }
         }
 
