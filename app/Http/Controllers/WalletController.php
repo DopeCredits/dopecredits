@@ -143,7 +143,7 @@ class WalletController extends Controller
         return redirect('/');
     }
 
-    // invest XDR GENERATE
+    // Staking Start 
     public function invest(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -248,6 +248,7 @@ class WalletController extends Controller
             // Operation failed
             if (!$xdr) {
                 throw new \Exception('Something went wrong during staking operation.');
+                Log::info('Something went wrong during staking operation.');
             }
             
             DB::commit(); // Commit the transaction
@@ -265,6 +266,7 @@ class WalletController extends Controller
         }
     }
 
+    //Start staking through wallets(Rabbet, Freighter etc)
     private function stakePublic($wallet, $amount)
     {
         try {
@@ -291,6 +293,7 @@ class WalletController extends Controller
             return $response;
         } catch (\Throwable $th) {
             return null;
+            Log::info('Error while Staking through public wallet.');
         }
     }
 
@@ -319,6 +322,7 @@ class WalletController extends Controller
             return $response;
         } catch (\Throwable $th) {
             return null;
+            Log::info('Error while Staking through private wallet.');
         }
     }
 
@@ -346,6 +350,7 @@ class WalletController extends Controller
         } catch (\Throwable $th) {
             // $invest->delete();
             return response()->json(['status' => 0, 'msg' => 'Failed!']);
+            Log::info('Error while submitting Xdr.');
         }
     }
 
@@ -395,6 +400,7 @@ class WalletController extends Controller
                 return response()->json(['status' => 1, 'msg' => 'Success', 'tx' => $res->getId()]);
             } catch (\Throwable $th) {
                 \Log::error('Stop Staking Error: ' . $th->getMessage());
+                Log::info('Error while stop staking.');
                 return response()->json(['status' => 0, 'msg' => 'An error occurred while processing the transaction.']);
             }
         } else {
