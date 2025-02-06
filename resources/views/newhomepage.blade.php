@@ -1997,13 +1997,19 @@ function signXdr(xdr, staking_id) {
         case 'albeto':
             albedo.tx({
                 xdr: xdr,
-                network: testnet ? 'testnet' : 'mainnet'
+                network: 'public'
             })
                 .then(function (result) {
+                    console.log('Albedo signed XDR:', result);
                     const xdr = result.signed_envelope_xdr;
+                    if (!xdr) {
+                        console.error('Albedo did not return a signed XDR');
+                        return;
+                    }
                     submitStakingXdr(xdr, staking_id);
                 }).catch(function (error) {
                     btnLoaderHide();
+                    console.error('Albedo Wallet Error:', error);
                     toastr.error('Rejected!', "Albeto Wallet");
                 });
 
