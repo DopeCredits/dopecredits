@@ -790,6 +790,9 @@
                                     <span>Stakers</span>
                                 </div>
                                 <div class="stat-value" id="total-stakers">53</div>
+                            <div class="stat-item">
+                                <h3>DOPE Unlocked</h3>
+                                <p class="stat-value" id="unlocked">Loading...</p>
                             </div>
                             <div style="margin-top: 20px;flex-direction: column; align-items: start;" class="stat-item unlocked-section">
                                <div style="display: flex; justify-content: space-between; align-items: center;width: 100%;">
@@ -1090,7 +1093,7 @@
                                 <div class="distribution-item">
                                     <div class="item-header">
                                         <div class="indicator" style="background: #08a6c3"></div>
-                                        <h4>Staking rewards - 700,000,000 (70%)</h4>
+                                        <h4>Staking rewards - 850,000,000 (85%)</h4>
                                     </div>
                                     <div class="progress-bar">
                                         <div class="progress" style="width: 70%; background: #08a6c3"></div>
@@ -1766,8 +1769,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     data: 'reward',
                     title: 'Staking Reward',
                     render: function (data, type, row) {
-                        return `${data} DOPE </span>`;
+                        if (type === 'display') {
+                            return `${data} DOPE`;  // Display with the 'DOPE' suffix
+                        }
+                        return data;  // For sorting purposes, return the raw numeric value
                     },
+                    orderData: [2],  // Ensure sorting uses the raw numeric value
                 },
                 {
                     data: 'explorer_link',
@@ -1798,7 +1805,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Populate the stats with the response data
                 $('#total-stakers').text(response.total_stakers);
                 $('#total-staked').text(response.total_staked + ' DOPE');
-                $('#unlocked').text(formatUnlockedTokens(response.unlocked_tokens)+ ' / 700M');
+                $('#unlocked').text(formatUnlockedTokens(response.unlocked_tokens)+ ' / 850M');
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching dashboard data:', error);
@@ -2212,13 +2219,19 @@ function signXdr(xdr, staking_id) {
         case 'albeto':
             albedo.tx({
                 xdr: xdr,
-                network: testnet ? 'testnet' : 'mainnet'
+                network: 'public'
             })
                 .then(function (result) {
+                    console.log('Albedo signed XDR:', result);
                     const xdr = result.signed_envelope_xdr;
+                    if (!xdr) {
+                        console.error('Albedo did not return a signed XDR');
+                        return;
+                    }
                     submitStakingXdr(xdr, staking_id);
                 }).catch(function (error) {
                     btnLoaderHide();
+                    console.error('Albedo Wallet Error:', error);
                     toastr.error('Rejected!', "Albeto Wallet");
                 });
 
