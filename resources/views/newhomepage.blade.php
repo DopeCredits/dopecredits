@@ -372,7 +372,7 @@
                             <li><a href="{{ url('https://stellar.expert/explorer/public/asset/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B') }}" target="_blank" rel="noopener noreferrer">Token explorer</a></li>
                             <li><a href="{{ url('#') }}">About</a></li>
                             <li><a href="{{ url('#buy-dope') }}">Buy DOPE</a></li>
-                            <li><a href="{{ url('#') }}">Refer & Earn</a></li>
+                            {{-- <li><a href="{{ url('#') }}">Refer & Earn</a></li> --}}
                         </ul>
                         {{-- <div class="wallet-btn">
                                 <a href="{{ url('#') }}" class="btn dope mt-0" data-bs-toggle="modal"
@@ -652,7 +652,7 @@
                     </button>
                 </div>
                 @else
-                <div class="insufficient-dope">
+                {{-- <div class="insufficient-dope">
                     <div class="insufficient-content">
                         <div class="insufficient-icon">
                             <i class="fa fa-exclamation-circle"></i>
@@ -663,7 +663,7 @@
                             <p class="current-balance">Current Balance: <span>{{ $balance }} DOPE</span></p>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 @endif
                 <!-- mainSection -->
 
@@ -683,7 +683,7 @@
                     <div class="stats-card asset-stats-card">
                         <div class="card-header">
                             <h3 class="section-title">DOPE Asset Stats</h3>
-                            <span class="update-badge">Updated every 24 hours</span>
+                            <span class="update-badge">Live Data</span>
                         </div>
                         <div class="asset-stats-content">
                             <div class="main-stats">
@@ -693,15 +693,15 @@
                                             <i class="fa fa-line-chart"></i>
                                             <span>Price</span>
                                         </div>
-                                        <div class="stat-value">0.0085 XLM <span class="change-badge positive">+2.4%</span></div>
+                                        <div class="stat-value" id="dope-price"></div>
                                     </div>
-                                    <div class="stat-item">
+                                    {{-- <div class="stat-item">
                                         <div class="stat-label">
                                             <i class="fa fa-money"></i>
                                             <span>Market Cap</span>
                                         </div>
                                         <div class="stat-value">$2,000,000</div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <div class="stat-row">
                                     <div class="stat-item">
@@ -709,30 +709,30 @@
                                             <i class="fa fa-users"></i>
                                             <span>Holders</span>
                                         </div>
-                                        <div class="stat-value">153</div>
+                                        <div class="stat-value" id="holders"></div>
                                     </div>
                                     <div class="stat-item">
                                         <div class="stat-label">
                                             <i class="fa fa-random"></i>
                                             <span>Trustlines</span>
                                         </div>
-                                        <div class="stat-value">205</div>
+                                        <div class="stat-value" id="trustlines"></div>
                                     </div>
                                 </div>
                                 <div class="stat-row">
-                                    <div class="stat-item">
+                                    {{-- <div class="stat-item">
                                         <div class="stat-label">
                                             <i class="fa fa-exchange"></i>
                                             <span>Overall Traded Volume</span>
                                         </div>
                                         <div class="stat-value">$18,000</div>
-                                    </div>
+                                    </div> --}}
                                     <div class="stat-item">
                                         <div class="stat-label">
                                             <i class="fa fa-star"></i>
                                             <span>Stellar Asset Rating</span>
                                         </div>
-                                        <div class="stat-value">4.0</div>
+                                        <div class="stat-value" id="rating">4.0</div>
                                     </div>
                                 </div>
                             </div>
@@ -751,10 +751,10 @@
                                         </div>
                                         <div class="stat-info">
                                             <span style="font-size: 12px;" class="label">Value Locked</span>
-                                            <span style="color: #4a9e1c;" class="value">$14,200</span>
+                                            <span style="color: #4a9e1c;" class="value" id="liquidity_pools_amount"></span>
                                         </div>
                                     </div>
-                                    <div class="pool-stat-item">
+                                    {{-- <div class="pool-stat-item">
                                         <div class="stat-icon-wrapper">
                                             <i class="fa fa-users"></i>
                                         </div>
@@ -762,7 +762,7 @@
                                             <span style="font-size: 12px;" class="label">Total Liquidity Providers</span>
                                             <span style="color: #4a9e1c;" class="value">51</span>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -782,17 +782,14 @@
                                     <i class="fa fa-lock"></i>
                                     <span>DOPE Staked</span>
                                 </div>
-                                <div class="stat-value highlight-value" id="total-staked">12,531,532</div>
+                                <div class="stat-value highlight-value" id="total-staked">Loading...</div>
                             </div>
                             <div style="margin-top: 20px" class="stat-item">
                                 <div class="stat-label">
                                     <i class="fa fa-users"></i>
                                     <span>Stakers</span>
                                 </div>
-                                <div class="stat-value" id="total-stakers">53</div>
-                            <div class="stat-item">
-                                <h3>DOPE Unlocked</h3>
-                                <p class="stat-value" id="unlocked">Loading...</p>
+                                <div class="stat-value" id="total-stakers">Loading...</div>
                             </div>
                             <div style="margin-top: 20px;flex-direction: column; align-items: start;" class="stat-item unlocked-section">
                                <div style="display: flex; justify-content: space-between; align-items: center;width: 100%;">
@@ -800,11 +797,11 @@
                                     <i class="fa fa-unlock"></i>
                                     <span>DOPE Unlocked</span>
                                 </div>
-                                <div class="stat-value" id="unlocked">75,421 / 700M</div>
+                                <div class="stat-value" id="unlocked-tokens">Loading...</div>
                                </div>
-                                <div style="width: 100%;background-color: #f2f5f7;" class="progress-bar">
+                                {{-- <div style="width: 100%;background-color: #f2f5f7;" class="progress-bar">
                                     <div class="progress" style="width: 10.7%;"></div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -812,6 +809,7 @@
             </div>
 
             <!-- Activity Table Card -->
+            @if (isset($_COOKIE['public']))
             <div class="row">
                 <div class="col-12">
                     <div class="activity-card">
@@ -822,10 +820,11 @@
                                 </div>
                                 <div class="simple-stats">
                                     <div class="simple-stat">
-                                        <span>Staked: <strong style="color: #4a9e1c;white-space: nowrap;">55,532 DOPE</strong></span>
+                                        Staked: <strong id="wallet-total-staked" style="color: #4a9e1c; white-space: nowrap;">Loading...</strong>
                                     </div>
                                     <div class="simple-stat">
-                                        <span>Rewards: <strong style="color: #4a9e1c;white-space: nowrap;">5374.53 DOPE</strong></span>
+                                        Rewards: <strong id="total_reward_received" style="color: #4a9e1c; white-space: nowrap;">Loading...</strong>
+                                        {{-- <span>Rewards: <strong style="color: #4a9e1c;white-space: nowrap;">5374.53 DOPE</strong></span> --}}
                                     </div>
                                 </div>
                             </div>
@@ -865,6 +864,7 @@
                     </div>
                 </div>
             </div>
+            @endif
 
             <!-- Your Stats -->
             @if (isset($_COOKIE['public']))
@@ -1498,8 +1498,8 @@
                     .then(response => response.json()) // Parse JSON
                     .then(data => {
                         // Update UI with fetched data
-                        $('#wallet-total-staked').text(data.staked);  // Assuming data.staked for staked value
-                        $('#total_reward_received').text(data.total_reward_received); // Assuming data.total_reward_received
+                        $('#wallet-total-staked').text(data.staked + ' DOPE');  // Assuming data.staked for staked value
+                        $('#total_reward_received').text(data.total_reward_received + ' DOPE'); // Assuming data.total_reward_received
                     })
                     .catch(error => {
                         // Handle error gracefully
@@ -1796,6 +1796,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 emptyTable: "No staking rewards available yet."
             }
         });
+        $('#dope-price').text('Loading...');
+        $('#holders').text('Loading...');
+        $('#trustlines').text('Loading...');
+        $('#rating').text('Loading...');
+        $('#liquidity_pools_amount').text('Loading...');
 
         // Fetch dashboard data when the page loads
         $.ajax({
@@ -1804,15 +1809,20 @@ document.addEventListener('DOMContentLoaded', function() {
             success: function (response) {
                 // Populate the stats with the response data
                 $('#total-stakers').text(response.total_stakers);
+                $('#dope-price').text('$' + parseFloat(response.price).toFixed(6));
+                $('#holders').text(response.holders);
+                $('#trustlines').text(response.trustline);
+                $('#rating').text(response.rating);
+                $('#liquidity_pools_amount').text(response.liquidity_pools_amount);
                 $('#total-staked').text(response.total_staked + ' DOPE');
-                $('#unlocked').text(formatUnlockedTokens(response.unlocked_tokens)+ ' / 850M');
+                $('#unlocked-tokens').text(formatUnlockedTokens(response.unlocked_tokens)+ ' / 850M');
             },
             error: function (xhr, status, error) {
                 console.error('Error fetching dashboard data:', error);
                 // Display error messages or fallback values
                 $('#total-stakers').text('Error');
                 $('#total-staked').text('Error');
-                $('#unlocked').text('Error');
+                $('#unlocked-tokens').text('Error');
             }
         });
 

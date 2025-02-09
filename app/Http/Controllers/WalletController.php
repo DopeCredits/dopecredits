@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Soneso\StellarSDK\AssetTypeCreditAlphanum4;
 use Soneso\StellarSDK\Crypto\KeyPair;
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\Log;
 
 class WalletController extends Controller
 {
-    private $sdk, $minAmount, $maxFee, $returnDays;
+    private $sdk, $minAmount, $maxFee, $daily_rate;
 
     public function __construct()
     {
@@ -33,6 +34,7 @@ class WalletController extends Controller
         // $this->sdk = StellarSDK::getTestNetInstance();
         $this->minAmount = 10;
         $this->maxFee = 3000;
+        $this->daily_rate = 0.1 / 100; 
     }
 
     public function store(Request $request)
@@ -357,57 +359,64 @@ class WalletController extends Controller
 
     public function stop_staking($wallet_address = null)
     {
-        if ($wallet_address) {
-            $public_key = $wallet_address;
-
-            $wallets = Staking::where('public', $public_key)
-                ->where('amount', '>=', 1000)
-                ->where('status', 0)
-                ->whereNotNull('transaction_id')
-                ->get();
-
-            if ($wallets->isEmpty()) {
-                return response()->json(['status' => 0, 'msg' => 'Wallet not found!']);
-            }
-
-            $amount = $wallets->sum('amount');
-
-            try {
-                // Destination Account
-                $mainSecret = env('MAIN_WALLET');
-                $mainPair = KeyPair::fromSeed($mainSecret);
-
-                $mainAccount = $this->sdk->requestAccount($mainPair->getAccountId());
-                $account = $this->sdk->requestAccount($public_key);
-
-                $assetCode = 'DOPE';
-                $assetIssuer = 'GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B';
-                $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
-
-                // Payment Operation
-                $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $amount))->build();
-                $txbuilder = new TransactionBuilder($mainAccount);
-                $txbuilder->setMaxOperationFee($this->maxFee);
-                $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(Memo::text('DOPE Stake Return'))->build();
-                $transaction->sign($mainPair, Network::public());
-                $res = $this->sdk->submitTransaction($transaction);
-
-                foreach ($wallets as $wallet) {
-                    $wallet->status = 1;
-                    $wallet->save();
-                }
-
-                return response()->json(['status' => 1, 'msg' => 'Success', 'tx' => $res->getId()]);
-            } catch (\Throwable $th) {
-                \Log::error('Stop Staking Error: ' . $th->getMessage());
-                Log::info('Error while stop staking.');
-                return response()->json(['status' => 0, 'msg' => 'An error occurred while processing the transaction.']);
-            }
-        } else {
+        if (!$wallet_address) {
             return response()->json(['status' => 0, 'msg' => 'Wallet address not provided!']);
+        }
+
+        $wallets = Staking::where('public', $wallet_address)
+        ->get();
+        
+        if ($wallets) {
+            $active_staking_wallets = $wallets->where('amount', '>=', 1000)
+            ->where('status', 0)
+            ->whereNotNull('transaction_id')
+            ->get();
+            if($active_staking_wallets)
+            {
+                $amount = $wallets->sum('amount');
+    
+                try {
+                    // Destination Account
+                    $mainSecret = env('MAIN_WALLET');
+                    $mainPair = KeyPair::fromSeed($mainSecret);
+    
+                    $mainAccount = $this->sdk->requestAccount($mainPair->getAccountId());
+                    $account = $this->sdk->requestAccount($wallet_address);
+    
+                    $assetCode = 'DOPE';
+                    $assetIssuer = 'GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B';
+                    $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
+    
+                    // Payment Operation
+                    $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $amount))->build();
+                    $txbuilder = new TransactionBuilder($mainAccount);
+                    $txbuilder->setMaxOperationFee($this->maxFee);
+                    $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(Memo::text('DOPE Stake Return'))->build();
+                    $transaction->sign($mainPair, Network::public());
+                    $res = $this->sdk->submitTransaction($transaction);
+    
+                    foreach ($wallets as $wallet) {
+                        $wallet->status = 1;
+                        $wallet->save();
+                    }
+    
+                    return response()->json(['status' => 1, 'msg' => 'Success', 'tx' => $res->getId()]);
+                } catch (\Throwable $th) {
+                    Log::error('Stop Staking Error: ' . $th->getMessage());
+                    Log::info('Error while stop staking.');
+                    return response()->json(['status' => 0, 'msg' => 'An error occurred while processing the transaction.']);
+                }
+            }
+            else{
+                return response()->json(['status' => 0, 'msg' => 'Already stoped staking!']);
+            }
+        }
+        else{
+            return response()->json(['status' => 0, 'msg' => 'Wallet not found!']);
         }
     }
 
+    // Job distributing staking reward
     public function investresult()
     {
         // removes NULL
@@ -421,10 +430,16 @@ class WalletController extends Controller
 
         // Looping through invest
         foreach ($invests as $key => $invest) {
-            $result = $this->returnStaking($invest);
-            if ($result) {
-                StakingResult::create(['staking_id' => $invest->id, 'amount' => $result->amount, 'transaction_id' => $result->tx]);
-            }
+            // if($invest->auto_reinvest == 0){
+                $result = $this->returnStaking($invest);
+                if ($result) {
+                    StakingResult::create(['staking_id' => $invest->id, 'amount' => $result->amount, 'transaction_id' => $result->tx]);
+                }
+            // }
+            // else{
+            //     $updated_amount = $this->daily_rate * $invest->amount;
+            //     $invest->amount == $updated_amount;
+            // }
             // Update the `updated_at` field to current time
             $invest->updated_at = now();
             $invest->save();
@@ -432,10 +447,10 @@ class WalletController extends Controller
         return response()->json([$invests]);
     }
 
+     // sending staking reward tokens to the wallet from distribution wallet
     private function returnStaking($invest)
     {
-        $daily_rate = 0.1 / 100; 
-        $amount = $daily_rate * $invest->amount;
+        $amount = $this->daily_rate * $invest->amount;
         try {
             // Destination Account
             $mainSecret = env('DISTRIBUTION_WALLET');
@@ -469,7 +484,7 @@ class WalletController extends Controller
     }
 
     public function fetch_dashboard_data() {
-
+        
         // $account = $this->sdk->requestAccount('GBAXVSMRA5YDYT3HSHBWTNRFCX6E6DZO7IKSIFDBKYGIRPYL4QP2TJ64');
         
         // $unlocked_tokens = 0;
@@ -504,13 +519,82 @@ class WalletController extends Controller
         $total_staked = Staking::whereNotNull('transaction_id')->where('status', 0) //active stakers
         ->sum('amount'); // Assuming `amount` is the column holding staked values
 
+        // Asset details for DOPE token
+        $assetCode = 'DOPE';
+        $assetIssuer = 'GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B';
+
+        // Fetch asset information from Horizon
+        $horizonUrl = "https://horizon.stellar.org/assets?asset_code={$assetCode}&asset_issuer={$assetIssuer}";
+        try {
+            $response = Http::get($horizonUrl);
+            $assetData = $response->json();
+
+            
+            if (isset($assetData['_embedded']['records'][0])) {
+                $dopeData = $assetData['_embedded']['records'][0];
+
+                $circulatingSupply = $dopeData['balances']['authorized'];
+                $holders =  $dopeData['accounts']['authorized'];
+                $trustlineCount = $holders;
+                $liquidityPoolsAmount = $dopeData['liquidity_pools_amount'];
+                
+                // Assuming you have a method for fetching token price
+                
+                $data = $this->asset_data($assetCode, $assetIssuer);
+                $marketCap = $circulatingSupply * $data['price'];
+            } 
+        } catch (\Exception $e) {
+            Log::error('Error fetching DOPE data: ' . $e->getMessage());
+            $Dope_data_token_data = [];
+        }
+
         return response()->json([
             'data' => $data,
             'total_stakers' => $total_stakers,
             'total_staked' => $total_staked,
             'unlocked_tokens' => $unlocked_tokens,
+            'price' => $data['price'] ?? 0,
+            // 'market_cap' => $marketCap,
+            'holders' => $holders ?? 0,
+            'trustline' => $trustlineCount ?? 0,
+            // '7days_volume' => $volumeInXLM,
+            'liquidity_pools_amount' => $liquidityPoolsAmount ?? 0,
+            'rating' => $data['rating']
         ]);
         
+    }
+
+    private function asset_data($assetCode, $assetIssuer)
+    {
+        try {
+            $url = "https://api.stellar.expert/explorer/public/asset/{$assetCode}-{$assetIssuer}";
+            $response = Http::get($url);
+            if ($response->successful()) {
+                $data = $response->json();
+                if (isset($data['price'])) {
+                    $averageRating = $this->calculate_average_rating($data['rating']);
+                    return[
+                        'price' => $data['price'],
+                        'rating' => $averageRating
+                    ];
+                }
+            }
+
+            return 0;
+        } catch (\Exception $e) {
+            Log::error('Error fetching trading volume: ' . $e->getMessage());
+            return 0;
+        }
+    }    
+
+    private function calculate_average_rating(array $rating): float
+    {
+        unset($rating['average']); // Ignore the precomputed average if available
+        $ratingValues = array_values($rating);
+        $sum = array_sum($ratingValues);
+        $count = count($ratingValues);
+
+        return $count > 0 ? round($sum / $count, 2) : 0;
     }
 
     public function fetch_wallet_data($wallet_address = null){
