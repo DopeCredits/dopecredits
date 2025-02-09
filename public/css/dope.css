@@ -261,11 +261,12 @@ nav {
 .nav-links {
     display: flex;
     list-style: none;
-    width: 38vw;
+    width: 100%;
     padding: 0 4.7vw;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
 }
+
 
 .nav-links li a {
     text-decoration: none;
@@ -273,6 +274,7 @@ nav {
     color: black;
     font-size: 18px;
     font-weight: 500;
+    white-space: nowrap;
 }
 
 .nav-links li a:hover {
@@ -308,7 +310,9 @@ nav {
     cursor: pointer;
 
 }
-
+#topWallet{
+white-space: nowrap;
+}
 .login-button:hover {
     color: #131418;
     background-color: #f2f5f7;

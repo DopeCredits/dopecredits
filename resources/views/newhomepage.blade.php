@@ -371,6 +371,8 @@
                             <li><a href="{{ asset('images/DOPE Credits Whitepaper.pdf') }}" target="_blank">Whitepaper</a></li>
                             <li><a href="{{ url('https://stellar.expert/explorer/public/asset/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B') }}" target="_blank" rel="noopener noreferrer">Token explorer</a></li>
                             <li><a href="{{ url('#') }}">About</a></li>
+                            <li><a href="{{ url('#buy-dope') }}">Buy DOPE</a></li>
+                            <li><a href="{{ url('#') }}">Refer & Earn</a></li>
                         </ul>
                         {{-- <div class="wallet-btn">
                                 <a href="{{ url('#') }}" class="btn dope mt-0" data-bs-toggle="modal"
@@ -488,21 +490,105 @@
             <!-- navbar -->
             <div class="dopeRange">
                 <div class="rangeBal">
-                    <div class="balLeft">
+                    <div class="balRight">
                         <p>Your Balance: <span class="highlight-value">{{ isset($_COOKIE['public']) ? dopeBalance($_COOKIE['public']) : '0' }} $DOPE</span></p>
                     </div>
-                    <div class="balRight">
-                        <p>Minimum Staking: <span class="highlight-value">1,000 $DOPE</span></p>
+                </div>
+                <div  style="margin-bottom: 80px" id="buy-dope" class="container">
+                    {{-- <div class="section-header text-center">
+                        <div class="title-badge">
+                            <span class="badge-dot"></span>
+                            <span class="badge-text">BUY $DOPE</span>
+                            <img src="{{ asset('images/dopeIcon.png') }}" alt="Dope Icon" class="badge-icon">
+                        </div>
+                        <h2>Get Your DOPE Credits</h2>
+                        <p class="section-subtitle">Choose your preferred platform to buy DOPE Credits</p>
+                    </div> --}}
+                    <h2  class="buy-dope-heading">Buy DOPE Links</h2>
+                    <div class="buy-options-container">
+                        <div class="buy-options-flex">
+                            <div class="buy-option-card">
+                                <a target="_blank" rel="noopener noreferrer" href="https://lobstr.co/trade/native/DOPE:GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B" class="d-flex align-items-center justify-content-start gap-3">
+                                    <div class="platform-icon">
+                                        <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2Fa55c99f2652b4466932d9b74893f232e&methods=resize%2C900%2C5000" alt="LOBSTR">
+                                    </div>
+                                    <h4>LOBSTR</h4>
+                                </a>
+                            </div>
+                            <div class="buy-option-card">
+                                <a target="_blank" rel="noopener noreferrer" href="https://www.stellarx.com/swap/native/DOPE:GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B" class="d-flex align-items-center justify-content-start gap-3">
+                                    <div class="platform-icon">
+                                        <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F2ddf9bd39f4d4f8ba2e475921f51c8db&methods=resize%2C900%2C5000" alt="StellarX">
+                                    </div>
+                                    <h4>StellarX</h4>
+                                </a>
+                            </div>
+                            <div class="buy-option-card">
+                                <a target="_blank" rel="noopener noreferrer" href="https://obm.lumenswap.io/spot/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/XLM" class="d-flex align-items-center justify-content-start gap-3">
+                                    <div class="platform-icon">
+                                        <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2Fa89a4e078c9f4a5d99d874ed8ebb2002&methods=resize%2C900%2C5000" alt="Lumenswap">
+                                    </div>
+                                    <h4>Lumenswap</h4>
+                                </a>
+                            </div>
+                            <div class="buy-option-card">
+                                <a target="_blank" rel="noopener noreferrer" href="https://dogstar.io/trade/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/XLM" class="d-flex align-items-center justify-content-start gap-3">
+                                    <div class="platform-icon">
+                                        <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2Fa8a31ad8d5854309a51aad3debba9251&methods=resize%2C900%2C5000" alt="Dogstar">
+                                    </div>
+                                    <h4>Dogstar</h4>
+                                </a>
+                            </div>
+                            <div class="buy-option-card">
+                                <a target="_blank" rel="noopener noreferrer" href="https://scopuly.com/swap/XLM-DOPE/native/GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/?amount=1000.0000000&destination=" class="d-flex align-items-center justify-content-start gap-3">
+                                    <div class="platform-icon">
+                                        <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F67b01d5df65d41ff83afc4dc53b82178&methods=resize%2C900%2C5000" alt="Scopuly">
+                                    </div>
+                                    <h4>Scopuly</h4>
+                                </a>
+                            </div>
+                            <div class="buy-option-card">
+                                <a target="_blank" rel="noopener noreferrer" href="https://stellarterm.com/exchange/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/XLM-native" class="d-flex align-items-center justify-content-start gap-3">
+                                    <div class="platform-icon">
+                                        <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F67af86ffd80d470eb75ca76b632067cd&methods=resize%2C900%2C5000" alt="StellarTerm">
+                                    </div>
+                                    <h4>StellarTerm</h4>
+                                </a>
+                            </div>
+                            <div class="buy-option-card">
+                                <a target="_blank" rel="noopener noreferrer" href="https://interstellar.exchange/app/#/trade/guest/DOPE/GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/XLM/native" class="d-flex align-items-center justify-content-start gap-3">
+                                    <div class="platform-icon">
+                                        <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F357b2e0801d347ba9af61d487eca2e91&methods=resize%2C900%2C5000" alt="Interstellar">
+                                    </div>
+                                    <h4>Interstellar</h4>
+                                </a>
+                            </div>
+                            <div class="buy-option-card">
+                                <a target="_blank" rel="noopener noreferrer" href="https://stellarport.io/exchange/GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/DOPE" class="d-flex align-items-center justify-content-start gap-3">
+                                    <div class="platform-icon">
+                                        <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F260e959279a740ae8fcafe15cbe529bc&methods=resize%2C900%2C5000" alt="XSTAR">
+                                    </div>
+                                    <h4>Stellarport</h4>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="mainRange">
+                <?php
+                    $balance = isset($_COOKIE['public']) ? dopeBalance($_COOKIE['public']) : 0;
+                    $maxValue = $balance > 0 ? $balance : 10000000;
+                ?>
+
+                @if($balance >= 1000)
+                <div   class="mainRange">
                     <h1>How many $DOPE do you want to stake?</h1>
                     <div class="range-container">
-                         <?php $balance = isset($_COOKIE['public']) ? dopeBalance($_COOKIE['public']) : 0;
-                        $maxValue = $balance > 0 ? $balance : 10000000; ?>
                         <div id="dope-slider" data-min="1000" data-max="<?= $maxValue ?>"></div>
                         <div class="range-labels">
                             <span class="min-value">1,000</span>
+                            <div class="balRight">
+                                <p>Minimum: <span class="highlight-value">1,000 $DOPE</span></p>
+                            </div>
                             <span class="max-value"><?= number_format($maxValue) ?></span>
                         </div>
                         <div class="selected-value-container">
@@ -513,6 +599,24 @@
                             <div class="error-message" id="value-error"></div>
                         </div>
                     </div>
+                    <div class="d-flex align-items-center justify-content-center gap-2">
+                        <label style="font-weight: 600;color:black" class="d-flex align-items-center gap-0" for="">
+                            Auto-Reinvest
+                            <div class="tooltip-container">
+                                <span class="text">
+                                    !
+                                </span>
+                                <span class="tooltip">
+                                    Auto-Reinvest is a feature that allows you to automatically reinvest your staking rewards back into the staking pool. This means that your rewards will be used to buy more $DOPE tokens, which will then be staked again. This can help you earn more $DOPE tokens over time, but it also means that you are taking on more risk.
+                                </span>
+                              </div>
+                        </label>
+                        <div class="checkbox">
+                            <input class="tgl" id="toggle" type="checkbox" />
+                            <label class="tgl-btn" for="toggle"></label>
+                          </div>
+
+                    </div>
                     <div class="terms-section">
                         <label class="custom-checkbox">
                             <input type="checkbox" id="agree-checkbox" class="regular-checkbox big-checkbox">
@@ -520,6 +624,7 @@
                             <span class="terms-text">Read the <a href="javascript:void(0)" onclick="$('#termsModal').modal('show')" class="terms-link">Terms and conditions</a></span>
                         </label>
                     </div>
+
                     @if (isset($_COOKIE['public']))
                     <button
                         style="background-image: linear-gradient(to right, #80c931, #08a6c3);"
@@ -529,22 +634,40 @@
                         >
                         <span>Stake Now</span>
                     </button>
-                @else
+                    @else
                     <a style="background-image: linear-gradient(to right, #80c931, #08a6c3);"
                        class="stake-btn"
                        onclick="$('#ConnectWallet').modal('show');"
                        href="javascript:void(0)">
                         Connect Wallet
                     </a>
-                @endif
-                <button id="loadStaking" type="button" class="loader-btn" style="display: none;">
-                    <span class="form-btn">
-                        <div class="spinner-border text-light" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                    @endif
+                    <button id="loadStaking" type="button" class="loader-btn" style="display: none;">
+                        <span class="form-btn">
+                            <div class="spinner-border text-light" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p>Processing</p>
+                        </span>
+                    </button>
+                </div>
+                @else
+                <div class="insufficient-dope">
+                    <div class="insufficient-content">
+                        <div class="insufficient-icon">
+                            <i class="fa fa-exclamation-circle"></i>
                         </div>
-                        <p>Processing</p>
-                    </span>
-                </button>
+                        <h2>Not Enough DOPE</h2>
+                        <p>You need at least 1,000 DOPE tokens to start staking.</p>
+                        <div class="insufficient-actions">
+                            <p class="current-balance">Current Balance: <span>{{ $balance }} DOPE</span></p>
+                        </div>
+                    </div>
+                </div>
+                @endif
+                <!-- mainSection -->
+
+                </div>
                 </div>
             </div>
         </div>
@@ -553,32 +676,199 @@
      <!-- Main Dashboard Section -->
      <section style="background: white" class="staking-dashboard">
         <div class="container">
-            <!-- Staking Stats -->
+            <!-- Stats Row -->
             <div class="row mb-4">
-                <div class="col-12">
-                    <div class="stats-card">
-                        <h2 class="section-title">Staking Stats</h2>
-                        <div class="stats-grid">
-                            <div class="stat-item">
-                                <h3>Total Stakers</h3>
-                                <p class="stat-value" id="total-stakers">Loading...</p>
+                <!-- DOPE Asset Stats -->
+                <div class="col-lg-6 col-md-12 mb-4 mb-lg-0">
+                    <div class="stats-card asset-stats-card">
+                        <div class="card-header">
+                            <h3 class="section-title">DOPE Asset Stats</h3>
+                            <span class="update-badge">Updated every 24 hours</span>
+                        </div>
+                        <div class="asset-stats-content">
+                            <div class="main-stats">
+                                <div class="stat-row">
+                                    <div class="stat-item">
+                                        <div class="stat-label">
+                                            <i class="fa fa-line-chart"></i>
+                                            <span>Price</span>
+                                        </div>
+                                        <div class="stat-value">0.0085 XLM <span class="change-badge positive">+2.4%</span></div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">
+                                            <i class="fa fa-money"></i>
+                                            <span>Market Cap</span>
+                                        </div>
+                                        <div class="stat-value">$2,000,000</div>
+                                    </div>
+                                </div>
+                                <div class="stat-row">
+                                    <div class="stat-item">
+                                        <div class="stat-label">
+                                            <i class="fa fa-users"></i>
+                                            <span>Holders</span>
+                                        </div>
+                                        <div class="stat-value">153</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">
+                                            <i class="fa fa-random"></i>
+                                            <span>Trustlines</span>
+                                        </div>
+                                        <div class="stat-value">205</div>
+                                    </div>
+                                </div>
+                                <div class="stat-row">
+                                    <div class="stat-item">
+                                        <div class="stat-label">
+                                            <i class="fa fa-exchange"></i>
+                                            <span>Overall Traded Volume</span>
+                                        </div>
+                                        <div class="stat-value">$18,000</div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-label">
+                                            <i class="fa fa-star"></i>
+                                            <span>Stellar Asset Rating</span>
+                                        </div>
+                                        <div class="stat-value">4.0</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="stat-item">
-                                <h3>Total Staked</h3>
-                                <p class="stat-value" id="total-staked">Loading...</p>
-                            </div>
-                            <div class="stat-item">
-                                <h3>DOPE Unlocked</h3>
-                                <p class="stat-value" id="unlocked">Loading...</p>
+                            <div class="liquidity-pool-section">
+                                <div class="section-header">
+                                    <div class="pool-title">
+                                        <i class="fa fa-water"></i>
+                                        <h6>DOPE/XLM Liquidity Pool</h6>
+                                    </div>
+                                    <div class="pool-badge">Active</div>
+                                </div>
+                                <div class="pool-stats">
+                                    <div class="pool-stat-item">
+                                        <div class="stat-icon-wrapper">
+                                            <i class="fa fa-lock"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <span style="font-size: 12px;" class="label">Value Locked</span>
+                                            <span style="color: #4a9e1c;" class="value">$14,200</span>
+                                        </div>
+                                    </div>
+                                    <div class="pool-stat-item">
+                                        <div class="stat-icon-wrapper">
+                                            <i class="fa fa-users"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <span style="font-size: 12px;" class="label">Total Liquidity Providers</span>
+                                            <span style="color: #4a9e1c;" class="value">51</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>            
+
+                <!-- Staking Stats -->
+                <div class="col-lg-6 col-md-12">
+                    <div class="stats-card staking-stats-card">
+                        <div class="card-header">
+                            <h3 class="section-title">DOPE Staking Stats</h3>
+                            <span class="update-badge">Live Data</span>
+                        </div>
+                        <div class="staking-stats-content">
+                            <div style="margin-top: 20px" class="stat-item">
+                                <div class="stat-label">
+                                    <i class="fa fa-lock"></i>
+                                    <span>DOPE Staked</span>
+                                </div>
+                                <div class="stat-value highlight-value" id="total-staked">12,531,532</div>
+                            </div>
+                            <div style="margin-top: 20px" class="stat-item">
+                                <div class="stat-label">
+                                    <i class="fa fa-users"></i>
+                                    <span>Stakers</span>
+                                </div>
+                                <div class="stat-value" id="total-stakers">53</div>
+                            <div class="stat-item">
+                                <h3>DOPE Unlocked</h3>
+                                <p class="stat-value" id="unlocked">Loading...</p>
+                            </div>
+                            <div style="margin-top: 20px;flex-direction: column; align-items: start;" class="stat-item unlocked-section">
+                               <div style="display: flex; justify-content: space-between; align-items: center;width: 100%;">
+                                <div class="stat-label">
+                                    <i class="fa fa-unlock"></i>
+                                    <span>DOPE Unlocked</span>
+                                </div>
+                                <div class="stat-value" id="unlocked">75,421 / 700M</div>
+                               </div>
+                                <div style="width: 100%;background-color: #f2f5f7;" class="progress-bar">
+                                    <div class="progress" style="width: 10.7%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Table Card -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="activity-card">
+                        <div style="width: 100%;" class="card-header">
+                            <div style="display: flex; justify-content: space-between; align-items: center;width: 100%;" class="header-content">
+                                <div class="title-section">
+                                    <h2 class="section-title">My Activity</h2>
+                                </div>
+                                <div class="simple-stats">
+                                    <div class="simple-stat">
+                                        <span>Staked: <strong style="color: #4a9e1c;white-space: nowrap;">55,532 DOPE</strong></span>
+                                    </div>
+                                    <div class="simple-stat">
+                                        <span>Rewards: <strong style="color: #4a9e1c;white-space: nowrap;">5374.53 DOPE</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="activity-table-wrapper">
+                            <table class="activity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Transaction</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1s ago</td>
+                                        <td><span class="badge badge-reward">Staking reward</span></td>
+                                        <td>5.4 DOPE</td>
+                                        <td><a href="#" class="transaction-link"><i class="fa fa-external-link"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>1s ago</td>
+                                        <td><span class="badge badge-staked">Staked</span></td>
+                                        <td>5.4 DOPE</td>
+                                        <td><a href="#" class="transaction-link"><i class="fa fa-external-link"></i></a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3 mins ago</td>
+                                        <td><span class="badge badge-unstaked">Unstaked</span></td>
+                                        <td>1500 DOPE</td>
+                                        <td><a href="#" class="transaction-link"><i class="fa fa-external-link"></i></a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Your Stats -->
             @if (isset($_COOKIE['public']))
-            <div class="row mb-4">
+            <div class="row my-4">
                 <div class="col-12">
                     <div class="your-stats-card">
                         <h2 class="section-title">Your Stats</h2>
@@ -602,14 +892,37 @@
                 </div>
             </div>
             @endif
-            
+
 
             <!-- Latest Transactions -->
-            <div class="row">
+            <div style="margin-top: 40px;" class="row">
                 <div class="col-12">
-                    <div class="transactions-card">
+                    <div style="padding: 25px !important;" class="transactions-card">
                         <h2 class="section-title">Latest Transactions</h2>
-                        <div class="table-responsive">
+                        <div style="border-top: 1px solid rgba(128, 201, 49, 0.15);padding-top: 10px;" class="table-responsive">
+                            <div class="table-filters">
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" data-filter="all" checked>
+                                    <span class="checkmark"></span>
+                                    <span class="filter-label">
+                                            All Transactions
+                                    </span>
+                                </label>
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" data-filter="staked">
+                                    <span class="checkmark"></span>
+                                    <span class="filter-label">
+                                        DOPE Staked
+                                    </span>
+                                </label>
+                                <label class="filter-checkbox">
+                                    <input type="checkbox" data-filter="reward">
+                                    <span class="checkmark"></span>
+                                    <span class="filter-label">
+                                        Reward Received
+                                    </span>
+                                </label>
+                            </div>
                             <table id="transactionsTable" class="table">
                                 <thead>
                                     <tr>
@@ -630,100 +943,7 @@
         </div>
     </section>
 
-    <!-- mainSection -->
-    <section class="buy-dope-section">
-        <div class="container">
-            <div class="section-header text-center">
-                <div class="title-badge">
-                    <span class="badge-dot"></span>
-                    <span class="badge-text">BUY $DOPE</span>
-                    <img src="{{ asset('images/dopeIcon.png') }}" alt="Dope Icon" class="badge-icon">
-                </div>
-                <h2>Get Your DOPE Credits</h2>
-                <p class="section-subtitle">Choose your preferred platform to buy DOPE Credits</p>
-            </div>
-            <div class="buy-options-container">
-                <div class="row buy-options-row">
-                    <!-- First Row -->
-                    <div class="col-md-3 col-sm-6">
-                        <div class="buy-option-card">
-                            <div class="platform-icon">
-                                <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2Fa55c99f2652b4466932d9b74893f232e&methods=resize%2C900%2C5000" alt="LOBSTR">
-                            </div>
-                            <h4>LOBSTR</h4>
-                            <a href="https://lobstr.co/trade/native/DOPE:GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="buy-option-card">
-                            <div class="platform-icon">
-                                <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F2ddf9bd39f4d4f8ba2e475921f51c8db&methods=resize%2C900%2C5000" alt="StellarX">
-                            </div>
-                            <h4>StellarX</h4>
-                            <a href="https://www.stellarx.com/markets/DOPE:GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/native" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="buy-option-card">
-                            <div class="platform-icon">
-                                <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2Fa89a4e078c9f4a5d99d874ed8ebb2002&methods=resize%2C900%2C5000" alt="Lumenswap">
-                            </div>
-                            <h4>Lumenswap</h4>
-                            <a href="https://obm.lumenswap.io/spot/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/XLM" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="buy-option-card">
-                            <div class="platform-icon">
-                                <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2Fa8a31ad8d5854309a51aad3debba9251&methods=resize%2C900%2C5000" alt="Dogstar">
-                            </div>
-                            <h4>Dogstar</h4>
-                            <a href="#" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="row buy-options-row">
-                    <!-- Second Row -->
-                    <div class="col-md-3 col-sm-6">
-                        <div class="buy-option-card">
-                            <div class="platform-icon">
-                                <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F67b01d5df65d41ff83afc4dc53b82178&methods=resize%2C900%2C5000" alt="Scopuly">
-                            </div>
-                            <h4>Scopuly</h4>
-                            <a href="https://scopuly.com/trade/DOPE-XLM/GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/native" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="buy-option-card">
-                            <div class="platform-icon">
-                                <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F67af86ffd80d470eb75ca76b632067cd&methods=resize%2C900%2C5000" alt="StellarTerm">
-                            </div>
-                            <h4>StellarTerm</h4>
-                            <a href="https://stellarterm.com/exchange/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/XLM-native" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="buy-option-card">
-                            <div class="platform-icon">
-                                <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F357b2e0801d347ba9af61d487eca2e91&methods=resize%2C900%2C5000" alt="Interstellar">
-                            </div>
-                            <h4>Interstellar</h4>
-                            <a href="https://interstellar.exchange/app/#/trade/guest/DOPE/GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/XLM/native" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
-                        </div>
-                    </div>
-                    <div class="col-md-3 col-sm-6">
-                        <div class="buy-option-card">
-                            <div class="platform-icon">
-                                <img src="https://images.builderservices.io/s/cdn/v1.0/i/m?url=https%3A%2F%2Fstorage.googleapis.com%2Fproduction-domaincom-v1-0-7%2F037%2F1100037%2FMs0ri0pf%2F260e959279a740ae8fcafe15cbe529bc&methods=resize%2C900%2C5000" alt="XSTAR">
-                            </div>
-                            <h4>Stellarport</h4>
-                            <a href="https://stellarport.io/exchange/GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B/DOPE" class="buy-link" target="_blank" rel="noopener noreferrer">Buy Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+
     <section class="enhanced-staking-section">
         <div class="container">
             <div style="align-items: center" class="row staking-info-section">
@@ -841,7 +1061,7 @@
                                 </div>
                                 <div class="token-description">
                                     <p>
-                                        DOPE Credits leverages the Stellar Blockchain for lightning-fast transactions and minimal fees, ensuring seamless and efficient staking. Whether you’re earning rewards or transferring tokens, Stellar’s advanced infrastructure makes DOPE Credits a powerhouse of performance and reliability. 🚀✨
+                                        DOPE Credits leverages the Stellar Blockchain for lightning-fast transactions and minimal fees, ensuring seamless and efficient staking. Whether you're earning rewards or transferring tokens, Stellar's advanced infrastructure makes DOPE Credits a powerhouse of performance and reliability. 🚀✨
                                     </p>
                                 </div>
                                 <div class="token-action">
@@ -1508,7 +1728,7 @@ document.addEventListener('DOMContentLoaded', function() {
         playButton.style.pointerEvents = 'auto';
     });
 
-    
+
     function formatUnlockedTokens(unlockedTokens) {
     // Round to two decimal places first
     unlockedTokens = parseFloat(unlockedTokens.toFixed(2));
@@ -1545,8 +1765,8 @@ document.addEventListener('DOMContentLoaded', function() {
             columns: [
                 { data: 'wallet_address', title: 'Wallet Address' },
                 { data: 'staked_amount', title: 'DOPE Staked' },
-                { 
-                    data: 'reward', 
+                {
+                    data: 'reward',
                     title: 'Staking Reward',
                     render: function (data, type, row) {
                         if (type === 'display') {
@@ -1556,13 +1776,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     orderData: [2],  // Ensure sorting uses the raw numeric value
                 },
-                { 
+                {
                     data: 'explorer_link',
                     title: 'Explorer Link',
                     render: function (data) {
                         if (data) {
                             const url = `https://stellar.expert/explorer/public/tx/${data}`;
-                            return `<a href="${url}" class="view-link" target="_blank">View on Stellar.expert</a>`;
+                            return `<a href="${url}" class="view-link" target="_blank">
+                                <i class="fa fa-external-link"></i>
+                                </a>`;
                         }
                         return 'N/A';
                     },
@@ -1594,7 +1816,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
 
-        $('.stop-staking').on('click', function () 
+        $('.stop-staking').on('click', function ()
         {
             const walletAddress = "{{ $_COOKIE['public'] ?? '' }}";
             const button = $(this); // Reference to the clicked button
@@ -1694,7 +1916,7 @@ function connectWallet() {
             storePublic($('#walletPrivateKey').val())
             break;
         default:
-            displayWalletButtons(); 
+            displayWalletButtons();
             toastr.warning('Please select Wallet', 'Selection');
     }
 }
@@ -1704,7 +1926,7 @@ async function frighterWallet() {
     // Step 1: Check if Freighter is connected
     try {
         const connected = await window.freighterApi.isConnected();
-        
+
         if (!connected) {
             toastr.error('Freighter wallet is not connected.', 'Freighter Wallet');
             displayWalletButtons();
@@ -1722,7 +1944,7 @@ async function frighterWallet() {
 
         // Access the 'address' property of the object
         const publicKey = publicKeyObject.address;
-        
+
         if (publicKey === 'User declined access') {
             toastr.error('Access declined by user.', 'Freighter Wallet');
             displayWalletButtons();
@@ -1742,7 +1964,7 @@ async function frighterWallet() {
 function rabbetWallet() {
     if (!window.rabet) {
         toastr.error('Please install Rabet Extension!', 'Rabbet Wallet');
-        displayWalletButtons(); 
+        displayWalletButtons();
     }
     rabet.connect()
         .then(function (result) {
@@ -1750,14 +1972,14 @@ function rabbetWallet() {
         })
         .catch(function (error) {
             toastr.error(`Wallet Connection Rejected!`, 'Rabbet Wallet');
-            displayWalletButtons(); 
+            displayWalletButtons();
         });
 }
 
 function xbullWallet() {
     if (typeof xBullSDK == "undefined") {
         toastr.error('Please install Xbull Extension!', 'Xbull Wallet');
-        displayWalletButtons(); 
+        displayWalletButtons();
     }
     xBullSDK.connect({
         canRequestPublicKey: true,
@@ -1769,7 +1991,7 @@ function xbullWallet() {
     })
         .catch(function (error) {
             toastr.error(`Error Occured`, 'Xbull Wallet');
-            displayWalletButtons(); 
+            displayWalletButtons();
         });
 }
 
@@ -1780,7 +2002,7 @@ function albedoWallet() {
         })
         .catch(function (error) {
             toastr.error(`Connection Rejected`, 'Albedo Wallet');
-            displayWalletButtons(); 
+            displayWalletButtons();
         });
 }
 
@@ -1844,7 +2066,7 @@ function storeWalletPublic(public, wallet) {
                     $('#btnStaking').removeAttr('disabled');
                     $('#slider_single').removeAttr('disabled');
                     $('#eligibleError').attr('hidden', true);
-                    // var accVal = Math.round((parseInt((response.balance).replace(/,/g, '')) / 1000));                    
+                    // var accVal = Math.round((parseInt((response.balance).replace(/,/g, '')) / 1000));
                     var accVal = kFormatter(parseInt((response.balance).replace(/,/g, '')));
                     $('#slider_single').attr('max', Math.floor(accVal));
                     $('.rangeP').text(number_format_short(parseInt((response.balance).replace(/,/g, ''))));
@@ -1857,17 +2079,17 @@ function storeWalletPublic(public, wallet) {
                 $('#walletImage').attr('src', base_url + '/images/' + wallet + '.png');
 
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
-                displayWalletButtons(); 
+                displayWalletButtons();
                 $('#ConnectWallet').modal('hide');
                 location.reload();
             } else {
                 toastr.error(`Error: ${response.msg}`, 'Connections')
-                displayWalletButtons(); 
+                displayWalletButtons();
             }
         },
         error: function (xhr, status, error) {
             toastr.error("Deposit 5 XLM lumens into your wallet!", "Wallet Error");
-            displayWalletButtons(); 
+            displayWalletButtons();
         }
     });
 }
@@ -1907,7 +2129,7 @@ function storePublic(key) {
                     $('#btnStaking').removeAttr('disabled');
                     $('#slider_single').removeAttr('disabled');
                     $('#eligibleError').attr('hidden', true);
-                    // var accVal = Math.round((parseInt((response.balance).replace(/,/g, '')) / 1000));                    
+                    // var accVal = Math.round((parseInt((response.balance).replace(/,/g, '')) / 1000));
                     var accVal = kFormatter(parseInt((response.balance).replace(/,/g, '')));
                     $('#slider_single').attr('max', Math.floor(accVal));
                     $('.rangeP').text(number_format_short(parseInt((response.balance).replace(/,/g, ''))));
@@ -1919,16 +2141,16 @@ function storePublic(key) {
                 $('#walletImage').attr('src', base_url + '/images/' + wallet + '.png');
 
                 toastr.success('Wallet Successfully Conneceted', 'Wallet Connection')
-                displayWalletButtons(); 
+                displayWalletButtons();
                 $('#ConnectWallet').modal('hide');
             } else {
                 toastr.error(`Error: ${response.msg}`, 'Connection')
-                displayWalletButtons(); 
+                displayWalletButtons();
             }
         },
         error: function (xhr, status, error) {
             toastr.error("Deposit 5 XLM lumens into your wallet", "Wallet Error");
-            displayWalletButtons(); 
+            displayWalletButtons();
         }
     });
 }
@@ -1954,7 +2176,7 @@ function invest(currentValue) {
         success: function (response) {
             if (response.status == 1) {
                 signXdr(response.xdr, response.staking_id);
-                
+
                 // Wait 3 seconds before reloading the page
                 // setTimeout(function() {
                 //     location.reload();
@@ -2043,7 +2265,7 @@ function submitStakingXdr(xdr, staking_id) {
             if (response.status == 1) {
                 toastr.success("Successful", "Staking");
                 // console.log("Staking successful. Reloading page...");
-                
+
                 setTimeout(function () {
                     location.reload(true); // Force reload
                 }, 1000);
