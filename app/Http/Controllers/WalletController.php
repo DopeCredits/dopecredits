@@ -150,6 +150,7 @@ class WalletController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'amount' => ['required', 'integer', 'min:1000'],
+            'auto_reinvest' => ['required', 'integer'],
         ], [
             'amount.required' => 'The amount field is required.',
             'amount.integer' => 'The amount must be a valid number.',
@@ -200,47 +201,10 @@ class WalletController extends Controller
             return response()->json(['status' => 0, 'msg' => 'Not enough DOPE Tokens!']);
         }
 
-        // $wallet = Wallet::where('public', $_COOKIE['public'])->first();
-
-        // $data = array(
-        //     'public' => $_COOKIE['public'],
-        //     'amount' => $request->amount,
-        //     'status' => 0
-        // );
-
-        // $invest = Staking::create($data);
-
-        // if (empty($wallet->secret)) {
-        //     $xdr = $this->stakePublic($wallet, $request->amount);
-        // } else {
-        //     $xdr = $this->stakeSecret($wallet, $request->amount);
-        // }
-
-        // // Operation failed
-        // if (!$xdr) {
-        //     $invest->delete();
-        //     return response()->json(['status' => 0, 'msg' => 'Something went wrong!']);
-        // }
-
-        // return response()->json(['xdr' => $xdr, 'status' => 1, 'staking_id' => $invest->id]);
-
         DB::beginTransaction();
 
         try {
-            $existing_staking = Staking::where('public', $_COOKIE['public'])->where('status', 0)->where('amount', '=>', 1000)->first();
-            if($existing_staking){
-                $existing_staking->amount += $request->amount;
-                $existing_staking->save();
-            }
 
-            else{
-                $new_stake = new Staking();
-                $new_stake->public = $_COOKIE['public'];
-                $new_stake->status = 0;
-                $new_stake->amount = $request->amount;
-                $new_stake->save();
-            }
-    
             if (empty($wallet->secret)) {
                 $xdr = $this->stakePublic($wallet, $request->amount);
             } else {
@@ -252,18 +216,29 @@ class WalletController extends Controller
                 throw new \Exception('Something went wrong during staking operation.');
                 Log::info('Something went wrong during staking operation.');
             }
+
+            $existing_staking = Staking::where('public', $_COOKIE['public'])->where('status', 0)->where('amount', '=>', 1000)->first();
+            if($existing_staking){
+                $existing_staking->amount += $request->amount;
+                $existing_staking->auto_reinvest = $request->auto_reinvest;
+                $existing_staking->save();
+            }
+
+            else{
+                $new_stake = new Staking();
+                $new_stake->public = $_COOKIE['public'];
+                $new_stake->status = 0;
+                $new_stake->amount = $request->amount;
+                $new_stake->auto_reinvest = $request->auto_reinvest;
+                $new_stake->save();
+            }
+    
             
             DB::commit(); // Commit the transaction
             return response()->json(['xdr' => $xdr, 'status' => 1, 'staking_id' => $existing_staking ? $existing_staking->id : $new_stake->id]);
 
         } catch (\Exception $e) {
             DB::rollBack(); // Rollback the transaction
-    
-            // Delete the staking record if it was created
-            // if (isset($invest)) {
-            //     $invest->delete();
-            // }
-    
             return response()->json(['status' => 0, 'msg' => $e->getMessage()]);
         }
     }
@@ -430,16 +405,16 @@ class WalletController extends Controller
 
         // Looping through invest
         foreach ($invests as $key => $invest) {
-            // if($invest->auto_reinvest == 0){
+            if($invest->auto_reinvest == 0 || $invest->auto_reinvest == null){
                 $result = $this->returnStaking($invest);
                 if ($result) {
                     StakingResult::create(['staking_id' => $invest->id, 'amount' => $result->amount, 'transaction_id' => $result->tx]);
                 }
-            // }
-            // else{
-            //     $updated_amount = $this->daily_rate * $invest->amount;
-            //     $invest->amount == $updated_amount;
-            // }
+            }
+            //when auto reinvest is 1 then only update the invested amount
+            else{
+                $invest->amount += $this->daily_rate * $invest->amount;
+            }
             // Update the `updated_at` field to current time
             $invest->updated_at = now();
             $invest->save();
@@ -496,7 +471,7 @@ class WalletController extends Controller
         // }
         
         
-        $data = StakingResult::join('stakings as s', 's.id', '=', 'staking_results.staking_id')
+        $latest_transactions = StakingResult::Join('stakings as s', 's.id', '=', 'staking_results.staking_id')
         ->select(
             'staking_results.amount as reward', 
             'staking_results.transaction_id as explorer_link', 
@@ -507,7 +482,7 @@ class WalletController extends Controller
         ->get();
 
         // Calculate unlocked tokens count
-        $unlocked_tokens = $data->sum('reward');
+        $unlocked_tokens = $latest_transactions->sum('reward');
 
 
         $total_stakers = Staking::whereNotNull('transaction_id')
@@ -549,7 +524,7 @@ class WalletController extends Controller
         }
 
         return response()->json([
-            'data' => $data,
+            'data' => $latest_transactions,
             'total_stakers' => $total_stakers,
             'total_staked' => $total_staked,
             'unlocked_tokens' => $unlocked_tokens,
@@ -618,4 +593,95 @@ class WalletController extends Controller
             return response()->json(['message' => 'No wallet address provided']);
         }
     }
+
+    // public function wallet_activity($wallet_address) {
+    //     if ($wallet_address) {
+    //         $staked_unstaked = Staking::whereNotNull('transaction_id')
+    //         ->where('public', $wallet_address)
+    //         ->orderBy('updated_at', 'desc')
+    //         ->get();
+    
+    //         $staking_reward = StakingResult::join('stakings as s', 's.id', '=', 'staking_results.staking_id')
+    //         ->whereNotNull('staking_results.transaction_id')
+    //         ->where('s.public', $wallet_address)
+    //         ->where('s.status', 0)
+    //         ->select('staking_results.*')
+    //         ->orderBy('updated_at', 'desc')
+    //         ->get();
+            
+    //         $activityData = [];
+
+    //         foreach ($staked_unstaked as $item) {
+    //             $type = $item->status === 0 ? 'Staked' : 'Unstaked';
+    //             $activityData[] = [
+    //                 'time' => $item->created_at->diffForHumans(),
+    //                 'type' => $type,
+    //                 'amount' => $item->amount . ' DOPE',
+    //                 'transaction' => $item->transaction_id,
+    //             ];
+    //         }
+
+    //         foreach ($staking_reward as $reward) {
+    //             $activityData[] = [
+    //                 'time' => $reward->created_at->diffForHumans(),
+    //                 'type' => 'Staking reward',
+    //                 'amount' => $reward->amount . ' DOPE',
+    //                 'transaction' => $reward->transaction_id,
+    //             ];
+    //         }
+    
+    //         return response()->json(['activities' => $activityData]);
+    //     } else {
+    //         return response()->json(['message' => 'No wallet address provided']);
+    //     }
+    // }
+
+
+    public function wallet_activity($wallet_address) {
+        if ($wallet_address) {
+            $staked_unstaked = Staking::whereNotNull('transaction_id')
+                ->where('public', $wallet_address)
+                ->orderBy('updated_at', 'desc')
+                ->get();
+    
+            $staking_reward = StakingResult::join('stakings as s', 's.id', '=', 'staking_results.staking_id')
+                ->whereNotNull('staking_results.transaction_id')
+                ->where('s.public', $wallet_address)
+                ->where('s.status', 0)
+                ->select('staking_results.*')
+                ->orderBy('updated_at', 'desc')
+                ->get();
+            
+            $activityData = [];
+    
+            foreach ($staked_unstaked as $item) {
+                $type = $item->status === 0 ? 'Staked' : 'Unstaked';
+                $activityData[] = [
+                    'time' => $item->created_at->diffForHumans(),
+                    'type' => $type,
+                    'amount' => $item->amount . ' DOPE',
+                    'transaction' => $item->transaction_id,
+                ];
+            }
+    
+            foreach ($staking_reward as $reward) {
+                $activityData[] = [
+                    'time' => $reward->created_at->diffForHumans(), // Use updated_at for sorting
+                    'type' => 'Staking reward',
+                    'amount' => $reward->amount . ' DOPE',
+                    'transaction' => $reward->transaction_id,
+                ];
+            }
+    
+            // Sort merged array by 'time' in descending order
+            usort($activityData, function ($a, $b) {
+                return strtotime($b['time']) <=> strtotime($a['time']);
+            });
+    
+            return response()->json(['activities' => $activityData]);
+        } else {
+            return response()->json(['message' => 'No wallet address provided']);
+        }
+    }
+    
 }

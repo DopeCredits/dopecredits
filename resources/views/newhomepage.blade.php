@@ -578,95 +578,105 @@
                     $balance = isset($_COOKIE['public']) ? dopeBalance($_COOKIE['public']) : 0;
                     $maxValue = $balance > 0 ? $balance : 10000000;
                 ?>
-
-                @if($balance >= 1000)
-                <div   class="mainRange">
-                    <h1>How many $DOPE do you want to stake?</h1>
-                    <div class="range-container">
-                        <div id="dope-slider" data-min="1000" data-max="<?= $maxValue ?>"></div>
-                        <div class="range-labels">
-                            <span class="min-value">1,000</span>
-                            <div class="balRight">
-                                <p>Minimum: <span class="highlight-value">1,000 $DOPE</span></p>
-                            </div>
-                            <span class="max-value"><?= number_format($maxValue) ?></span>
-                        </div>
-                        <div class="selected-value-container">
-                            <div class="value-input-group">
-                                <input type="text" id="value-input" class="value-input" value="1,000">
-                                <span class="currency-label">$DOPE</span>
-                            </div>
-                            <div class="error-message" id="value-error"></div>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-center gap-2">
-                        <label style="font-weight: 600;color:black" class="d-flex align-items-center gap-0" for="">
-                            Auto-Reinvest
-                            <div class="tooltip-container">
-                                <span class="text">
-                                    !
-                                </span>
-                                <span class="tooltip">
-                                    Auto-Reinvest is a feature that allows you to automatically reinvest your staking rewards back into the staking pool. This means that your rewards will be used to buy more $DOPE tokens, which will then be staked again. This can help you earn more $DOPE tokens over time, but it also means that you are taking on more risk.
-                                </span>
-                              </div>
-                        </label>
-                        <div class="checkbox">
-                            <input class="tgl" id="toggle" type="checkbox" />
-                            <label class="tgl-btn" for="toggle"></label>
-                          </div>
-
-                    </div>
-                    <div class="terms-section">
-                        <label class="custom-checkbox">
-                            <input type="checkbox" id="agree-checkbox" class="regular-checkbox big-checkbox">
-                            <span class="checkmark"></span>
-                            <span class="terms-text">Read the <a href="javascript:void(0)" onclick="$('#termsModal').modal('show')" class="terms-link">Terms and conditions</a></span>
-                        </label>
-                    </div>
-
-                    @if (isset($_COOKIE['public']))
-                    <button
-                        style="background-image: linear-gradient(to right, #80c931, #08a6c3);"
-                        id="btnStaking"
-                        type="button"
-                        class="stake-btn"
-                        >
-                        <span>Stake Now</span>
-                    </button>
-                    @else
+                @if (!isset($_COOKIE['public']))
+                <div class="mainRange">
                     <a style="background-image: linear-gradient(to right, #80c931, #08a6c3);"
-                       class="stake-btn"
-                       onclick="$('#ConnectWallet').modal('show');"
-                       href="javascript:void(0)">
-                        Connect Wallet
+                    class="stake-btn"
+                    onclick="$('#ConnectWallet').modal('show');"
+                    href="javascript:void(0)">
+                    Connect Wallet
                     </a>
-                    @endif
-                    <button id="loadStaking" type="button" class="loader-btn" style="display: none;">
-                        <span class="form-btn">
-                            <div class="spinner-border text-light" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                            <p>Processing</p>
-                        </span>
-                    </button>
                 </div>
                 @else
-                {{-- <div class="insufficient-dope">
-                    <div class="insufficient-content">
-                        <div class="insufficient-icon">
-                            <i class="fa fa-exclamation-circle"></i>
+                    @if($balance >= 1000)
+                    <!-- Scrollbar Section -->
+                    <div class="mainRange">
+                        <h1>How many $DOPE do you want to stake?</h1>
+                        <div class="range-container">
+                            <div id="dope-slider" data-min="1000" data-max="<?= $maxValue ?>"></div>
+                            <div class="range-labels">
+                                <span class="min-value">1,000</span>
+                                <div class="balRight">
+                                    <p>Minimum: <span class="highlight-value">1,000 $DOPE</span></p>
+                                </div>
+                                <span class="max-value"><?= number_format($maxValue) ?></span>
+                            </div>
+                            <div class="selected-value-container">
+                                <div class="value-input-group">
+                                    <input type="text" id="value-input" class="value-input" value="1,000">
+                                    <span class="currency-label">$DOPE</span>
+                                </div>
+                                <div class="error-message" id="value-error"></div>
+                            </div>
                         </div>
-                        <h2>Not Enough DOPE</h2>
-                        <p>You need at least 1,000 DOPE tokens to start staking.</p>
-                        <div class="insufficient-actions">
-                            <p class="current-balance">Current Balance: <span>{{ $balance }} DOPE</span></p>
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                            <label style="font-weight: 600;color:black" class="d-flex align-items-center gap-0" for="">
+                                Auto-Reinvest
+                                <div class="tooltip-container">
+                                    <span class="text">
+                                        !
+                                    </span>
+                                    <span class="tooltip">
+                                        Auto-Reinvest is a feature that allows you to automatically reinvest your staking rewards back into the staking pool. This means that your rewards will be used to buy more $DOPE tokens, which will then be staked again. This can help you earn more $DOPE tokens over time, but it also means that you are taking on more risk.
+                                    </span>
+                                </div>
+                            </label>
+                            <div class="checkbox">
+                                <input class="tgl" id="toggle" type="checkbox" />
+                                <label class="tgl-btn" for="toggle"></label>
+                            </div>
+
+                        </div>
+                        <div class="terms-section">
+                            <label class="custom-checkbox">
+                                <input type="checkbox" id="agree-checkbox" class="regular-checkbox big-checkbox">
+                                <span class="checkmark"></span>
+                                <span class="terms-text">Read the <a href="javascript:void(0)" onclick="$('#termsModal').modal('show')" class="terms-link">Terms and conditions</a></span>
+                            </label>
+                        </div>
+
+                        @if (isset($_COOKIE['public']))
+                        <button
+                            style="background-image: linear-gradient(to right, #80c931, #08a6c3);"
+                            id="btnStaking"
+                            type="button"
+                            class="stake-btn"
+                            >
+                            <span>Stake Now</span>
+                        </button>
+                        @else
+                        <a style="background-image: linear-gradient(to right, #80c931, #08a6c3);"
+                        class="stake-btn"
+                        onclick="$('#ConnectWallet').modal('show');"
+                        href="javascript:void(0)">
+                            Connect Wallet
+                        </a>
+                        @endif
+                        <button id="loadStaking" type="button" class="loader-btn" style="display: none;">
+                            <span class="form-btn">
+                                <div class="spinner-border text-light" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                <p>Processing</p>
+                            </span>
+                        </button>
+                    </div>
+                    @else
+                    <div class="insufficient-dope">
+                        <div class="insufficient-content">
+                            <div class="insufficient-icon">
+                                <i class="fa fa-exclamation-circle"></i>
+                            </div>
+                            <h2>Not Enough DOPE</h2>
+                            <p>You need at least 1,000 DOPE tokens to start staking.</p>
+                            <div class="insufficient-actions">
+                                <p class="current-balance">Current Balance: <span>{{ $balance }} DOPE</span></p>
+                            </div>
                         </div>
                     </div>
-                </div> --}}
+                    @endif
+                    <!-- Scrollbar Section -->
                 @endif
-                <!-- mainSection -->
-
                 </div>
                 </div>
             </div>
@@ -839,7 +849,7 @@
                                         <th>Transaction</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                {{-- <tbody>
                                     <tr>
                                         <td>1s ago</td>
                                         <td><span class="badge badge-reward">Staking reward</span></td>
@@ -858,8 +868,14 @@
                                         <td>1500 DOPE</td>
                                         <td><a href="#" class="transaction-link"><i class="fa fa-external-link"></i></a></td>
                                     </tr>
+                                </tbody> --}}
+                                <tbody id="activity-table-body">
+                                    <!-- Dynamic Content Will Be Inserted Here -->
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="action-group">
+                            <button class="btn btn-danger stop-staking">Stop Staking</button>
                         </div>
                     </div>
                 </div>
@@ -867,7 +883,7 @@
             @endif
 
             <!-- Your Stats -->
-            @if (isset($_COOKIE['public']))
+            {{-- @if (isset($_COOKIE['public']))
             <div class="row my-4">
                 <div class="col-12">
                     <div class="your-stats-card">
@@ -876,12 +892,10 @@
                             <div class="stat-group">
                                 <h3>Staked:</h3>
                                 <p class="stat-value" id="wallet-total-staked">Loading...</p>
-                                {{-- <p class="stat-value">10,000 DOPE</p> --}}
                                 <a href="https://stellar.expert/explorer/public/account/{{ $_COOKIE['public'] }}" class="view-link" target="_blank" rel="noopener noreferrer">View trx on explorer</a>
                             </div>
                             <div class="stat-group">
                                 <h3>Total reward received</h3>
-                                {{-- <p class="stat-value">52 DOPE</p> --}}
                                 <p class="stat-value" id="total_reward_received">Loading...</p>
                             </div>
                             <div class="action-group">
@@ -891,7 +905,7 @@
                     </div>
                 </div>
             </div>
-            @endif
+            @endif --}}
 
 
             <!-- Latest Transactions -->
@@ -1511,7 +1525,12 @@
 @endif
 <script>
  function acceptTerms() {
-    document.getElementById('agree-checkbox').checked = true;
+    // document.getElementById('agree-checkbox').checked = true;
+    // $('#termsModal').modal('hide');
+    const checkbox = document.getElementById('agree-checkbox');
+    if (checkbox) {
+        checkbox.checked = true;
+    }
     $('#termsModal').modal('hide');
 }
 
@@ -1519,17 +1538,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const checkbox = document.getElementById('agree-checkbox');
     const termsLink = document.querySelector('.terms-link');
 
-    checkbox.addEventListener('click', function(e) {
-        if (!this.checked) {
+    if (checkbox) {
+        checkbox.addEventListener('click', function(e) {
+            if (!this.checked) {
+                e.preventDefault();
+                $('#termsModal').modal('show');
+            }
+        });
+    }
+    if (termsLink) {
+        termsLink.addEventListener('click', function(e) {
             e.preventDefault();
             $('#termsModal').modal('show');
-        }
-    });
-
-    termsLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        $('#termsModal').modal('show');
-    });
+        });
+    }
 
     $('#termsModal').on('hidden.bs.modal', function () {
         if (!checkbox.checked) {
@@ -1887,6 +1909,57 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         });
+
+        const walletAddress = "{{ $_COOKIE['public'] ?? '' }}";
+
+        if (walletAddress) {
+            $.ajax({
+                url: `/wallet_activity/${walletAddress}`,
+                type: "GET",
+                success: function (response) {
+                    const tableBody = $("#activity-table-body");
+                    tableBody.empty();
+
+                    let totalStaked = 0;
+                    let totalRewards = 0;
+
+                    // Mapping activity types to badge classes
+                    const badgeClassMap = {
+                        "Staked": "badge-staked",
+                        "Unstaked": "badge-unstaked",
+                        "Staking reward": "badge-reward"
+                    };
+
+                    response.activities.forEach(activity => {
+                        // Update total staked and rewards
+                        if (activity.type === "Staked") {
+                            totalStaked += parseFloat(activity.amount);
+                        } else if (activity.type === "Staking reward") {
+                            totalRewards += parseFloat(activity.amount);
+                        }
+
+                        const badgeClass = badgeClassMap[activity.type] || "badge-default";
+
+                        // Append activity row to the table
+                        tableBody.append(`
+                            <tr>
+                                <td>${activity.time}</td>
+                                <td><span class="badge ${badgeClass}">${activity.type}</span></td>
+                                <td>${activity.amount}</td>
+                                <td><a href="https://stellar.expert/explorer/public/tx/${activity.transaction}" target="_blank" class="transaction-link"><i class="fa fa-external-link"></i></a></td>
+                            </tr>
+                        `);
+                    });
+
+                    // Update staked and reward stats
+                    $("#wallet-total-staked").text(`${totalStaked.toFixed(2)} DOPE`);
+                    $("#total_reward_received").text(`${totalRewards.toFixed(2)} DOPE`);
+                },
+                error: function () {
+                    alert("Failed to load wallet activity.");
+                }
+            });
+        }
     });
 
 
@@ -2171,7 +2244,8 @@ function btnLoaderHide() {
 }
 
 function invest(currentValue) {
-
+    let autoReinvest = document.getElementById('toggle').checked ? 1 : 0; // Get toggle value (1 for checked, 0 for unchecked)
+    
     $('#btnStaking').hide();
     $('#loadStaking').show();
     $.ajax({
@@ -2182,6 +2256,7 @@ function invest(currentValue) {
         type: "post",
         data: {
             amount: currentValue,
+            auto_reinvest: autoReinvest,
         },
         success: function (response) {
             if (response.status == 1) {
