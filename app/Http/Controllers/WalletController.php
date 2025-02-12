@@ -217,7 +217,7 @@ class WalletController extends Controller
                 Log::info('Something went wrong during staking operation.');
             }
 
-            $existing_staking = Staking::where('public', $_COOKIE['public'])->where('status', 0)->where('amount', '=>', 1000)->first();
+            $existing_staking = Staking::where('public', $_COOKIE['public'])->where('status', 0)->where('amount', '>=', 1000)->latest()->first();
             if($existing_staking){
                 $existing_staking->amount += $request->amount;
                 $existing_staking->auto_reinvest = $request->auto_reinvest;
@@ -338,56 +338,52 @@ class WalletController extends Controller
             return response()->json(['status' => 0, 'msg' => 'Wallet address not provided!']);
         }
 
-        $wallets = Staking::where('public', $wallet_address)
-        ->get();
-        
-        if ($wallets) {
-            $active_staking_wallets = $wallets->where('amount', '>=', 1000)
-            ->where('status', 0)
-            ->whereNotNull('transaction_id')
-            ->get();
-            if($active_staking_wallets)
-            {
-                $amount = $wallets->sum('amount');
-    
-                try {
-                    // Destination Account
-                    $mainSecret = env('MAIN_WALLET');
-                    $mainPair = KeyPair::fromSeed($mainSecret);
-    
-                    $mainAccount = $this->sdk->requestAccount($mainPair->getAccountId());
-                    $account = $this->sdk->requestAccount($wallet_address);
-    
-                    $assetCode = 'DOPE';
-                    $assetIssuer = 'GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B';
-                    $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
-    
-                    // Payment Operation
-                    $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $amount))->build();
-                    $txbuilder = new TransactionBuilder($mainAccount);
-                    $txbuilder->setMaxOperationFee($this->maxFee);
-                    $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(Memo::text('DOPE Stake Return'))->build();
-                    $transaction->sign($mainPair, Network::public());
-                    $res = $this->sdk->submitTransaction($transaction);
-    
-                    foreach ($wallets as $wallet) {
-                        $wallet->status = 1;
-                        $wallet->save();
-                    }
-    
-                    return response()->json(['status' => 1, 'msg' => 'Success', 'tx' => $res->getId()]);
-                } catch (\Throwable $th) {
-                    Log::error('Stop Staking Error: ' . $th->getMessage());
-                    Log::info('Error while stop staking.');
-                    return response()->json(['status' => 0, 'msg' => 'An error occurred while processing the transaction.']);
-                }
-            }
-            else{
-                return response()->json(['status' => 0, 'msg' => 'Already stoped staking!']);
-            }
-        }
-        else{
+        $wallets = Staking::where('public', $wallet_address)->get();
+        if ($wallets->isEmpty()) {
             return response()->json(['status' => 0, 'msg' => 'Wallet not found!']);
+        }
+
+        // Filter only active staking records
+        $active_staking_wallets = $wallets->where('amount', '>=', 1000)
+        ->where('status', 0)
+        ->whereNotNull('transaction_id');
+
+        if ($active_staking_wallets->isEmpty()) {
+        return response()->json(['status' => 0, 'msg' => 'Already stopped staking!']);
+        }
+
+        $amount = $active_staking_wallets->sum('amount');
+
+        try {
+            // Destination Account
+            $mainSecret = env('MAIN_WALLET');
+            $mainPair = KeyPair::fromSeed($mainSecret);
+
+            $mainAccount = $this->sdk->requestAccount($mainPair->getAccountId());
+            $account = $this->sdk->requestAccount($wallet_address);
+
+            $assetCode = 'DOPE';
+            $assetIssuer = 'GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B';
+            $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
+
+            // Payment Operation
+            $paymentOperation = (new PaymentOperationBuilder($account->getAccountId(), $asset, $amount))->build();
+            $txbuilder = new TransactionBuilder($mainAccount);
+            $txbuilder->setMaxOperationFee($this->maxFee);
+            $transaction = $txbuilder->addOperation($paymentOperation)->addMemo(Memo::text('DOPE Stake Return'))->build();
+            $transaction->sign($mainPair, Network::public());
+            $res = $this->sdk->submitTransaction($transaction);
+
+            foreach ($active_staking_wallets as $active_wallet) {
+                $active_wallet->status = 1;
+                $active_wallet->save();
+            }
+
+            return response()->json(['status' => 1, 'msg' => 'Success', 'tx' => $res->getId()]);
+        } catch (\Throwable $th) {
+            Log::error('Stop Staking Error: ' . $th->getMessage());
+            Log::info('Error while stop staking.');
+            return response()->json(['status' => 0, 'msg' => 'An error occurred while processing the transaction.']);
         }
     }
 
@@ -655,7 +651,7 @@ class WalletController extends Controller
             $activityData = [];
     
             foreach ($staked_unstaked as $item) {
-                $type = $item->status === 0 ? 'Staked' : 'Unstaked';
+                $type = ($item->status == 0) ? 'Staked' : 'Unstaked';
                 $activityData[] = [
                     'time' => $item->created_at->diffForHumans(),
                     'type' => $type,

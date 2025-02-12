@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Staking extends Model
 {
     use HasFactory;
-    protected $fillable = ['public', 'amount', 'status', 'transaction_id'];
+    protected $fillable = ['public', 'amount', 'status', 'transaction_id', 'auto_reinvest'];
 
     public function investResult()
     {
