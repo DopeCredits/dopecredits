@@ -470,7 +470,8 @@ class WalletController extends Controller
         $latest_transactions = StakingResult::Join('stakings as s', 's.id', '=', 'staking_results.staking_id')
         ->select(
             'staking_results.amount as reward', 
-            'staking_results.transaction_id as explorer_link', 
+            's.transaction_id as staked_transaction',
+            'staking_results.transaction_id as reward_transaction',
             's.public as wallet_address', 
             's.amount as staked_amount' 
         )
@@ -479,6 +480,27 @@ class WalletController extends Controller
 
         // Calculate unlocked tokens count
         $unlocked_tokens = $latest_transactions->sum('reward');
+
+        // Prepare separate rows for staked amount and rewards
+        $formattedData = [];
+
+        foreach ($latest_transactions as $transaction) {
+            // First row: Staked amount
+            $formattedData[] = [
+                'wallet_address' => $transaction->wallet_address,
+                'type' => 'Staked',
+                'amount' => $transaction->staked_amount . ' DOPE',
+                'explorer_link' => $transaction->staked_transaction
+            ];
+
+            // Second row: Reward amount
+            $formattedData[] = [
+                'wallet_address' => $transaction->wallet_address,
+                'type' => 'Reward',
+                'amount' => $transaction->reward . ' DOPE',
+                'explorer_link' => $transaction->reward_transaction
+            ];
+        }
 
 
         $total_stakers = Staking::whereNotNull('transaction_id')
@@ -501,18 +523,16 @@ class WalletController extends Controller
             $assetData = $response->json();
 
             
+            // dd($assetData);
             if (isset($assetData['_embedded']['records'][0])) {
                 $dopeData = $assetData['_embedded']['records'][0];
-
-                $circulatingSupply = $dopeData['balances']['authorized'];
-                $holders =  $dopeData['accounts']['authorized'];
-                $trustlineCount = $holders;
+                $trustlineCount =  $dopeData['accounts']['authorized'];
+                // $trustlineCount = $holders;
                 $liquidityPoolsAmount = $dopeData['liquidity_pools_amount'];
                 
                 // Assuming you have a method for fetching token price
                 
                 $data = $this->asset_data($assetCode, $assetIssuer);
-                $marketCap = $circulatingSupply * $data['price'];
             } 
         } catch (\Exception $e) {
             Log::error('Error fetching DOPE data: ' . $e->getMessage());
@@ -520,13 +540,13 @@ class WalletController extends Controller
         }
 
         return response()->json([
-            'data' => $latest_transactions,
+            'data' => $formattedData,
             'total_stakers' => $total_stakers,
             'total_staked' => $total_staked,
             'unlocked_tokens' => $unlocked_tokens,
             'price' => $data['price'] ?? 0,
             // 'market_cap' => $marketCap,
-            'holders' => $holders ?? 0,
+            // 'holders' => $holders ?? 0,
             'trustline' => $trustlineCount ?? 0,
             // '7days_volume' => $volumeInXLM,
             'liquidity_pools_amount' => $liquidityPoolsAmount ?? 0,

@@ -714,13 +714,13 @@
                                     </div> --}}
                                 </div>
                                 <div class="stat-row">
-                                    <div class="stat-item">
+                                    {{-- <div class="stat-item">
                                         <div class="stat-label">
                                             <i class="fa fa-users"></i>
                                             <span>Holders</span>
                                         </div>
                                         <div class="stat-value" id="holders"></div>
-                                    </div>
+                                    </div> --}}
                                     <div class="stat-item">
                                         <div class="stat-label">
                                             <i class="fa fa-random"></i>
@@ -941,8 +941,10 @@
                                 <thead>
                                     <tr>
                                         <th>Wallet address</th>
-                                        <th>DOPE staked</th>
-                                        <th>Staking reward</th>
+                                        {{-- <th>DOPE staked</th>
+                                        <th>Staking reward</th> --}}
+                                        <th>Type</th> <!-- Shows 'Staked' or 'Reward' -->
+                                        <th>Amount</th> <!-- Displays the amount with DOPE suffix -->
                                         <th>Explorer link</th>
                                     </tr>
                                 </thead>
@@ -1079,7 +1081,7 @@
                                     </p>
                                 </div>
                                 <div class="token-action">
-                                    <a style="margin-top: 0px" href="#" class="btn dope">DOPE Explorer</a>
+                                    <a style="margin-top: 0px" href="https://stellar.expert/explorer/public/asset/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B-1" target="_blank" class="btn dope">DOPE Explorer</a>
                                 </div>
                             </div>
                         </div>
@@ -1773,31 +1775,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     $(document).ready(function() {
-        $('#transactionsTable').DataTable({
+        const table = $('#transactionsTable').DataTable({
             processing: true,
             serverSide: false,
             ajax: {
-            url: base_url + '/fetch_dashboard_data',
-            type: 'GET',
-            error: function (xhr, error, thrown) {
-                console.error('Error fetching data:', error);
-                $('#transactionsTable').html('<tr><td colspan="3">Error loading data</td></tr>');
-            }
+                url: base_url + '/fetch_dashboard_data',
+                type: 'GET',
+                error: function (xhr, error, thrown) {
+                    console.error('Error fetching data:', error);
+                    $('#transactionsTable').html('<tr><td colspan="3">Error loading data</td></tr>');
+                }
             },
             columns: [
                 { data: 'wallet_address', title: 'Wallet Address' },
-                { data: 'staked_amount', title: 'DOPE Staked' },
-                {
-                    data: 'reward',
-                    title: 'Staking Reward',
-                    render: function (data, type, row) {
-                        if (type === 'display') {
-                            return `${data} DOPE`;  // Display with the 'DOPE' suffix
-                        }
-                        return data;  // For sorting purposes, return the raw numeric value
-                    },
-                    orderData: [2],  // Ensure sorting uses the raw numeric value
-                },
+                { data: 'type', title: 'Type' },
+                { data: 'amount', title: 'Amount' },
                 {
                     data: 'explorer_link',
                     title: 'Explorer Link',
@@ -1818,8 +1810,46 @@ document.addEventListener('DOMContentLoaded', function() {
                 emptyTable: "No staking rewards available yet."
             }
         });
+         // Handle checkbox changes
+        $('.filter-checkbox input').on('change', function() {
+            const filterType = $(this).data('filter');
+            const isChecked = $(this).is(':checked');
+            
+            // Uncheck all other checkboxes
+            $('.filter-checkbox input').not(this).prop('checked', false);
+            
+            // If unchecking the last checkbox, check "All Transactions"
+            if (!isChecked) {
+                $('input[data-filter="all"]').prop('checked', true);
+            }
+            
+            // If checking a specific filter, ensure it stays checked
+            if (isChecked) {
+                $(this).prop('checked', true);
+            }
+            
+            // Redraw the table to apply filters
+            table.draw();
+        });
+
+        // Update the search function to match the new behavior
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+            const allChecked = $('input[data-filter="all"]').is(':checked');
+            const stakedChecked = $('input[data-filter="staked"]').is(':checked');
+            const rewardChecked = $('input[data-filter="reward"]').is(':checked');
+            
+            // If "All Transactions" is checked, show everything
+            if (allChecked) return true;
+            
+            // Get the type from the row data (data[1] is the 'Type' column)
+            const type = data[1].toLowerCase();
+            
+            // Check if row matches the selected filter
+            return (stakedChecked && type.includes('staked')) ||
+                (rewardChecked && type.includes('reward'));
+        });
         $('#dope-price').text('Loading...');
-        $('#holders').text('Loading...');
+        // $('#holders').text('Loading...');
         $('#trustlines').text('Loading...');
         $('#rating').text('Loading...');
         $('#liquidity_pools_amount').text('Loading...');
@@ -1832,7 +1862,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Populate the stats with the response data
                 $('#total-stakers').text(response.total_stakers);
                 $('#dope-price').text('$' + parseFloat(response.price).toFixed(6));
-                $('#holders').text(response.holders);
+                // $('#holders').text(response.holders);
                 $('#trustlines').text(response.trustline);
                 $('#rating').text(response.rating);
                 $('#liquidity_pools_amount').text(response.liquidity_pools_amount);
