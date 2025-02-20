@@ -2274,8 +2274,6 @@ function btnLoaderHide() {
 }
 
 function invest(currentValue) {
-    let autoReinvest = document.getElementById('toggle').checked ? 1 : 0; // Get toggle value (1 for checked, 0 for unchecked)
-    
     $('#btnStaking').hide();
     $('#loadStaking').show();
     $.ajax({
@@ -2286,7 +2284,6 @@ function invest(currentValue) {
         type: "post",
         data: {
             amount: currentValue,
-            auto_reinvest: autoReinvest,
         },
         success: function (response) {
             if (response.status == 1) {

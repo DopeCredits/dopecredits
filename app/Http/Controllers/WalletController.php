@@ -150,7 +150,6 @@ class WalletController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'amount' => ['required', 'integer', 'min:1000'],
-            'auto_reinvest' => ['required', 'integer'],
         ], [
             'amount.required' => 'The amount field is required.',
             'amount.integer' => 'The amount must be a valid number.',
@@ -220,7 +219,6 @@ class WalletController extends Controller
             $existing_staking = Staking::where('public', $_COOKIE['public'])->where('status', 0)->where('amount', '>=', 1000)->latest()->first();
             if($existing_staking){
                 $existing_staking->amount += $request->amount;
-                $existing_staking->auto_reinvest = $request->auto_reinvest;
                 $existing_staking->save();
             }
 
@@ -229,7 +227,6 @@ class WalletController extends Controller
                 $new_stake->public = $_COOKIE['public'];
                 $new_stake->status = 0;
                 $new_stake->amount = $request->amount;
-                $new_stake->auto_reinvest = $request->auto_reinvest;
                 $new_stake->save();
             }
     
@@ -401,15 +398,9 @@ class WalletController extends Controller
 
         // Looping through invest
         foreach ($invests as $key => $invest) {
-            if($invest->auto_reinvest == 0 || $invest->auto_reinvest == null){
-                $result = $this->returnStaking($invest);
-                if ($result) {
-                    StakingResult::create(['staking_id' => $invest->id, 'amount' => $result->amount, 'transaction_id' => $result->tx]);
-                }
-            }
-            //when auto reinvest is 1 then only update the invested amount
-            else{
-                $invest->amount += $this->daily_rate * $invest->amount;
+            $result = $this->returnStaking($invest);
+            if ($result) {
+                StakingResult::create(['staking_id' => $invest->id, 'amount' => $result->amount, 'transaction_id' => $result->tx]);
             }
             // Update the `updated_at` field to current time
             $invest->updated_at = now();
