@@ -609,7 +609,7 @@
                                 <div class="error-message" id="value-error"></div>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center justify-content-center gap-2">
+                        {{-- <div class="d-flex align-items-center justify-content-center gap-2">
                             <label style="font-weight: 600;color:black" class="d-flex align-items-center gap-0" for="">
                                 Auto-Reinvest
                                 <div class="tooltip-container">
@@ -626,7 +626,7 @@
                                 <label class="tgl-btn" for="toggle"></label>
                             </div>
 
-                        </div>
+                        </div> --}}
                         <div class="terms-section">
                             <label class="custom-checkbox">
                                 <input type="checkbox" id="agree-checkbox" class="regular-checkbox big-checkbox">
