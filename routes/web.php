@@ -4,6 +4,7 @@ use App\Http\Controllers\AppController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\StakingController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BlogController;
 
 Route::get('/', [AppController::class, 'home'])->name('home');
 Route::post('/contact', [AppController::class, 'contact'])->name('contact');
@@ -26,3 +27,6 @@ Route::post('/stop_staking/{wallet_address?}', [WalletController::class, 'stop_s
 Route::get('/dashboard', function() {
     return view('staking-dashboard');
 })->name('dashboard');
+
+Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
+Route::get('/blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show');
