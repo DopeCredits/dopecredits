@@ -7,6 +7,7 @@ use App\Models\StakingResult;
 use App\Models\Wallet;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -34,7 +35,7 @@ class WalletController extends Controller
         // $this->sdk = StellarSDK::getTestNetInstance();
         $this->minAmount = 10;
         $this->maxFee = 3000;
-        $this->daily_rate = 0.1 / 100; 
+        $this->daily_rate = 0.1 / 100;
     }
 
     public function store(Request $request)
@@ -73,7 +74,7 @@ class WalletController extends Controller
 
         // Store Stellar Account if not exist
         $wallet = Wallet::where('public', $request->public)->first();
-        
+
         if (!$wallet) {
             Wallet::create($data);
         } else {
@@ -155,7 +156,7 @@ class WalletController extends Controller
             'amount.integer' => 'The amount must be a valid number.',
             'amount.min' => 'The amount must be at least 1000.',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 0,
@@ -163,19 +164,19 @@ class WalletController extends Controller
                 'errors' => $validator->errors(),
             ], 422);
         }
-        
+
         if (!isset($_COOKIE['public'])) {
             return response()->json(['status' => 0, 'msg' => 'Wallet not connected!']);
         }
-        
-        $wallet = Wallet::where('public', $_COOKIE['public'])->first(); 
+
+        $wallet = Wallet::where('public', $_COOKIE['public'])->first();
         if (!$wallet) {
             return response()->json(['status' => 0, 'msg' => 'Wallet not found!']);
         }
-        
+
         // Check Stellar Account
         $account = $this->sdk->requestAccount($_COOKIE['public']);
-        if(!$account){
+        if (!$account) {
             return response()->json(['status' => 0, 'msg' => 'Not enough XLM in your wallet!']);
         }
 
@@ -209,7 +210,7 @@ class WalletController extends Controller
             } else {
                 $xdr = $this->stakeSecret($wallet, $request->amount);
             }
-    
+
             // Operation failed
             if (!$xdr) {
                 throw new \Exception('Something went wrong during staking operation.');
@@ -217,23 +218,20 @@ class WalletController extends Controller
             }
 
             $existing_staking = Staking::where('public', $_COOKIE['public'])->where('status', 0)->where('amount', '>=', 1000)->latest()->first();
-            if($existing_staking){
+            if ($existing_staking) {
                 $existing_staking->amount += $request->amount;
                 $existing_staking->save();
-            }
-
-            else{
+            } else {
                 $new_stake = new Staking();
                 $new_stake->public = $_COOKIE['public'];
                 $new_stake->status = 0;
                 $new_stake->amount = $request->amount;
                 $new_stake->save();
             }
-    
-            
+
+
             DB::commit(); // Commit the transaction
             return response()->json(['xdr' => $xdr, 'status' => 1, 'staking_id' => $existing_staking ? $existing_staking->id : $new_stake->id]);
-
         } catch (\Exception $e) {
             DB::rollBack(); // Rollback the transaction
             return response()->json(['status' => 0, 'msg' => $e->getMessage()]);
@@ -250,7 +248,7 @@ class WalletController extends Controller
             $mainPair = KeyPair::fromSeed($mainSecret);
 
             $account = $this->sdk->requestAccount($wallet->public);
-            
+
             $assetCode = 'DOPE';
             $assetIssuer = 'GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B';
             $asset = new AssetTypeCreditAlphanum4($assetCode, $assetIssuer);
@@ -342,11 +340,11 @@ class WalletController extends Controller
 
         // Filter only active staking records
         $active_staking_wallets = $wallets->where('amount', '>=', 1000)
-        ->where('status', 0)
-        ->whereNotNull('transaction_id');
+            ->where('status', 0)
+            ->whereNotNull('transaction_id');
 
         if ($active_staking_wallets->isEmpty()) {
-        return response()->json(['status' => 0, 'msg' => 'Already stopped staking!']);
+            return response()->json(['status' => 0, 'msg' => 'Already stopped staking!']);
         }
 
         $amount = $active_staking_wallets->sum('amount');
@@ -391,7 +389,7 @@ class WalletController extends Controller
         Staking::whereNull('transaction_id')->delete();
 
         $invests = Staking::whereNotNull('transaction_id')
-            ->where('amount', '>=' ,1000)
+            ->where('amount', '>=', 1000)
             ->where('status', 0)
             ->where('updated_at', '<=', now()->subHours(24))
             ->get();
@@ -409,7 +407,7 @@ class WalletController extends Controller
         return response()->json([$invests]);
     }
 
-     // sending staking reward tokens to the wallet from distribution wallet
+    // sending staking reward tokens to the wallet from distribution wallet
     private function returnStaking($invest)
     {
         $amount = $this->daily_rate * $invest->amount;
@@ -445,105 +443,119 @@ class WalletController extends Controller
         }
     }
 
-    public function fetch_dashboard_data() {
-        
-        // $account = $this->sdk->requestAccount('GBAXVSMRA5YDYT3HSHBWTNRFCX6E6DZO7IKSIFDBKYGIRPYL4QP2TJ64');
-        
-        // $unlocked_tokens = 0;
+    public function transactions(Request $request)
+    {
+        $limit  = 200;
+        $filter = $request->query('filter', 'all');
 
-        // foreach ($account->getBalances() as $bal) {
-        //     if ($bal->getAssetCode() == 'DOPE') {
-        //         $unlocked_tokens = 850000000 - $bal->getBalance();
-        //     }
-        // }
-        
-        
-        $latest_transactions = StakingResult::Join('stakings as s', 's.id', '=', 'staking_results.staking_id')
-        ->select(
-            'staking_results.amount as reward', 
-            's.transaction_id as staked_transaction',
-            'staking_results.transaction_id as reward_transaction',
-            's.public as wallet_address', 
-            's.amount as staked_amount' 
-        )
-        ->orderBy('staking_results.updated_at', 'desc')
-        ->get();
+        $staked = DB::table('stakings as s')
+            ->select([
+                's.public as wallet_address',
+                DB::raw("'Staked' as type"),
+                's.amount as amount',
+                's.transaction_id as explorer_link',
+                's.updated_at as occurred_at',
+            ])
+            ->whereNotNull('s.transaction_id');
 
-        // Calculate unlocked tokens count
-        $unlocked_tokens = $latest_transactions->sum('reward');
+        $rewards = DB::table('staking_results as r')
+            ->join('stakings as s', 's.id', '=', 'r.staking_id')
+            ->select([
+                's.public as wallet_address',
+                DB::raw("'Reward' as type"),
+                'r.amount as amount',
+                'r.transaction_id as explorer_link',
+                'r.updated_at as occurred_at',
+            ]);
 
-        // Prepare separate rows for staked amount and rewards
-        $formattedData = [];
-
-        foreach ($latest_transactions as $transaction) {
-            // First row: Staked amount
-            $formattedData[] = [
-                'wallet_address' => $transaction->wallet_address,
-                'type' => 'Staked',
-                'amount' => $transaction->staked_amount . ' DOPE',
-                'explorer_link' => $transaction->staked_transaction
-            ];
-
-            // Second row: Reward amount
-            $formattedData[] = [
-                'wallet_address' => $transaction->wallet_address,
-                'type' => 'Reward',
-                'amount' => $transaction->reward . ' DOPE',
-                'explorer_link' => $transaction->reward_transaction
-            ];
+        if ($filter === 'staked') {
+            $base = $staked;
+        } elseif ($filter === 'reward') {
+            $base = $rewards;
+        } else {
+            $base = DB::query()->fromSub($staked->unionAll($rewards), 't');
         }
 
+        $rows = $base
+            ->orderByDesc('occurred_at') // <-- one final sort on the unified timestamp
+            ->limit($limit)
+            ->get();
 
-        $total_stakers = Staking::whereNotNull('transaction_id')
-        ->where('status', 0) //active stakers
-        ->distinct('public')
-        ->count('public'); // Assuming `public` is the identifier for stakers
+        $data = $rows->map(fn($row) => [
+            'wallet_address' => (string) $row->wallet_address,
+            'type'           => (string) $row->type,
+            'amount'         => (string) ($row->amount . ' DOPE'),
+            'explorer_link'  => $row->explorer_link ?: null,
+            'occurred_at'    => (string) $row->occurred_at, // useful for client sorting/debug
+        ])->values()->toArray();
 
-        // Sum the amount where transaction_id is not null
-        $total_staked = Staking::whereNotNull('transaction_id')->where('status', 0) //active stakers
-        ->sum('amount'); // Assuming `amount` is the column holding staked values
+        return response()->json(['data' => $data]);
+    }
 
-        // Asset details for DOPE token
-        $assetCode = 'DOPE';
+    public function fetch_dashboard_data(Request $request)
+    {
+        $unlocked_tokens = DB::table('staking_results')->sum('amount');
+
+        $total_stakers = DB::table('stakings')
+            ->whereNotNull('transaction_id')
+            ->where('status', 0)
+            ->distinct('public')
+            ->count('public');
+
+        $total_staked = DB::table('stakings')
+            ->whereNotNull('transaction_id')
+            ->where('status', 0)
+            ->sum('amount');
+
+        // 4) Horizon + price: cache to avoid hitting it every request
+        $assetCode   = 'DOPE';
         $assetIssuer = 'GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B';
 
-        // Fetch asset information from Horizon
-        $horizonUrl = "https://horizon.stellar.org/assets?asset_code={$assetCode}&asset_issuer={$assetIssuer}";
-        try {
-            $response = Http::get($horizonUrl);
-            $assetData = $response->json();
+        $dopeMeta = Cache::remember("dope_meta_v1", 300, function () use ($assetCode, $assetIssuer) {
+            $horizonUrl = "https://horizon.stellar.org/assets?asset_code={$assetCode}&asset_issuer={$assetIssuer}";
+            try {
+                $response = Http::timeout(5)->get($horizonUrl)->json();
+                $rec = $response['_embedded']['records'][0] ?? null;
 
-            
-            // dd($assetData);
-            if (isset($assetData['_embedded']['records'][0])) {
-                $dopeData = $assetData['_embedded']['records'][0];
-                $trustlineCount =  $dopeData['accounts']['authorized'];
-                // $trustlineCount = $holders;
-                $liquidityPoolsAmount = $dopeData['liquidity_pools_amount'];
-                
-                // Assuming you have a method for fetching token price
-                
-                $data = $this->asset_data($assetCode, $assetIssuer);
-            } 
-        } catch (\Exception $e) {
-            Log::error('Error fetching DOPE data: ' . $e->getMessage());
-            $Dope_data_token_data = [];
-        }
+                $trustlineCount = $rec['accounts']['authorized'] ?? 0;
+                $liquidityPoolsAmount = $rec['liquidity_pools_amount'] ?? 0;
+
+                // If asset_data() calls out to a price API, wrap it in try/catch too.
+                $data = ['price' => 0, 'rating' => null];
+                try {
+                    $data = app(static::class)->asset_data($assetCode, $assetIssuer) ?? $data;
+                } catch (\Throwable $e) {
+                    Log::warning('asset_data failed: ' . $e->getMessage());
+                }
+
+                return [
+                    'price' => $data['price'] ?? 0,
+                    'rating' => $data['rating'] ?? null,
+                    'trustline' => $trustlineCount,
+                    'liquidity_pools_amount' => $liquidityPoolsAmount,
+                ];
+            } catch (\Throwable $e) {
+                Log::error('Horizon fetch failed: ' . $e->getMessage());
+                return [
+                    'price' => 0,
+                    'rating' => null,
+                    'trustline' => 0,
+                    'liquidity_pools_amount' => 0,
+                ];
+            }
+        });
+
+
 
         return response()->json([
-            'data' => $formattedData,
-            'total_stakers' => $total_stakers,
-            'total_staked' => $total_staked,
-            'unlocked_tokens' => $unlocked_tokens,
-            'price' => $data['price'] ?? 0,
-            // 'market_cap' => $marketCap,
-            // 'holders' => $holders ?? 0,
-            'trustline' => $trustlineCount ?? 0,
-            // '7days_volume' => $volumeInXLM,
-            'liquidity_pools_amount' => $liquidityPoolsAmount ?? 0,
-            'rating' => $data['rating']
+            'total_stakers'          => (int) $total_stakers,
+            'total_staked'           => (float) $total_staked,
+            'unlocked_tokens'        => (float) $unlocked_tokens,
+            'price'                  => $dopeMeta['price'],
+            'trustline'              => (int) $dopeMeta['trustline'],
+            'liquidity_pools_amount' => $dopeMeta['liquidity_pools_amount'],
+            'rating'                 => $dopeMeta['rating'],
         ]);
-        
     }
 
     private function asset_data($assetCode, $assetIssuer)
@@ -555,7 +567,7 @@ class WalletController extends Controller
                 $data = $response->json();
                 if (isset($data['price'])) {
                     $averageRating = $this->calculate_average_rating($data['rating']);
-                    return[
+                    return [
                         'price' => $data['price'],
                         'rating' => $averageRating
                     ];
@@ -567,7 +579,7 @@ class WalletController extends Controller
             Log::error('Error fetching trading volume: ' . $e->getMessage());
             return 0;
         }
-    }    
+    }
 
     private function calculate_average_rating(array $rating): float
     {
@@ -579,19 +591,20 @@ class WalletController extends Controller
         return $count > 0 ? round($sum / $count, 2) : 0;
     }
 
-    public function fetch_wallet_data($wallet_address = null){
+    public function fetch_wallet_data($wallet_address = null)
+    {
         if ($wallet_address) {
             $staked = Staking::whereNotNull('transaction_id')
-            ->where('public', $wallet_address)
-            ->where('status', 0) //active staking
-            ->sum('amount'); // Assuming `amount` is the staked amount column
-    
+                ->where('public', $wallet_address)
+                ->where('status', 0) //active staking
+                ->sum('amount'); // Assuming `amount` is the staked amount column
+
             // Sum the amount where transaction_id is not null
             $total_reward_received = StakingResult::join('stakings as s', 's.id', '=', 'staking_results.staking_id')
-            ->whereNotNull('staking_results.transaction_id')
-            ->where('s.public', $wallet_address)
-            ->sum('staking_results.amount'); // Sum of rewards
-    
+                ->whereNotNull('staking_results.transaction_id')
+                ->where('s.public', $wallet_address)
+                ->sum('staking_results.amount'); // Sum of rewards
+
             return response()->json([
                 'staked' => $staked,
                 'total_reward_received' => $total_reward_received,
@@ -607,7 +620,7 @@ class WalletController extends Controller
     //         ->where('public', $wallet_address)
     //         ->orderBy('updated_at', 'desc')
     //         ->get();
-    
+
     //         $staking_reward = StakingResult::join('stakings as s', 's.id', '=', 'staking_results.staking_id')
     //         ->whereNotNull('staking_results.transaction_id')
     //         ->where('s.public', $wallet_address)
@@ -615,7 +628,7 @@ class WalletController extends Controller
     //         ->select('staking_results.*')
     //         ->orderBy('updated_at', 'desc')
     //         ->get();
-            
+
     //         $activityData = [];
 
     //         foreach ($staked_unstaked as $item) {
@@ -636,7 +649,7 @@ class WalletController extends Controller
     //                 'transaction' => $reward->transaction_id,
     //             ];
     //         }
-    
+
     //         return response()->json(['activities' => $activityData]);
     //     } else {
     //         return response()->json(['message' => 'No wallet address provided']);
@@ -644,13 +657,14 @@ class WalletController extends Controller
     // }
 
 
-    public function wallet_activity($wallet_address) {
+    public function wallet_activity($wallet_address)
+    {
         if ($wallet_address) {
             $staked_unstaked = Staking::whereNotNull('transaction_id')
                 ->where('public', $wallet_address)
                 ->orderBy('updated_at', 'desc')
                 ->get();
-    
+
             $staking_reward = StakingResult::join('stakings as s', 's.id', '=', 'staking_results.staking_id')
                 ->whereNotNull('staking_results.transaction_id')
                 ->where('s.public', $wallet_address)
@@ -658,9 +672,9 @@ class WalletController extends Controller
                 ->select('staking_results.*')
                 ->orderBy('updated_at', 'desc')
                 ->get();
-            
+
             $activityData = [];
-    
+
             foreach ($staked_unstaked as $item) {
                 $type = ($item->status == 0) ? 'Staked' : 'Unstaked';
                 $activityData[] = [
@@ -670,7 +684,7 @@ class WalletController extends Controller
                     'transaction' => $item->transaction_id,
                 ];
             }
-    
+
             foreach ($staking_reward as $reward) {
                 $activityData[] = [
                     'time' => $reward->created_at->diffForHumans(), // Use updated_at for sorting
@@ -679,16 +693,15 @@ class WalletController extends Controller
                     'transaction' => $reward->transaction_id,
                 ];
             }
-    
+
             // Sort merged array by 'time' in descending order
             usort($activityData, function ($a, $b) {
                 return strtotime($b['time']) <=> strtotime($a['time']);
             });
-    
+
             return response()->json(['activities' => $activityData]);
         } else {
             return response()->json(['message' => 'No wallet address provided']);
         }
     }
-    
 }

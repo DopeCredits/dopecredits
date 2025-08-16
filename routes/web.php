@@ -16,6 +16,7 @@ Route::post('/wallet/secret', [WalletController::class, 'secret'])->name('wallet
 
 Route::get('/wallet/disconnect', [WalletController::class, 'disconnect'])->name('wallet.disconnect');
 Route::get('/fetch_dashboard_data', [WalletController::class, 'fetch_dashboard_data']);
+Route::get('/transactions', [WalletController::class, 'transactions']);
 Route::get('/fetch_wallet_data/{wallet_address?}', [WalletController::class, 'fetch_wallet_data']);
 Route::get('/wallet_activity/{wallet_address?}', [WalletController::class, 'wallet_activity']);
 
