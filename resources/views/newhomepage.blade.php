@@ -1403,9 +1403,9 @@
                     .then(data => {
                         // Update UI with fetched data
                         $('#wallet-total-staked').text(data.staked +
-                        ' DOPE'); // Assuming data.staked for staked value
+                            ' DOPE'); // Assuming data.staked for staked value
                         $('#total_reward_received').text(data.total_reward_received +
-                        ' DOPE'); // Assuming data.total_reward_received
+                            ' DOPE'); // Assuming data.total_reward_received
                     })
                     .catch(error => {
                         // Handle error gracefully
@@ -1686,7 +1686,13 @@
                 serverSide: false,
                 autoWidth: false,
                 scrollX: true,
-                responsive: false, // turn back on after you see rows
+                responsive: false,
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin me-1"></i> Loading transactions…',
+                    loadingRecords: 'Loading transactions…',
+                    emptyTable: 'No transactions found',
+                    zeroRecords: 'No matching transactions'
+                },
                 ajax: {
                     url: base_url + '/transactions',
                     type: 'GET',
@@ -1721,6 +1727,7 @@
                 ],
                 pageLength: 10
             });
+
 
             // filters (your .seg-btn buttons)
             $('.seg-wrap').on('click', '.seg-btn', function() {
@@ -1780,7 +1787,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     button.text('Processing...').prop('disabled',
-                    true); // Disable the button to prevent multiple clicks
+                        true); // Disable the button to prevent multiple clicks
 
                     $.ajax({
                         url: `/stop_staking/${walletAddress}`, // Corrected: use backticks for string interpolation
