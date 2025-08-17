@@ -6,6 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @if (app()->environment('staging'))
+    <meta name="robots" content="noindex, nofollow, noarchive">
+    <meta name="googlebot" content="noindex, nofollow">
+    @endif
     <title>Dope Credits</title>
     <!-- bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -201,34 +205,7 @@
             padding: 20px 0;
             position: relative;
         }
-
-        /* .noUi-target {
-            height: 6px;
-            border: none;
-            background: #e9ecef;
-            box-shadow: none;
-            margin-top: 30px;
-        }
-
-        .noUi-connect {
-            background: #80c931;
-        } */
-
-        /* .noUi-handle {
-            width: 24px !important;
-            height: 24px !important;
-            border-radius: 50%;
-            background: white;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.2);
-            border: 2px solid #80c931;
-            cursor: pointer;
-            right: -12px !important;
-        } */
-
-        /* .noUi-handle:before, .noUi-handle:after {
-            display: none;
-        } */
-
+        
         .range-labels {
             display: flex;
             justify-content: space-between;
