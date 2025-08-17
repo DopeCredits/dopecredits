@@ -1734,11 +1734,7 @@
             success: function(response) {
                 // Populate the stats with the response data
                 $('#total-stakers').text(response.total_stakers);
-                const n = +response.price; // e.g. 1.7004687693726915e-7
-                const mantissa = parseFloat(n.toExponential(20).split('e')[
-                0]); // "1.70046876937269150000"
-                const shown = Math.trunc(mantissa * 1e6) / 1e6; // 1.700468 (truncate)
-                $('#dope-price').text('$' + shown.toFixed(6));
+                $('#dope-price').text('$' + (+response.price).toFixed(12));
                 // $('#holders').text(response.holders);
                 $('#trustlines').text(response.trustline);
                 $('#rating').text(response.rating);
