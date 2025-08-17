@@ -1258,10 +1258,10 @@
                 <div class="col-12">
                     <div class="innerFooter">
                         <div class="leftFooter">
-                            <a href="{{ url('#') }}">How it works</a>
+                            {{-- <a href="{{ url('#') }}">How it works</a>
                             <a href="{{ url('#') }}">Faqs</a>
                             <a href="{{ url('#') }}">Token details</a>
-                            <a href="{{ url('#') }}">Distributuion</a>
+                            <a href="{{ url('#') }}">Distributuion</a> --}}
                         </div>
                         <div class="rightFooter">
                             <div class="socialLinks">
