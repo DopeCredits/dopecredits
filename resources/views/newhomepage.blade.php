@@ -1692,6 +1692,7 @@
                     type: 'GET',
                     data: d => {
                         d.filter = currentFilter;
+                        d.from = 'home';
                     },
                     dataSrc: 'data'
                 },

@@ -445,18 +445,19 @@ class WalletController extends Controller
 
     public function transactions(Request $request)
     {
-        $limit  = 200;
         $filter = $request->query('filter', 'all');
+        $from   = $request->query('from');
 
-        $staked = DB::table('stakings as s')
-            ->select([
-                's.public as wallet_address',
-                DB::raw("'Staked' as type"),
-                's.amount as amount',
-                's.transaction_id as explorer_link',
-                's.updated_at as occurred_at',
-            ])
-            ->whereNotNull('s.transaction_id');
+        // If request came from homepage → fix limit = 200, else no limit
+        $limit = $from === 'home' ? 200 : null;
+
+        $staked = DB::table('stakings as s')->select([
+            's.public as wallet_address',
+            DB::raw("'Staked' as type"),
+            's.amount as amount',
+            's.transaction_id as explorer_link',
+            's.created_at as occurred_at',
+        ])->whereNotNull('s.transaction_id');
 
         $rewards = DB::table('staking_results as r')
             ->join('stakings as s', 's.id', '=', 'r.staking_id')
@@ -468,25 +469,26 @@ class WalletController extends Controller
                 'r.updated_at as occurred_at',
             ]);
 
-        if ($filter === 'staked') {
-            $base = $staked;
-        } elseif ($filter === 'reward') {
-            $base = $rewards;
-        } else {
-            $base = DB::query()->fromSub($staked->unionAll($rewards), 't');
+        $base = match ($filter) {
+            'staked' => $staked,
+            'reward' => $rewards,
+            default  => DB::query()->fromSub($staked->unionAll($rewards), 't'),
+        };
+
+        $query = $base->orderByDesc('occurred_at');
+
+        if ($limit) {
+            $query->limit($limit);
         }
 
-        $rows = $base
-            ->orderByDesc('occurred_at') // <-- one final sort on the unified timestamp
-            ->limit($limit)
-            ->get();
+        $rows = $query->get();
 
         $data = $rows->map(fn($row) => [
             'wallet_address' => (string) $row->wallet_address,
             'type'           => (string) $row->type,
             'amount'         => (string) ($row->amount . ' DOPE'),
             'explorer_link'  => $row->explorer_link ?: null,
-            'occurred_at'    => (string) $row->occurred_at, // useful for client sorting/debug
+            'occurred_at'    => (string) $row->occurred_at,
         ])->values()->toArray();
 
         return response()->json(['data' => $data]);
@@ -544,8 +546,6 @@ class WalletController extends Controller
                 ];
             }
         });
-
-
 
         return response()->json([
             'total_stakers'          => (int) $total_stakers,
@@ -613,49 +613,6 @@ class WalletController extends Controller
             return response()->json(['message' => 'No wallet address provided']);
         }
     }
-
-    // public function wallet_activity($wallet_address) {
-    //     if ($wallet_address) {
-    //         $staked_unstaked = Staking::whereNotNull('transaction_id')
-    //         ->where('public', $wallet_address)
-    //         ->orderBy('updated_at', 'desc')
-    //         ->get();
-
-    //         $staking_reward = StakingResult::join('stakings as s', 's.id', '=', 'staking_results.staking_id')
-    //         ->whereNotNull('staking_results.transaction_id')
-    //         ->where('s.public', $wallet_address)
-    //         ->where('s.status', 0)
-    //         ->select('staking_results.*')
-    //         ->orderBy('updated_at', 'desc')
-    //         ->get();
-
-    //         $activityData = [];
-
-    //         foreach ($staked_unstaked as $item) {
-    //             $type = $item->status === 0 ? 'Staked' : 'Unstaked';
-    //             $activityData[] = [
-    //                 'time' => $item->created_at->diffForHumans(),
-    //                 'type' => $type,
-    //                 'amount' => $item->amount . ' DOPE',
-    //                 'transaction' => $item->transaction_id,
-    //             ];
-    //         }
-
-    //         foreach ($staking_reward as $reward) {
-    //             $activityData[] = [
-    //                 'time' => $reward->created_at->diffForHumans(),
-    //                 'type' => 'Staking reward',
-    //                 'amount' => $reward->amount . ' DOPE',
-    //                 'transaction' => $reward->transaction_id,
-    //             ];
-    //         }
-
-    //         return response()->json(['activities' => $activityData]);
-    //     } else {
-    //         return response()->json(['message' => 'No wallet address provided']);
-    //     }
-    // }
-
 
     public function wallet_activity($wallet_address)
     {
