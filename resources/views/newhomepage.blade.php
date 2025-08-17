@@ -1722,12 +1722,6 @@
                 pageLength: 10
             });
 
-            // diagnostics
-            table.on('xhr.dt', (e, s, json) => console.log('xhr.dt rows:', json?.data?.length ??
-                'no data'));
-            table.on('draw.dt', () => console.log('draw rows in DOM:', $('#transactionsTable tbody tr')
-                .length));
-
             // filters (your .seg-btn buttons)
             $('.seg-wrap').on('click', '.seg-btn', function() {
                 $('.seg-btn').removeClass('is-active').attr('aria-selected', 'false');
