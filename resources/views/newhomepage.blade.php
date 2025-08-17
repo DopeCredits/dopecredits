@@ -1669,18 +1669,6 @@
         $(function() {
             let currentFilter = 'all';
 
-            if ($.fn.DataTable.isDataTable('#transactionsTable')) {
-                $('#transactionsTable').DataTable().clear().destroy();
-                $('#transactionsTable').empty().append(`
-      <thead>
-        <tr>
-          <th>Wallet address</th><th>Type</th><th>Amount</th><th>Explorer link</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    `);
-            }
-
             const table = $('#transactionsTable').DataTable({
                 processing: true,
                 serverSide: false,
