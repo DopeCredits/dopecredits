@@ -648,7 +648,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="liquidity-pool-section">
+                            {{-- <div class="liquidity-pool-section">
                                 <div class="section-header">
                                     <div class="pool-title">
                                         <i class="fa fa-water"></i>
@@ -668,7 +668,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -694,6 +694,13 @@
                                     <span>Stakers</span>
                                 </div>
                                 <div class="stat-value" id="total-stakers">Loading...</div>
+                            </div>
+                            <div style="margin-top: 20px" class="stat-item">
+                                <div class="stat-label">
+                                    <i class="fa fa-users"></i>
+                                    <span>DOPE/XLM Liquidity Pool</span>
+                                </div>
+                                <div class="stat-value" id="liquidity_pools_amount">Loading...</div>
                             </div>
                             <div style="margin-top: 20px;flex-direction: column; align-items: start;"
                                 class="stat-item unlocked-section">
@@ -1703,7 +1710,7 @@
         $('#trustlines').text('Loading...');
         $('#rating').text('Loading...');
         $('#liquidity_pools_amount').text('Loading...');
-
+        
         // Fetch dashboard data when the page loads
         $.ajax({
             url: '/fetch_dashboard_data', // URL for your route
