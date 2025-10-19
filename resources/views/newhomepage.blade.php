@@ -1973,38 +1973,6 @@
             });
     }
 
-    function kFormatter(num) {
-        return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) : Math.sign(num) * Math.abs(
-            num)
-    }
-
-    function number_format_short(n) {
-        var n_format = 0;
-        var suffix = '';
-        if (n < 900) {
-            // 0 - 900
-            n_format = (n);
-            suffix = '';
-        } else if (n < 900000) {
-            // 0.9k-850k
-            n_format = (n / 1000);
-            suffix = 'K';
-        } else if (n < 900000000) {
-            // 0.9m-850m
-            n_format = (n / 1000000);
-            suffix = 'M';
-        } else if (n < 900000000000) {
-            // 0.9b-850b
-            n_format = (n / 1000000000);
-            suffix = 'B';
-        } else {
-            // 0.9t+
-            n_format = (n / 1000000000000);
-            suffix = 'T';
-        }
-        return Math.floor(n_format).toString() + suffix;
-    }
-
     //Storing wallets connecting from extensions like rabet etc
     function storeWalletPublic(public, wallet) {
         $.ajax({
@@ -2066,11 +2034,6 @@
         });
     }
 
-    function displayWalletButtons() {
-        $('.walletconnect-btn').show();
-        $('.connectLoading-btn').hide();
-    }
-
     //Storing wallets connecting from secret key
     function storePublic(key) {
         $.ajax({
@@ -2128,11 +2091,6 @@
                 displayWalletButtons();
             }
         });
-    }
-
-    function btnLoaderHide() {
-        $('#btnStaking').show();
-        $('#loadStaking').hide();
     }
 
     function invest(currentValue) {
@@ -2246,6 +2204,48 @@
                 toastr.error('Something went wrong!', "Staking Error");
             }
         });
+    }
+
+    function kFormatter(num) {
+        return Math.abs(num) > 999 ? Math.sign(num) * ((Math.abs(num) / 1000).toFixed(1)) : Math.sign(num) * Math.abs(
+            num)
+    }
+
+    function number_format_short(n) {
+        var n_format = 0;
+        var suffix = '';
+        if (n < 900) {
+            // 0 - 900
+            n_format = (n);
+            suffix = '';
+        } else if (n < 900000) {
+            // 0.9k-850k
+            n_format = (n / 1000);
+            suffix = 'K';
+        } else if (n < 900000000) {
+            // 0.9m-850m
+            n_format = (n / 1000000);
+            suffix = 'M';
+        } else if (n < 900000000000) {
+            // 0.9b-850b
+            n_format = (n / 1000000000);
+            suffix = 'B';
+        } else {
+            // 0.9t+
+            n_format = (n / 1000000000000);
+            suffix = 'T';
+        }
+        return Math.floor(n_format).toString() + suffix;
+    }
+
+    function displayWalletButtons() {
+        $('.walletconnect-btn').show();
+        $('.connectLoading-btn').hide();
+    }
+
+    function btnLoaderHide() {
+        $('#btnStaking').show();
+        $('#loadStaking').hide();
     }
 </script>
 
