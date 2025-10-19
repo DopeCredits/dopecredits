@@ -456,7 +456,7 @@ class WalletController extends Controller
             DB::raw("'Staked' as type"),
             's.amount as amount',
             's.transaction_id as explorer_link',
-            's.created_at as occurred_at',
+            's.updated_at as occurred_at',
         ])->whereNotNull('s.transaction_id');
 
         $rewards = DB::table('staking_results as r')
