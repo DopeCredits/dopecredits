@@ -1843,6 +1843,18 @@
                     // Update staked and reward stats
                     $("#wallet-total-staked").text(`${totalStaked.toFixed(2)} DOPE`);
                     $("#total_reward_received").text(`${totalRewards.toFixed(2)} DOPE`);
+
+                    
+                    if ($.fn.DataTable.isDataTable('.activity-table')) {
+                        $('.activity-table').DataTable().destroy();
+                    }
+                    $('.activity-table').DataTable({
+                        pageLength: 5,
+                        lengthChange: false,
+                        searching: false,
+                        ordering: false,
+                        info: false
+                    });
                 },
                 error: function() {
                     alert("Failed to load wallet activity.");
