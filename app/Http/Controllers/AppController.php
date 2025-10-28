@@ -37,11 +37,11 @@ class AppController extends Controller
             return response()->json(['status' => 0, 'errors' => $errors]);
         }
 
-        $toEmail = 'info@answerly.app';
-        $emailSubject = 'Email from Answerly Staking';
+        $toEmail = 'info@dopecredits.com';
+        $emailSubject = 'Email from Dopecredits Staking';
         $headers = ['From' => $email, 'Reply-To' => $email, 'Content-type' => 'text/html; charset=iso-8859-1'];
 
-        $bodyParagraphs = ["<h3>Email from Answerly Staking</h3>","Name: {$name}<br>", "Email: {$email}<br>", "Message:", $message];
+        $bodyParagraphs = ["<h3>Email from Dopecredits Staking</h3>","Name: {$name}<br>", "Email: {$email}<br>", "Message:", $message];
         $body = join(PHP_EOL, $bodyParagraphs);
 
         if (mail($toEmail, $emailSubject, $body, $headers)) {

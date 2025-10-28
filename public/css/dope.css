@@ -7,6 +7,43 @@
     font-family: 'Inter', sans-serif;
 }
 
+/* Wrapper (soft gray rounded bar) */
+.seg-wrap{
+  display:inline-flex;
+  gap:8px;
+  padding:6px;
+  border-radius:999px;
+  /* background:rgba(0,0,0,.06);          */
+  align-items:center;
+  margin-bottom: 10px;
+}
+
+/* Buttons (pills) */
+.seg-btn{
+  appearance:none; border:0; cursor:pointer;
+  padding:10px 16px; border-radius:999px;
+  background:rgba(255,255,255,.75);
+  color:#3b3b3b; font-weight:600; line-height:1;
+  transition:background .2s, color .2s, box-shadow .2s, transform .02s;
+  white-space:nowrap;
+}
+.seg-btn:hover{ background:rgba(255,255,255,.95); }
+.seg-btn:active{ transform:scale(.98); }
+
+/* Active pill (green→teal gradient like image) */
+.seg-btn.is-active{
+  color:#fff;
+  background:linear-gradient(90deg,#80C931,#16B6B3);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.05);
+}
+
+/* Mobile: stretch across */
+@media (max-width:576px){
+  .seg-wrap{ width:100%; gap:6px; }
+  .seg-btn{ flex:1; text-align:center; padding:10px 12px; }
+}
+
+
 
 ul.dropdown-menu.show{
     background: white !important;
