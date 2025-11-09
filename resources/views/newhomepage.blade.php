@@ -358,7 +358,7 @@
                             <div class="line3"></div>
                         </div>
                         <ul class="nav-links">
-                            <li><a href="{{ asset('images/DOPE Credits Whitepaper.pdf') }}"
+                            <li><a href="{{ asset('DOPE Credits Whitepaper.pdf') }}"
                                     target="_blank">Whitepaper</a></li>
                             <li><a href="{{ url('https://stellar.expert/explorer/public/asset/DOPE-GA5J25LV64MUIWVGWMMOTNPEKEZTXDDCCZNNPHTSGAIHXHTPMR3NLD4B') }}"
                                     target="_blank" rel="noopener noreferrer">Token explorer</a></li>
