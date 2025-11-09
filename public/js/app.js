@@ -8,7 +8,6 @@
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = __webpack_require__(/*! ./lib/axios */ "./node_modules/axios/lib/axios.js");
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/adapters/xhr.js":
@@ -232,8 +231,7 @@ module.exports = function xhrAdapter(config) {
 };
 
 
-/***/ }),
-
+/***/ }),;
 /***/ "./node_modules/axios/lib/axios.js":
 /*!*****************************************!*\
   !*** ./node_modules/axios/lib/axios.js ***!
@@ -295,7 +293,6 @@ axios.spread = __webpack_require__(/*! ./helpers/spread */ "./node_modules/axios
 axios.isAxiosError = __webpack_require__(/*! ./helpers/isAxiosError */ "./node_modules/axios/lib/helpers/isAxiosError.js");
 
 module.exports = axios;
-
 // Allow use of default import syntax in TypeScript
 module.exports["default"] = axios;
 
@@ -328,8 +325,6 @@ Cancel.prototype.toString = function toString() {
 Cancel.prototype.__CANCEL__ = true;
 
 module.exports = Cancel;
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/cancel/CancelToken.js":
@@ -458,8 +453,6 @@ CancelToken.source = function source() {
 };
 
 module.exports = CancelToken;
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/cancel/isCancel.js":
@@ -474,8 +467,6 @@ module.exports = CancelToken;
 module.exports = function isCancel(value) {
   return !!(value && value.__CANCEL__);
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/core/Axios.js":
@@ -640,8 +631,6 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 });
 
 module.exports = Axios;
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/core/InterceptorManager.js":
@@ -705,8 +694,6 @@ InterceptorManager.prototype.forEach = function forEach(fn) {
 };
 
 module.exports = InterceptorManager;
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/core/buildFullPath.js":
@@ -736,8 +723,6 @@ module.exports = function buildFullPath(baseURL, requestedURL) {
   }
   return requestedURL;
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/core/createError.js":
@@ -765,8 +750,6 @@ module.exports = function createError(message, config, code, request, response) 
   var error = new Error(message);
   return enhanceError(error, config, code, request, response);
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/core/dispatchRequest.js":
@@ -863,8 +846,6 @@ module.exports = function dispatchRequest(config) {
     return Promise.reject(reason);
   });
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/core/enhanceError.js":
@@ -917,8 +898,6 @@ module.exports = function enhanceError(error, config, code, request, response) {
   };
   return error;
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/core/mergeConfig.js":
@@ -1027,8 +1006,6 @@ module.exports = function mergeConfig(config1, config2) {
 
   return config;
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/core/settle.js":
@@ -1063,8 +1040,6 @@ module.exports = function settle(resolve, reject, response) {
     ));
   }
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/core/transformData.js":
@@ -1096,8 +1071,6 @@ module.exports = function transformData(data, headers, fns) {
 
   return data;
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/defaults.js":
@@ -1242,8 +1215,6 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 });
 
 module.exports = defaults;
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/env/data.js":
@@ -1255,7 +1226,6 @@ module.exports = defaults;
 module.exports = {
   "version": "0.25.0"
 };
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/helpers/bind.js":
@@ -1276,8 +1246,6 @@ module.exports = function bind(fn, thisArg) {
     return fn.apply(thisArg, args);
   };
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/helpers/buildURL.js":
@@ -1357,8 +1325,6 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
   return url;
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/helpers/combineURLs.js":
@@ -1382,8 +1348,6 @@ module.exports = function combineURLs(baseURL, relativeURL) {
     ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
     : baseURL;
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/helpers/cookies.js":
@@ -1446,8 +1410,6 @@ module.exports = (
       };
     })()
 );
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/helpers/isAbsoluteURL.js":
@@ -1471,8 +1433,6 @@ module.exports = function isAbsoluteURL(url) {
   // by any combination of letters, digits, plus, period, or hyphen.
   return /^([a-z][a-z\d+\-.]*:)?\/\//i.test(url);
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/helpers/isAxiosError.js":
@@ -1495,8 +1455,6 @@ var utils = __webpack_require__(/*! ./../utils */ "./node_modules/axios/lib/util
 module.exports = function isAxiosError(payload) {
   return utils.isObject(payload) && (payload.isAxiosError === true);
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/helpers/isURLSameOrigin.js":
@@ -1597,8 +1555,6 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
     }
   });
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/helpers/parseHeaders.js":
@@ -1661,8 +1617,6 @@ module.exports = function parseHeaders(headers) {
 
   return parsed;
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/helpers/spread.js":
@@ -1699,8 +1653,6 @@ module.exports = function spread(callback) {
     return callback.apply(null, arr);
   };
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/helpers/validator.js":
@@ -1792,8 +1744,6 @@ module.exports = {
   assertOptions: assertOptions,
   validators: validators
 };
-
-
 /***/ }),
 
 /***/ "./node_modules/axios/lib/utils.js":
@@ -2152,8 +2102,6 @@ module.exports = {
   trim: trim,
   stripBOM: stripBOM
 };
-
-
 /***/ }),
 
 /***/ "./resources/js/app.js":
